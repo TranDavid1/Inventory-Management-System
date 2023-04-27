@@ -1,28 +1,34 @@
 import "./App.css";
 import React, { useState } from "react";
-import InventoryForm from "./components/InventoryForm";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import InventoryList from "./components/InventoryList";
+import Dashboard from "./components/Dashboard";
+import Navbar from "./components/Navbar";
 
 function App() {
     const [inventory, setInventory] = useState([]);
-    const [showForm, setShowForm] = useState(false);
-
-    const handleAddItem = (newItem) => {
-        setInventory([...inventory, newItem]);
-        setShowForm(false);
-    };
-
-    const handleShowForm = () => {
-        setShowForm(true);
-    };
 
     return (
-        <div className="App">
-            <h1>Inventory Management App</h1>
-            {!showForm && <button onClick={handleShowForm}>Add Item</button>}
-            {showForm && <InventoryForm onAddItem={handleAddItem} />}
-            <InventoryList inventory={inventory} />
-        </div>
+        <Router>
+            <div className="App">
+                <Navbar />
+                <Routes>
+                    <Route
+                        exact
+                        path="/"
+                        element={<InventoryList inventory={inventory} />}
+                    />
+                    <Route
+                        path="/dashboard"
+                        element={<Dashboard inventory={inventory} />}
+                    />
+                    <Route
+                        path="/items"
+                        element={<InventoryList inventory={inventory} />}
+                    />
+                </Routes>
+            </div>
+        </Router>
     );
 }
 
