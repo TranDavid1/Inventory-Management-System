@@ -5,6 +5,11 @@ import FolderList from "./FolderList";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import SearchIcon from "@mui/icons-material/Search";
+import AddIcon from "@mui/icons-material/Add";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
 
 function Inventory(props) {
     const [sortOrder, setSortOrder] = useState("asc");
@@ -13,6 +18,8 @@ function Inventory(props) {
     const [selectedFolder, setSelectedFolder] = useState("");
     const [showDropDown, setShowDropdown] = useState(false);
     const dropDownRef = useRef(null);
+    const [showAddNewOptions, setShowAddNewOptions] = useState(false);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -107,6 +114,10 @@ function Inventory(props) {
         setShowDropdown(true);
     };
 
+    const handleAddNewButtonClick = () => {
+        setShowAddNewOptions(!showAddNewOptions);
+    };
+
     // return (
     //     <div className="Inventory">
     //         <h2>All Items</h2>
@@ -168,8 +179,136 @@ function Inventory(props) {
     //     </div>
     // );
 
+    function AddItemDialog(props) {
+        const { open, onClose } = props;
+        const [itemName, setItemName] = useState("");
+        const [itemQuantity, setItemQuantity] = useState("");
+        const [itemPrice, setItemPrice] = useState("");
+
+        const handleItemNameChange = (event) => {
+            setItemName(event.target.value);
+        };
+
+        const handleItemQuantityChange = (event) => {
+            setItemQuantity(event.target.value);
+        };
+
+        const handleItemPriceChange = (event) => {
+            setItemPrice(event.target.value);
+        };
+
+        const handleAddItem = (event) => {
+            event.preventDefault();
+            // Add item to the list here
+            try {
+                const newItem = {
+                    name: itemName,
+                    quantity: itemQuantity,
+                    price: itemPrice,
+                };
+
+                // Make an API call to add the new item
+                const response = fetch("/api/items", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(newItem),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to add item");
+                }
+
+                // Close the dialog
+                onClose();
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        const handleClose = () => {
+            onClose();
+        };
+
+        return (
+            <Dialog open={open} onClose={handleClose}>
+                <h2>Add Item</h2>
+                <form className="add-item-form" onSubmit={handleAddItem}>
+                    <div>
+                        <label htmlFor="item-name">Item Name:</label>
+                        <input
+                            type="text"
+                            id="item-name"
+                            value={itemName}
+                            onChange={handleItemNameChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="item-quantity">Item Quantity:</label>
+                        <input
+                            type="number"
+                            id="item-quantity"
+                            value={itemQuantity}
+                            onChange={handleItemQuantityChange}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="item-price">Item Price:</label>
+                        <input
+                            type="number"
+                            id="item-price"
+                            value={itemPrice}
+                            onChange={handleItemPriceChange}
+                            placeholder="Price, USD"
+                        />
+                    </div>
+                    <button type="submit">Add</button>
+                </form>
+            </Dialog>
+        );
+    }
+
     return (
-        <div className="InventoryList">
+        <div className="Inventory">
+            <div className="sticky-header">
+                <h1 className="inventory-header">All Items</h1>
+                <div className="add-new">
+                    <Button
+                        className="add-new-button"
+                        variant="contained"
+                        onClick={handleAddNewButtonClick}
+                    >
+                        <>
+                            <AddIcon /> Add New
+                        </>
+                    </Button>
+                    {showAddNewOptions && (
+                        <div className="add-new-options">
+                            <Button
+                                className="add-item-button"
+                                variant="contained"
+                                onClick={() => setOpen(true)}
+                            >
+                                <>
+                                    <PostAddIcon />
+                                    Add Item
+                                </>
+                            </Button>
+                            <Button
+                                className="add-folder-button"
+                                variant="contained"
+                            >
+                                <>
+                                    <CreateNewFolderIcon />
+                                    Add Folder
+                                </>
+                            </Button>
+                        </div>
+                    )}
+                    <AddItemDialog open={open} onClose={() => setOpen(false)} />
+                </div>
+            </div>
             <div className="inventory-options">
                 <div className="searchBar">
                     <SearchIcon className="searchIcon" />
