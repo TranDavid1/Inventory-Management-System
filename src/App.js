@@ -1,7 +1,9 @@
-import "./App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import InventoryList from "./components/InventoryList";
+import axios from "axios";
+
+import "./App.css";
+import Inventory from "./components/Inventory";
 import Dashboard from "./components/Dashboard";
 import Navbar from "./components/Navbar";
 
@@ -16,7 +18,7 @@ function App() {
                     <Route
                         exact
                         path="/"
-                        element={<InventoryList inventory={inventory} />}
+                        element={<Inventory inventory={inventory} />}
                     />
                     <Route
                         path="/dashboard"
@@ -24,7 +26,7 @@ function App() {
                     />
                     <Route
                         path="/items"
-                        element={<InventoryList inventory={inventory} />}
+                        element={<Inventory inventory={inventory} />}
                     />
                 </Routes>
             </div>

@@ -6,7 +6,7 @@ function InventoryItem(props) {
 
     return (
         <li>
-            {item.name} - {item.quantity}
+            {item.name} - {item.quantity} - {item.folder}
         </li>
     );
 }

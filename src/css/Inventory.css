@@ -71,3 +71,46 @@
     border-radius: 5px;
     color: #fff;
 }
+
+.inventory-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.inventory-summary div {
+    flex-basis: 30%;
+    text-align: center;
+}
+
+.inventory-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.searchBar {
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+}
+
+.searchBar .searchIcon {
+}
+
+.searchBar .searchInput {
+    margin: 0 auto;
+    border: none;
+    background-color: #f2f2f2;
+}
+
+.searchBar .searchInput:focus {
+    outline: none;
+}
+
+.sortButton {
+    display: inline-flex;
+    align-items: center;
+}
