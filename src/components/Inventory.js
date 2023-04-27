@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InventoryItem from "./InventoryItem";
 import "../css/Inventory.css";
 import FolderList from "./FolderList";
@@ -11,6 +11,25 @@ function Inventory(props) {
     const [filterValue, setFilterValue] = useState("");
     const [searchValue, setSearchValue] = useState("");
     const [selectedFolder, setSelectedFolder] = useState("");
+    const [showDropDown, setShowDropdown] = useState(false);
+    const dropDownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropDownRef.current &&
+                !dropDownRef.current.contains(event.target)
+            ) {
+                setShowDropdown(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropDownRef]);
 
     const handleSortOrder = () => {
         setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -83,6 +102,10 @@ function Inventory(props) {
         (total, item) => total + item.quantity,
         0
     );
+
+    const handleSearchBarClick = () => {
+        setShowDropdown(true);
+    };
 
     // return (
     //     <div className="Inventory">
@@ -158,6 +181,7 @@ function Inventory(props) {
                         value={searchValue}
                         onChange={handleSearchValue}
                         placeholder="Search"
+                        onFocus={handleSearchBarClick}
                     />
                 </div>
                 <div className="sort">
@@ -184,6 +208,11 @@ function Inventory(props) {
                     />
                 </div> */}
             </div>
+            {showDropDown && (
+                <div ref={dropDownRef} className="searchBarDropdownText">
+                    Type at least 3 characters to search for items and folders
+                </div>
+            )}
             <div className="inventory-summary">
                 <div>
                     <h3>Folders</h3>
