@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import InventoryItem from "./InventoryItem";
 import "../css/InventoryList.css";
+import FolderList from "./FolderList";
 
 function InventoryList(props) {
     const [sortOrder, setSortOrder] = useState("asc");
     const [filterValue, setFilterValue] = useState("");
     const [searchValue, setSearchValue] = useState("");
+    const [selectedFolder, setSelectedFolder] = useState("");
 
     const handleSortOrder = () => {
         setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -49,9 +51,21 @@ function InventoryList(props) {
         return item.name.toLowerCase().includes(searchValue.toLowerCase());
     });
 
+    const filteredByFolderInventory =
+        selectedFolder === ""
+            ? searchedInventory
+            : searchedInventory.filter(
+                  (item) => item.folder === selectedFolder
+              );
+
     return (
         <div className="InventoryList">
             <h2>Inventory List</h2>
+            <FolderList
+                inventory={props.inventory}
+                selectedFolder={selectedFolder}
+                onFolderChange={setSelectedFolder}
+            />
             <div>
                 <label htmlFor="sortOrder">Sort by Name:</label>
                 <button onClick={handleSortOrder}>
