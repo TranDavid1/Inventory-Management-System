@@ -34,3 +34,11 @@
 .Navbar li.active {
     background-color: #f5f5f5;
 }
+
+.Navbar li:hover .MuiIconButton-root {
+    color: #0062cc; /* Change the color when hovered over */
+}
+
+.Navbar li.active .MuiIconButton-root {
+    color: #0062cc; /* Change the color when active */
+}
