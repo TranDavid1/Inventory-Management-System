@@ -1,17 +1,15 @@
 import React from "react";
+// import "./Dashboard.css";
 
-function Dashboard({ inventory }) {
-    // calculate total number of unique items
-    const uniqueItems = [...new Set(inventory.map((item) => item.name))];
-    const totalUniqueItems = uniqueItems.length;
+function Dashboard({ props }) {
+    const { inventory, recentActivity } = props;
 
-    // calculate the total quantity of all items
+    // calculate metrics for summary section
+    const numUniqueItems = new Set(inventory.map((item) => item.name)).size;
     const totalQuantity = inventory.reduce(
-        (total, item) => total + parseInt(item.quantity),
+        (total, item) => total + item.quantity,
         0
     );
-
-    // calculate the total value of all items
     const totalValue = inventory.reduce(
         (total, item) => total + parseInt(item.quantity),
         0
@@ -19,10 +17,26 @@ function Dashboard({ inventory }) {
 
     return (
         <div className="Dashboard">
-            <h2>Dashboard</h2>
-            <p>Total number of unique items: {totalUniqueItems}</p>
-            <p>Total quantity of all items: {totalQuantity}</p>
-            <p>Total value of all items:</p>
+            <div className="Summary">
+                <h2>Inventory Summary</h2>
+                <ul>
+                    <li>{numUniqueItems} Items</li>
+                    <li>{totalQuantity} Total Quantity</li>
+                    <li>${totalValue.toFixed(2)} Total Value</li>
+                </ul>
+            </div>
+            <div className="RecentActivity">
+                <h2>Recent Activity</h2>
+                {recentActivity.length === 0 ? (
+                    <p>No recent activity.</p>
+                ) : (
+                    <ul>
+                        {recentActivity.map((activity) => (
+                            <li key={activity.timestamp}>{activity.message}</li>
+                        ))}
+                    </ul>
+                )}
+            </div>
         </div>
     );
 }
