@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import InventoryItem from "./InventoryItem";
+import "../css/InventoryList.css";
 
 function InventoryList(props) {
     const [sortOrder, setSortOrder] = useState("asc");

@@ -1,0 +1,73 @@
+.InventoryList {
+    margin-left: 15vw;
+    max-width: 800px;
+    padding: 30px;
+}
+
+.InventoryList h2 {
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.InventoryList table {
+    border-collapse: collapse;
+    margin-top: 30px;
+    width: 100%;
+}
+
+.InventoryList th,
+.InventoryList td {
+    border: 1px solid #ccc;
+    padding: 12px;
+}
+
+.InventoryList th {
+    background-color: #f4f4f4;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.InventoryList td {
+    font-size: 1.1rem;
+}
+
+.InventoryList td.actions {
+    text-align: center;
+}
+
+.InventoryList td.actions button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    margin-left: 5px;
+    padding: 5px;
+}
+
+.InventoryList td.actions button:hover {
+    color: #007bff;
+}
+
+.InventoryList input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    padding: 10px;
+    width: 100%;
+}
+
+.InventoryList label {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-right: 10px;
+}
+
+.InventoryList button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+}

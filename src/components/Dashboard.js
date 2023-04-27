@@ -1,7 +1,7 @@
 import React from "react";
 // import "./Dashboard.css";
 
-function Dashboard({ props }) {
+function Dashboard(props) {
     const { inventory, recentActivity } = props;
 
     // calculate metrics for summary section

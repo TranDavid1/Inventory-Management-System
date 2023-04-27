@@ -1,4 +1,5 @@
 import React from "react";
+// import "../css/InventoryItem";
 
 function InventoryItem(props) {
     const item = props.item;

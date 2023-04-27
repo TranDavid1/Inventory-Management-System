@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../css/InventoryForm";
 
 function InventoryForm(props) {
     const [itemName, setItemName] = useState("");
