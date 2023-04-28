@@ -2,20 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import InventoryItem from "./InventoryItem";
 import "../css/Inventory.css";
 import FolderList from "./FolderList";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import FolderIcon from "@mui/icons-material/Folder";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
 import AddItemDialog from "../components/AddItemDialog";
 import AddFolderDialog from "./AddFolderDialog";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import DescriptionIcon from "@mui/icons-material/Description";
 
-function Inventory() {
+function Inventory(props) {
     const [sortOrder, setSortOrder] = useState("asc");
     const [filterValue, setFilterValue] = useState("");
     const [searchValue, setSearchValue] = useState("");
@@ -27,7 +27,9 @@ function Inventory() {
     const [items, setItems] = useState([]);
     const [folders, setFolders] = useState([]);
     const [addFolderOpen, setAddFolderOpen] = useState(false);
-    const [searchItemCount, setSearchItemCount] = useState(0);
+    const [totalValue, setTotalValue] = useState(0);
+    const [filteredItems, setFilteredItems] = useState([]);
+    const [searchResultsTotal, setSearchResultsTotal] = useState(0);
 
     useEffect(() => {
         fetchItems();
@@ -47,7 +49,20 @@ function Inventory() {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [dropDownRef]);
+    }, [filterValue, props.inventory, selectedFolder, dropDownRef]);
+
+    // update filteredItems based on searchValue
+    useEffect(() => {
+        if (searchValue === "") {
+            setFilteredItems(items);
+        } else {
+            const lowerCaseSearchValue = searchValue.toLowerCase();
+            const filtered = items.filter((item) =>
+                item.itemName.toLowerCase().includes(lowerCaseSearchValue)
+            );
+            setFilteredItems(filtered);
+        }
+    }, [searchValue, items]);
 
     const fetchItems = () => {
         fetch("http://localhost:5000/items")
@@ -69,88 +84,50 @@ function Inventory() {
             .catch((err) => console.error(err));
     };
 
-    // const handleSortOrder = () => {
-    //     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    // };
-
-    // const handleFilterValue = (event) => {
-    //     setFilterValue(event.target.value);
-    // };
-
-    // const handleDeleteItem = (id) => {
-    //     const updatedInventory = props.inventory.filter(
-    //         (item) => item.id !== id
-    //     );
-    //     props.onDeleteItem(updatedInventory);
-    // };
-
-    // const handleEditItem = (id, updatedItem) => {
-    //     const updatedInventory = props.inventory.map((item) =>
-    //         item.id === id ? updatedItem : item
-    //     );
-    //     props.onEditItem(updatedInventory);
-    // };
-
-    // const sortedInventory = [...props.inventory].sort((a, b) => {
-    //     if (sortOrder === "asc") {
-    //         return a.name.localeCompare(b.name);
-    //     } else {
-    //         return b.name.localeCompare(a.name);
-    //     }
-    // });
-
-    // const groupedInventory = props.inventory.reduce((acc, item) => {
-    //     if (!acc[item.folder]) {
-    //         acc[item.folder] = [item];
-    //     } else {
-    //         acc[item.folder].push(item);
-    //     }
-    //     return acc;
-    // }, {});
-
-    // const filteredInventory = sortedInventory.filter((item) => {
-    //     return item.name.toLowerCase().includes(filterValue.toLowerCase());
-    // });
-
-    // const searchedInventory = Object.entries(groupedInventory).map(
-    //     ([folder, items]) => ({
-    //         folder,
-    //         items: items.filter((item) =>
-    //             item.name.toLowerCase().includes(searchValue.toLowerCase())
-    //         ),
-    //     })
-    // );
-
-    // const filteredByFolderInventory =
-    //     selectedFolder === ""
-    //         ? searchedInventory
-    //         : searchedInventory.filter(
-    //               (item) => item.folder === selectedFolder
-    //           );
-
-    // const folderCount = Object.keys(groupedInventory).length;
-
-    // const itemsNotInFolder = props.inventory.filter((item) => !item.folder);
-
-    // const totalItemQuantity = props.inventory.reduce(
-    //     (total, item) => total + item.quantity,
-    //     0
-    // );
-
-    const filteredItems = items.filter((item) =>
-        item.itemName.toLowerCase().includes(searchValue.toLowerCase())
-    );
-
     const filteredFolders = folders.filter((folder) =>
         folder.folderName.toLowerCase().includes(searchValue.toLowerCase())
     );
 
     const handleSearchBarClick = () => {
         setShowDropdown(true);
+        calcTotalValue();
+    };
+
+    const handleSearch = (value) => {
+        setSearchValue(value);
+        if (value === "") {
+            setFilteredItems(items);
+        } else {
+            const filteredItems = items.filter((item) =>
+                item.itemName.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredItems(filteredItems);
+            setSearchResultsTotal(filteredItems.length);
+        }
     };
 
     const handleAddNewButtonClick = () => {
         setShowAddNewOptions(!showAddNewOptions);
+    };
+
+    const calcTotalValue = () => {
+        let total = 0;
+        filteredItems.forEach((item) => {
+            total += item.itemPrice * item.itemQuantity;
+        });
+        setTotalValue(total);
+    };
+
+    const handleSortOrder = () => {
+        const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
+        setSortOrder(newSortOrder);
+
+        const sortedItems = filteredItems.sort((a, b) =>
+            newSortOrder === "asc"
+                ? a.itemName.localeCompare(b.itemName)
+                : b.itemName.localeCompare(a.itemName)
+        );
+        setItems(sortedItems);
     };
 
     return (
@@ -210,17 +187,14 @@ function Inventory() {
                         type="text"
                         id="searchValue"
                         value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
+                        onChange={(e) => handleSearch(e.target.value)}
                         placeholder="Search"
                         onFocus={handleSearchBarClick}
                     />
                 </div>
-                {/* <div className="sort">
+                <div className="sort">
                     <label htmlFor="sortOrder"></label>
-                    <button
-                        className="sortButton"
-                        // onClick={handleSortOrder}
-                    >
+                    <button className="sortButton" onClick={handleSortOrder}>
                         {sortOrder === "asc" ? (
                             <>
                                 Name <ArrowDropUpIcon />
@@ -231,7 +205,7 @@ function Inventory() {
                             </>
                         )}
                     </button>
-                </div> */}
+                </div>
                 {/* <div>
                     <label htmlFor="filterValue">Filter by Name:</label>
                     <input
@@ -248,11 +222,18 @@ function Inventory() {
                 </div>
             )}
             <div className="inventory-summary">
-                <div>
-                    <h3>Folders: {filteredFolders.length}</h3>
+                <div className="inventory-summary-sec-1">
+                    <div>
+                        <h3>Folders: {filteredFolders.length}</h3>
+                    </div>
+                    <div>
+                        <h3>Items: {filteredItems.length}</h3>
+                    </div>
+                    <div>{/* <h3>Total Value: {totalValue}</h3> */}</div>
                 </div>
-                <div>
-                    <h3>Items: {filteredItems.length}</h3>
+
+                <div className="inventory-summary-sec-2">
+                    Search Results: {searchResultsTotal}
                 </div>
             </div>
 
@@ -295,6 +276,9 @@ function Inventory() {
                             >
                                 <Card className="item-card">
                                     <CardContent>
+                                        <div className="icon-wrapper">
+                                            <DescriptionIcon fontSize="large" />
+                                        </div>
                                         <div className="item-card-name">
                                             {item.itemName}
                                         </div>
@@ -302,8 +286,11 @@ function Inventory() {
                                             className="item-card-description"
                                             variant="subtitle1"
                                         >
-                                            {item.itemQuantity} unit | $
-                                            {item.itemPrice}
+                                            {item.itemQuantity}{" "}
+                                            {item.itemQuantity > 1
+                                                ? "units"
+                                                : "unit"}{" "}
+                                            | ${item.itemPrice}
                                         </Typography>
                                     </CardContent>
                                 </Card>
