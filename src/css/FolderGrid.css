@@ -1,0 +1,55 @@
+.inventory-grid-container__folders-grid {
+    padding-top: 1.5em;
+    padding-left: 2.5em;
+    padding-bottom: 2em;
+}
+
+.css-29hkq-MuiGrid-root {
+    padding-left: 16px;
+}
+
+.inventory-grid-container__folders-grid .card--folder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: grey;
+    height: 10em;
+    width: 10em;
+}
+
+.inventory-grid-container__folders-grid .card--folder .card__icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* .inventory-grid-container__folders-grid .folder-card {
+    height: 10em;
+    background-color: grey;
+    width: 10em;
+    display: inline-flex;
+    align-items: center;
+}
+
+.inventory-grid-container__folders-grid .folder-card .icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5rem;
+} */
+
+/* .inventory-grid-container__folders-grid .folder-card .folder-card-name {
+    display: inline-flex;
+    text-align: left;
+} */
+
+.css-46bh2p-MuiCardContent-root:last-child {
+    width: 100%;
+}
+
+.card__folder-name {
+    margin-top: 0.5em;
+    text-align: left;
+}

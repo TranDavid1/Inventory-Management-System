@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import InventoryItem from "./InventoryItem";
 import "../css/Inventory.css";
-import FolderList from "./FolderList";
+import FolderList from "./FolderGrid";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import PostAddIcon from "@mui/icons-material/PostAdd";
@@ -15,6 +15,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import DescriptionIcon from "@mui/icons-material/Description";
 import Folder from "./Folder";
+import FolderGrid from "./FolderGrid";
 
 function Inventory(props) {
     const [sortOrder, setSortOrder] = useState("asc");
@@ -291,7 +292,7 @@ function Inventory(props) {
             </div>
 
             <div className="inventory-grid-container">
-                <div className="inventory-grid-container__folders-grid">
+                {/* <div className="inventory-grid-container__folders-grid">
                     <Grid className="grid grid--folders" container spacing={2}>
                         {filteredFolders.map((folder) => (
                             <Grid
@@ -317,7 +318,8 @@ function Inventory(props) {
                             </Grid>
                         ))}
                     </Grid>
-                </div>
+                </div> */}
+                <FolderGrid filteredFolders={filteredFolders} />
                 <div className="inventory-grid-container__items-grid">
                     <Grid className="grid grid--items" container spacing={2}>
                         {filteredItems.map((item) => (
