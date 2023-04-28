@@ -208,20 +208,16 @@ function Inventory(props) {
                 };
 
                 // Make an API call to add the new item
-                const response = fetch("/api/items", {
+                fetch("/items/add", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(newItem),
-                });
-
-                if (!response.ok) {
-                    throw new Error("Failed to add item");
-                }
-
-                // Close the dialog
-                onClose();
+                })
+                    .then((res) => res.json())
+                    .then(() => onClose())
+                    .catch((err) => console.error(err));
             } catch (error) {
                 console.error(error);
             }

@@ -8,6 +8,8 @@ app.use(cors());
 app.use(express.json());
 
 // add routes here
+app.use("/", itemsRouter);
+
 app.listen(port, () => {
     console.log("Server is running on port: ${port}");
 });
