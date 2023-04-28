@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
 import AddItemDialog from "../components/AddItemDialog";
+import AddFolderDialog from "./AddFolderDialog";
 
 function Inventory() {
     const [sortOrder, setSortOrder] = useState("asc");
@@ -152,93 +153,93 @@ function Inventory() {
         setShowAddNewOptions(!showAddNewOptions);
     };
 
-    function AddFolderDialog(props) {
-        const { open, onClose } = props;
-        const [folderName, setFolderName] = useState("");
-        const [tags, setTags] = useState("");
-        const [items, setItems] = useState([]);
-        const [parent, setParent] = useState(null);
-        const [children, setChildren] = useState([]);
+    // function AddFolderDialog(props) {
+    //     const { open, onClose } = props;
+    //     const [folderName, setFolderName] = useState("");
+    //     const [tags, setTags] = useState("");
+    //     const [items, setItems] = useState([]);
+    //     const [parent, setParent] = useState(null);
+    //     const [children, setChildren] = useState([]);
 
-        const handleFolderNameChange = (event) => {
-            setFolderName(event.target.value);
-        };
+    //     const handleFolderNameChange = (event) => {
+    //         setFolderName(event.target.value);
+    //     };
 
-        const handleFolderTagsChange = (event) => {
-            setTags(event.target.value);
-        };
+    //     const handleFolderTagsChange = (event) => {
+    //         setTags(event.target.value);
+    //     };
 
-        const handleAddFolder = (event) => {
-            event.preventDefault();
-            // Add item to the list here
-            try {
-                const newFolder = {
-                    folderName: folderName,
-                    items: items,
-                    parent: parent,
-                    children: children,
-                    tags: tags,
-                };
+    //     const handleAddFolder = (event) => {
+    //         event.preventDefault();
+    //         // Add item to the list here
+    //         try {
+    //             const newFolder = {
+    //                 folderName: folderName,
+    //                 items: items,
+    //                 parent: parent,
+    //                 children: children,
+    //                 tags: tags,
+    //             };
 
-                console.log("newFolder:", newFolder);
+    //             console.log("newFolder:", newFolder);
 
-                // Make an API call to add the new item
-                fetch("http://localhost:5000/folders/add", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(newFolder),
-                })
-                    .then((res) => res.text())
-                    .then((text) => console.log(text))
-                    .then(() => {
-                        fetchItems();
-                        onClose();
-                    })
-                    .catch((err) => console.error(err));
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    //             // Make an API call to add the new item
+    //             fetch("http://localhost:5000/folders/add", {
+    //                 method: "POST",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                 },
+    //                 body: JSON.stringify(newFolder),
+    //             })
+    //                 .then((res) => res.text())
+    //                 .then((text) => console.log(text))
+    //                 .then(() => {
+    //                     fetchItems();
+    //                     onClose();
+    //                 })
+    //                 .catch((err) => console.error(err));
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
 
-        const handleClose = () => {
-            onClose();
-        };
+    //     const handleClose = () => {
+    //         onClose();
+    //     };
 
-        return (
-            <Dialog open={open} onClose={handleClose}>
-                <h2 className="add-folder-form-header">Add Folder</h2>
-                <form className="add-folder-form" onSubmit={handleAddFolder}>
-                    <div>
-                        <label htmlFor="folder-name"></label>
-                        <input
-                            className="folder-name-input"
-                            type="text"
-                            id="folder-name"
-                            value={folderName}
-                            onChange={handleFolderNameChange}
-                            placeholder="Name*"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="folder-tags"></label>
-                        <input
-                            className="folder-tags-input"
-                            type="text"
-                            id="folder-tags"
-                            value={tags}
-                            onChange={handleFolderTagsChange}
-                            placeholder="Tags"
-                        />
-                    </div>
-                    <button className="add-folder-button" type="submit">
-                        Add
-                    </button>
-                </form>
-            </Dialog>
-        );
-    }
+    //     return (
+    //         <Dialog open={open} onClose={handleClose}>
+    //             <h2 className="add-folder-form-header">Add Folder</h2>
+    //             <form className="add-folder-form" onSubmit={handleAddFolder}>
+    //                 <div>
+    //                     <label htmlFor="folder-name"></label>
+    //                     <input
+    //                         className="folder-name-input"
+    //                         type="text"
+    //                         id="folder-name"
+    //                         value={folderName}
+    //                         onChange={handleFolderNameChange}
+    //                         placeholder="Name*"
+    //                     />
+    //                 </div>
+    //                 <div>
+    //                     <label htmlFor="folder-tags"></label>
+    //                     <input
+    //                         className="folder-tags-input"
+    //                         type="text"
+    //                         id="folder-tags"
+    //                         value={tags}
+    //                         onChange={handleFolderTagsChange}
+    //                         placeholder="Tags"
+    //                     />
+    //                 </div>
+    //                 <button className="add-folder-button" type="submit">
+    //                     Add
+    //                 </button>
+    //             </form>
+    //         </Dialog>
+    //     );
+    // }
 
     return (
         <div className="Inventory">

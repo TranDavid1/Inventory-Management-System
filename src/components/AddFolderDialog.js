@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 
-function AddItemDialog(props) {
+function AddFolderDialog(props) {
     const { open, onClose } = props;
-    const [itemName, setItemName] = useState("");
-    const [itemQuantity, setItemQuantity] = useState("");
-    const [itemPrice, setItemPrice] = useState("");
+    const [folderName, setFolderName] = useState("");
+    const [tags, setTags] = useState("");
     const [items, setItems] = useState([]);
+    const [parent, setParent] = useState(null);
+    const [children, setChildren] = useState([]);
     const [folders, setFolders] = useState([]);
 
     useEffect(() => {
@@ -34,37 +35,35 @@ function AddItemDialog(props) {
             .catch((err) => console.error(err));
     };
 
-    const handleItemNameChange = (event) => {
-        setItemName(event.target.value);
+    const handleFolderNameChange = (event) => {
+        setFolderName(event.target.value);
     };
 
-    const handleItemQuantityChange = (event) => {
-        setItemQuantity(event.target.value);
+    const handleFolderTagsChange = (event) => {
+        setTags(event.target.value);
     };
 
-    const handleItemPriceChange = (event) => {
-        setItemPrice(event.target.value);
-    };
-
-    const handleAddItem = (event) => {
+    const handleAddFolder = (event) => {
         event.preventDefault();
         // Add item to the list here
         try {
-            const newItem = {
-                itemName: itemName,
-                itemQuantity: itemQuantity,
-                itemPrice: itemPrice,
+            const newFolder = {
+                folderName: folderName,
+                items: items,
+                parent: parent,
+                children: children,
+                tags: tags,
             };
 
-            console.log("newItem:", newItem);
+            console.log("newFolder:", newFolder);
 
             // Make an API call to add the new item
-            fetch("http://localhost:5000/items/add", {
+            fetch("http://localhost:5000/folders/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(newItem),
+                body: JSON.stringify(newFolder),
             })
                 .then((res) => res.text())
                 .then((text) => console.log(text))
@@ -85,43 +84,31 @@ function AddItemDialog(props) {
 
     return (
         <Dialog open={open} onClose={handleClose}>
-            <h2 className="add-item-form-header">Add Item</h2>
-            <form className="add-item-form" onSubmit={handleAddItem}>
+            <h2 className="add-folder-form-header">Add Folder</h2>
+            <form className="add-folder-form" onSubmit={handleAddFolder}>
                 <div>
-                    <label htmlFor="item-name"></label>
+                    <label htmlFor="folder-name"></label>
                     <input
-                        className="item-name-input"
+                        className="folder-name-input"
                         type="text"
-                        id="item-name"
-                        value={itemName}
-                        onChange={handleItemNameChange}
+                        id="folder-name"
+                        value={folderName}
+                        onChange={handleFolderNameChange}
                         placeholder="Name*"
                     />
                 </div>
                 <div>
-                    <label htmlFor="item-quantity"></label>
+                    <label htmlFor="folder-tags"></label>
                     <input
-                        className="item-quantity-input"
-                        type="number"
-                        id="item-quantity"
-                        value={itemQuantity}
-                        onChange={handleItemQuantityChange}
-                        defaultValue={1}
-                        placeholder="Quantity"
+                        className="folder-tags-input"
+                        type="text"
+                        id="folder-tags"
+                        value={tags}
+                        onChange={handleFolderTagsChange}
+                        placeholder="Tags"
                     />
                 </div>
-                <div>
-                    <label htmlFor="item-price"></label>
-                    <input
-                        className="item-price-input"
-                        type="number"
-                        id="item-price"
-                        value={itemPrice}
-                        onChange={handleItemPriceChange}
-                        placeholder="Price, USD"
-                    />
-                </div>
-                <button className="add-item-button" type="submit">
+                <button className="add-folder-button" type="submit">
                     Add
                 </button>
             </form>
@@ -129,4 +116,4 @@ function AddItemDialog(props) {
     );
 }
 
-export default AddItemDialog;
+export default AddFolderDialog;

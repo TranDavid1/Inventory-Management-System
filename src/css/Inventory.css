@@ -267,7 +267,7 @@ input[type="number"] {
 
 .inventory-grid-container .items-grid .item-card {
     /* margin-right: 1em; */
-    height: 8.5em;
+    height: 10em;
     width: 10em;
     background-color: grey;
 }
@@ -299,7 +299,7 @@ input[type="number"] {
 }
 
 .inventory-grid-container .folders-grid .folder-card {
-    height: 8em;
+    height: 10em;
     background-color: grey;
     width: 10em;
     display: inline-flex;
@@ -308,6 +308,5 @@ input[type="number"] {
 
 .inventory-grid-container .folders-grid .folder-card .folder-card-name {
     display: inline-flex;
-    align-items: center;
-    margin-bottom: auto;
+    text-align: left;
 }
