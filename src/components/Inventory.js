@@ -8,6 +8,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
+import FolderIcon from "@mui/icons-material/Folder";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
@@ -449,13 +450,16 @@ function Inventory() {
                 onFolderChange={setSelectedFolder}
             /> */}
 
-            <div className="inventory-grid">
+            <div className="inventory-grid-container">
                 <div className="folders-grid">
                     <Grid container spacing={2}>
                         {folders.map((folder) => (
                             <Grid folder xs={12} sm={6} md={4} key={folder._id}>
                                 <Card className="folder-card">
                                     <CardContent>
+                                        <div className="icon-wrapper">
+                                            <FolderIcon fontSize="large" />
+                                        </div>
                                         <div className="folder-card-name">
                                             {folder.folderName}
                                         </div>
@@ -474,7 +478,14 @@ function Inventory() {
                 <div className="items-grid">
                     <Grid container spacing={2}>
                         {items.map((item) => (
-                            <Grid item xs={12} sm={6} md={4} key={item._id}>
+                            <Grid
+                                item
+                                xs={12}
+                                sm={6}
+                                md={4}
+                                lg={2}
+                                key={item._id}
+                            >
                                 <Card className="item-card">
                                     <CardContent>
                                         <div className="item-card-name">

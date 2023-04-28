@@ -232,9 +232,12 @@ input[type="number"] {
     display: flex;
     align-items: center;
     background-color: #f2f2f2;
+    margin-bottom: 1em;
+    border-radius: 10px;
 }
 
 .searchBar .searchIcon {
+    padding-left: 0.5em;
 }
 
 .searchBar .searchInput {
@@ -254,33 +257,49 @@ input[type="number"] {
     margin-right: 0.5em;
 }
 
-.inventory-grid .items-grid {
+.inventory-grid-container .items-grid {
     padding-left: 0.5em;
 }
 
-.inventory-grid .items-grid .item-card {
-    height: 8em;
+.inventory-grid-container .items-grid .item-card {
+    margin-right: 1em;
+    height: 9em;
+    width: 10em;
     background-color: grey;
 }
 
-.inventory-grid .items-grid .item-card-name {
+.inventory-grid-container .items-grid .item-card-name {
     height: 5em;
 }
 
-.inventory-grid .items-grid .item-card-description {
+.inventory-grid-container .items-grid .item-card-description {
     display: inline-flex;
     align-items: center;
 }
 
-.inventory-grid .folders-grid {
+.inventory-grid-container .folders-grid {
     padding-left: 0.5em;
     padding-bottom: 1em;
 }
-.inventory-grid .folders-grid .folder-card {
-    height: 7em;
+
+.css-29hkq-MuiGrid-root {
+    padding-left: 16px;
 }
 
-.inventory-grid .folders-grid .folder-card-description {
+.inventory-grid-container .folders-grid .folder-card .icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.inventory-grid-container .folders-grid .folder-card {
+    height: 7em;
+    background-color: grey;
+    width: 10em;
+}
+
+.inventory-grid-container .folders-grid .folder-card .folder-card-description {
     display: inline-flex;
     align-items: center;
 }
