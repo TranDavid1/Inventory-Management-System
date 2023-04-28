@@ -325,7 +325,7 @@ function Inventory() {
         <div className="Inventory">
             <div className="sticky-header">
                 <h1 className="inventory-header">All Items</h1>
-                <div className="add-new">
+                <div className="add-new-options-container">
                     <Button
                         className="add-new-button"
                         variant="contained"
