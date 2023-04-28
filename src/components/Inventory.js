@@ -33,8 +33,10 @@ function Inventory(props) {
     const [filteredItems, setFilteredItems] = useState([]);
     const [searchResultsTotal, setSearchResultsTotal] = useState(0);
     const [showFolderGrid, setShowFolderGrid] = useState(false);
+    const [showSearchResults, setShowSearchResults] = useState(false);
 
     useEffect(() => {
+        setShowSearchResults(false);
         fetchItems();
         fetchFolders();
         console.log("updated items:", items);
@@ -91,7 +93,7 @@ function Inventory(props) {
         folder.folderName.toLowerCase().includes(searchValue.toLowerCase())
     );
 
-    const handleSearchBarClick = () => {
+    const handleSearchBarClick = (e) => {
         setShowDropdown(true);
         calcTotalValue();
     };
@@ -100,12 +102,15 @@ function Inventory(props) {
         setSearchValue(value);
         if (value === "") {
             setFilteredItems(items);
+            // setSearchResultsTotal(filteredItems.length);
+            setShowSearchResults(false);
         } else {
             const filteredItems = items.filter((item) =>
                 item.itemName.toLowerCase().includes(value.toLowerCase())
             );
             setFilteredItems(filteredItems);
             setSearchResultsTotal(filteredItems.length);
+            setShowSearchResults(true);
         }
     };
 
@@ -285,10 +290,11 @@ function Inventory(props) {
                     </div>
                     <div>{/* <h3>Total Value: {totalValue}</h3> */}</div>
                 </div>
-
-                <div className="inventory-summary-sec-2">
-                    Search Results: {searchResultsTotal}
-                </div>
+                {showSearchResults && (
+                    <div className="inventory-summary-sec-2">
+                        Search Results: {searchResultsTotal}
+                    </div>
+                )}
             </div>
 
             <div className="inventory-grid-container">
