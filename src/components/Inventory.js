@@ -14,6 +14,7 @@ import AddFolderDialog from "./AddFolderDialog";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import DescriptionIcon from "@mui/icons-material/Description";
+import Folder from "./Folder";
 
 function Inventory(props) {
     const [sortOrder, setSortOrder] = useState("asc");
@@ -30,6 +31,7 @@ function Inventory(props) {
     const [totalValue, setTotalValue] = useState(0);
     const [filteredItems, setFilteredItems] = useState([]);
     const [searchResultsTotal, setSearchResultsTotal] = useState(0);
+    const [showFolderGrid, setShowFolderGrid] = useState(false);
 
     useEffect(() => {
         fetchItems();
@@ -177,6 +179,10 @@ function Inventory(props) {
         return 0;
     };
 
+    const handleFolderCardButtonClick = () => {
+        setShowFolderGrid(!showFolderGrid);
+    };
+
     return (
         <div className="Inventory">
             <div className="sticky-header">
@@ -296,7 +302,7 @@ function Inventory(props) {
                                 lg={2}
                                 key={folder._id}
                             >
-                                <Button variant="text" className="card-button">
+                                <Button className="card-button">
                                     <Card className="card card--folder">
                                         <CardContent className="card__content">
                                             <div className="card__icon-wrapper">
