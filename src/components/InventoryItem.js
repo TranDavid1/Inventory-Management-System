@@ -2,12 +2,14 @@ import React from "react";
 // import "../css/InventoryItem";
 
 function InventoryItem(props) {
-    const item = props.item;
+    const items = props.items;
 
     return (
-        <li>
-            {item.name} - {item.quantity} - {item.folder}
-        </li>
+        <div className="inventory">
+            {items.map((item) => (
+                <InventoryItem key={item.id} item={item} />
+            ))}
+        </div>
     );
 }
 

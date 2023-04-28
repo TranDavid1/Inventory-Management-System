@@ -10,7 +10,7 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import Card from "@mui/material/Card";
+import { Grid, Card, CardContent, Typography } from "@mui/material";
 
 function Inventory() {
     const [sortOrder, setSortOrder] = useState("asc");
@@ -25,6 +25,7 @@ function Inventory() {
 
     useEffect(() => {
         fetchItems();
+        console.log("updated items:", items);
         const handleClickOutside = (event) => {
             if (
                 dropDownRef.current &&
@@ -45,6 +46,7 @@ function Inventory() {
         fetch("http://localhost:5000/items")
             .then((res) => res.json())
             .then((data) => {
+                console.log("data retrieved: ", data);
                 setItems(data);
             })
             .catch((err) => console.error(err));
@@ -247,29 +249,35 @@ function Inventory() {
 
         return (
             <Dialog open={open} onClose={handleClose}>
-                <h2>Add Item</h2>
+                <h2 className="add-item-form-header">Add Item</h2>
                 <form className="add-item-form" onSubmit={handleAddItem}>
                     <div>
-                        <label htmlFor="item-name">Item Name:</label>
+                        <label htmlFor="item-name"></label>
                         <input
+                            className="item-name-input"
                             type="text"
                             id="item-name"
                             value={itemName}
                             onChange={handleItemNameChange}
+                            placeholder="Name*"
                         />
                     </div>
                     <div>
-                        <label htmlFor="item-quantity">Item Quantity:</label>
+                        <label htmlFor="item-quantity"></label>
                         <input
+                            className="item-quantity-input"
                             type="number"
                             id="item-quantity"
                             value={itemQuantity}
                             onChange={handleItemQuantityChange}
+                            defaultValue={1}
+                            placeholder="Quantity"
                         />
                     </div>
                     <div>
-                        <label htmlFor="item-price">Item Price:</label>
+                        <label htmlFor="item-price"></label>
                         <input
+                            className="item-price-input"
                             type="number"
                             id="item-price"
                             value={itemPrice}
@@ -277,7 +285,9 @@ function Inventory() {
                             placeholder="Price, USD"
                         />
                     </div>
-                    <button type="submit">Add</button>
+                    <button className="add-item-button" type="submit">
+                        Add
+                    </button>
                 </form>
             </Dialog>
         );
@@ -392,13 +402,32 @@ function Inventory() {
             /> */}
 
             <div className="inventory-grid">
-                {items.map((item) => {
-                    <div key={items._id} className="card">
-                        <h2>{items.itemName}</h2>
-                        <p>Quantity: {items.itemQuantity}</p>
-                        <p>Price: {items.itemPrice}</p>
-                    </div>;
-                })}
+                <Grid container spacing={2}>
+                    {items.map((item) => (
+                        <Grid item xs={12} sm={6} md={4} key={item._id}>
+                            <Card className="item-card">
+                                <CardContent>
+                                    {/* <Typography variant="h6">
+                                        {item.name}
+                                    </Typography> */}
+                                    <div className="item-card-name">
+                                        {item.itemName}
+                                    </div>
+                                    <Typography
+                                        className="item-card-description"
+                                        variant="subtitle1"
+                                    >
+                                        {item.itemQuantity} unit | $
+                                        {item.itemPrice}
+                                    </Typography>
+                                    {/* <Typography variant="subtitle1">
+                                        Price: {item.itemPrice}
+                                    </Typography> */}
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
             </div>
         </div>
     );
