@@ -20,8 +20,9 @@ function Inventory() {
     const [showDropDown, setShowDropdown] = useState(false);
     const dropDownRef = useRef(null);
     const [showAddNewOptions, setShowAddNewOptions] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [addItemOpen, setAddItemOpen] = useState(false);
     const [items, setItems] = useState([]);
+    const [addFolderOpen, setAddFolderOpen] = useState(false);
 
     useEffect(() => {
         fetchItems();
@@ -132,67 +133,6 @@ function Inventory() {
         setShowAddNewOptions(!showAddNewOptions);
     };
 
-    // return (
-    //     <div className="Inventory">
-    //         <h2>All Items</h2>
-    //         <FolderList
-    //             inventory={props.inventory}
-    //             selectedFolder={selectedFolder}
-    //             onFolderChange={setSelectedFolder}
-    //         />
-    //         <div>
-    //             <label htmlFor="sortOrder">Sort by Name:</label>
-    //             <button onClick={handleSortOrder}>
-    //                 {sortOrder === "asc" ? "Ascending" : "Descending"}
-    //             </button>
-    //         </div>
-    //         <div>
-    //             <label htmlFor="filterValue">Filter by Name:</label>
-    //             <input
-    //                 type="text"
-    //                 id="filterValue"
-    //                 value={filterValue}
-    //                 onChange={handleFilterValue}
-    //             />
-    //         </div>
-    //         <div>
-    //             <label htmlFor="searchValue">Search:</label>
-    //             <input
-    //                 type="text"
-    //                 id="searchValue"
-    //                 value={searchValue}
-    //                 onChange={handleSearchValue}
-    //             />
-    //         </div>
-    //         <table>
-    //             <thead>
-    //                 <tr>
-    //                     <th>Name</th>
-    //                     <th>Description</th>
-    //                     <th>Quantity</th>
-    //                     <th>Actions</th>
-    //                 </tr>
-    //             </thead>
-    //             <tbody>
-    //                 {searchedInventory.length === 0 ? (
-    //                     <tr>
-    //                         <td colSpan="4">No items in inventory</td>
-    //                     </tr>
-    //                 ) : (
-    //                     searchedInventory.map((item) => (
-    //                         <InventoryItem
-    //                             key={item.id}
-    //                             item={item}
-    //                             onDeleteItem={handleDeleteItem}
-    //                             onEditItem={handleEditItem}
-    //                         />
-    //                     ))
-    //                 )}
-    //             </tbody>
-    //         </table>
-    //     </div>
-    // );
-
     function AddItemDialog(props) {
         const { open, onClose } = props;
         const [itemName, setItemName] = useState("");
@@ -293,6 +233,94 @@ function Inventory() {
         );
     }
 
+    function AddFolderDialog(props) {
+        const { open, onClose } = props;
+        const [folderName, setFolderName] = useState("");
+        const [tags, setTags] = useState("");
+        const [items, setItems] = useState({});
+        const [parent, setParent] = useState("");
+        const [children, setChildren] = useState({});
+
+        const handleFolderNameChange = (event) => {
+            setFolderName(event.target.value);
+        };
+
+        const handleFolderTagsChange = (event) => {
+            setTags(event.target.value);
+        };
+
+        const handleAddFolder = (event) => {
+            event.preventDefault();
+            // Add item to the list here
+            try {
+                const newFolder = {
+                    folderName: folderName,
+                    items: items,
+                    parent: parent,
+                    children: children,
+                    tags: tags,
+                };
+
+                console.log("newFolder:", newFolder);
+
+                // Make an API call to add the new item
+                fetch("http://localhost:5000/folders/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(newFolder),
+                })
+                    .then((res) => res.text())
+                    .then((text) => console.log(text))
+                    .then(() => {
+                        fetchItems();
+                        onClose();
+                    })
+                    .catch((err) => console.error(err));
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        const handleClose = () => {
+            onClose();
+        };
+
+        return (
+            <Dialog open={open} onClose={handleClose}>
+                <h2 className="add-folder-form-header">Add Folder</h2>
+                <form className="add-folder-form" onSubmit={handleAddFolder}>
+                    <div>
+                        <label htmlFor="folder-name"></label>
+                        <input
+                            className="folder-name-input"
+                            type="text"
+                            id="folder-name"
+                            value={folderName}
+                            onChange={handleFolderNameChange}
+                            placeholder="Name*"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="folder-tags"></label>
+                        <input
+                            className="folder-tags-input"
+                            type="text"
+                            id="folder-tags"
+                            value={tags}
+                            onChange={handleFolderTagsChange}
+                            placeholder="Tags"
+                        />
+                    </div>
+                    <button className="add-folder-button" type="submit">
+                        Add
+                    </button>
+                </form>
+            </Dialog>
+        );
+    }
+
     return (
         <div className="Inventory">
             <div className="sticky-header">
@@ -312,7 +340,7 @@ function Inventory() {
                             <Button
                                 className="add-item-button"
                                 variant="contained"
-                                onClick={() => setOpen(true)}
+                                onClick={() => setAddItemOpen(true)}
                             >
                                 <>
                                     <PostAddIcon />
@@ -322,6 +350,7 @@ function Inventory() {
                             <Button
                                 className="add-folder-button"
                                 variant="contained"
+                                onClick={() => setAddFolderOpen(true)}
                             >
                                 <>
                                     <CreateNewFolderIcon />
@@ -330,7 +359,14 @@ function Inventory() {
                             </Button>
                         </div>
                     )}
-                    <AddItemDialog open={open} onClose={() => setOpen(false)} />
+                    <AddItemDialog
+                        open={addItemOpen}
+                        onClose={() => setAddItemOpen(false)}
+                    />
+                    <AddFolderDialog
+                        open={addFolderOpen}
+                        onClose={() => setAddFolderOpen(false)}
+                    />
                 </div>
             </div>
             <div className="inventory-options">
