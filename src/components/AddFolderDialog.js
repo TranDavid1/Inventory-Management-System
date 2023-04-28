@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
+import "../css/AddFolderDialog.css";
 
 function AddFolderDialog(props) {
     const { open, onClose } = props;
