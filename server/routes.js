@@ -1,6 +1,7 @@
 const router = require("express").Router();
 // const Folder = require("../models/folder.model");
 const Item = require("../models/item.model");
+const Folder = require("../models/folder.model");
 
 router.route("/items/add").post((req, res) => {
     console.log("req.body", req.body);
@@ -16,6 +17,17 @@ router.route("/items/add").post((req, res) => {
 router.route("/items").get((req, res) => {
     Item.find()
         .then((items) => res.json(items))
+        .catch((err) => res.status(400).json(`Error: ${err}`));
+});
+
+router.route("/folders/add").post((req, res) => {
+    console.log("req.body", req.body);
+    const { folderName, items, parent, children, tags } = req.body;
+    const newFolder = new Folder({ folderName, items, parent, chidlren, tags });
+
+    newFolder
+        .save()
+        .then(() => res.json("Folder added!"))
         .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
