@@ -20,14 +20,17 @@ function Navbar() {
                     className={activeIndex === 0 ? "active" : ""}
                     onClick={() => handleClick(0)}
                 >
-                    <IconButton
-                        component={Link}
-                        to="/items"
-                        aria-label="Inventory"
-                        className="MuiIconButton-root"
-                    >
-                        <HomeIcon />
-                    </IconButton>
+                    <div className="inventory-icon-container">
+                        <IconButton
+                            component={Link}
+                            to="/items"
+                            aria-label="Inventory"
+                            className="MuiIconButton-root"
+                            title="Inventory"
+                        >
+                            <HomeIcon />
+                        </IconButton>
+                    </div>
                 </li>
                 <li
                     className={activeIndex === 1 ? "active" : ""}
@@ -38,6 +41,7 @@ function Navbar() {
                         to="/dashboard"
                         aria-label="Dashboard"
                         className="MuiIconButton-root"
+                        title="Dashboard"
                     >
                         <DashboardIcon />
                     </IconButton>
@@ -51,6 +55,7 @@ function Navbar() {
                         to="/items"
                         aria-label="Inventory"
                         className="MuiIconButton-root"
+                        title="Items"
                     >
                         <InventoryIcon />
                     </IconButton>

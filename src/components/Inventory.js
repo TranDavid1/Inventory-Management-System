@@ -12,6 +12,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
+import AddItemDialog from "../components/AddItemDialog";
 
 function Inventory() {
     const [sortOrder, setSortOrder] = useState("asc");
@@ -25,6 +26,7 @@ function Inventory() {
     const [items, setItems] = useState([]);
     const [folders, setFolders] = useState([]);
     const [addFolderOpen, setAddFolderOpen] = useState(false);
+    const [searchItemCount, setSearchItemCount] = useState(0);
 
     useEffect(() => {
         fetchItems();
@@ -72,10 +74,6 @@ function Inventory() {
 
     // const handleFilterValue = (event) => {
     //     setFilterValue(event.target.value);
-    // };
-
-    // const handleSearchValue = (event) => {
-    //     setSearchValue(event.target.value);
     // };
 
     // const handleDeleteItem = (id) => {
@@ -138,6 +136,14 @@ function Inventory() {
     //     0
     // );
 
+    const filteredItems = items.filter((item) =>
+        item.itemName.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    const filteredFolders = folders.filter((folder) =>
+        folder.folderName.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
     const handleSearchBarClick = () => {
         setShowDropdown(true);
     };
@@ -145,106 +151,6 @@ function Inventory() {
     const handleAddNewButtonClick = () => {
         setShowAddNewOptions(!showAddNewOptions);
     };
-
-    function AddItemDialog(props) {
-        const { open, onClose } = props;
-        const [itemName, setItemName] = useState("");
-        const [itemQuantity, setItemQuantity] = useState("");
-        const [itemPrice, setItemPrice] = useState("");
-
-        const handleItemNameChange = (event) => {
-            setItemName(event.target.value);
-        };
-
-        const handleItemQuantityChange = (event) => {
-            setItemQuantity(event.target.value);
-        };
-
-        const handleItemPriceChange = (event) => {
-            setItemPrice(event.target.value);
-        };
-
-        const handleAddItem = (event) => {
-            event.preventDefault();
-            // Add item to the list here
-            try {
-                const newItem = {
-                    itemName: itemName,
-                    itemQuantity: itemQuantity,
-                    itemPrice: itemPrice,
-                };
-
-                console.log("newItem:", newItem);
-
-                // Make an API call to add the new item
-                fetch("http://localhost:5000/items/add", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(newItem),
-                })
-                    .then((res) => res.text())
-                    .then((text) => console.log(text))
-                    .then(() => {
-                        fetchItems();
-                        onClose();
-                    })
-                    .catch((err) => console.error(err));
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        const handleClose = () => {
-            onClose();
-        };
-
-        return (
-            <Dialog open={open} onClose={handleClose}>
-                <h2 className="add-item-form-header">Add Item</h2>
-                <form className="add-item-form" onSubmit={handleAddItem}>
-                    <div>
-                        <label htmlFor="item-name"></label>
-                        <input
-                            className="item-name-input"
-                            type="text"
-                            id="item-name"
-                            value={itemName}
-                            onChange={handleItemNameChange}
-                            placeholder="Name*"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="item-quantity"></label>
-                        <input
-                            className="item-quantity-input"
-                            type="number"
-                            id="item-quantity"
-                            value={itemQuantity}
-                            onChange={handleItemQuantityChange}
-                            defaultValue={1}
-                            placeholder="Quantity"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="item-price"></label>
-                        <input
-                            className="item-price-input"
-                            type="number"
-                            id="item-price"
-                            value={itemPrice}
-                            onChange={handleItemPriceChange}
-                            placeholder="Price, USD"
-                        />
-                    </div>
-                    <button className="add-item-button" type="submit">
-                        Add
-                    </button>
-                </form>
-            </Dialog>
-        );
-    }
 
     function AddFolderDialog(props) {
         const { open, onClose } = props;
@@ -391,7 +297,7 @@ function Inventory() {
                         type="text"
                         id="searchValue"
                         value={searchValue}
-                        // onChange={handleSearchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
                         placeholder="Search"
                         onFocus={handleSearchBarClick}
                     />
@@ -424,7 +330,7 @@ function Inventory() {
                 </div> */}
             </div>
             {showDropDown && (
-                <div ref={dropDownRef} className="searchBarDropdownText">
+                <div ref={dropDownRef} className="search-bar-dropdown-text">
                     Type at least 3 characters to search for items and folders
                 </div>
             )}
@@ -453,8 +359,15 @@ function Inventory() {
             <div className="inventory-grid-container">
                 <div className="folders-grid">
                     <Grid container spacing={2}>
-                        {folders.map((folder) => (
-                            <Grid folder xs={12} sm={6} md={4} key={folder._id}>
+                        {filteredFolders.map((folder) => (
+                            <Grid
+                                folder
+                                xs={12}
+                                sm={6}
+                                md={4}
+                                lg={2}
+                                key={folder._id}
+                            >
                                 <Card className="folder-card">
                                     <CardContent>
                                         <div className="icon-wrapper">
@@ -463,12 +376,6 @@ function Inventory() {
                                         <div className="folder-card-name">
                                             {folder.folderName}
                                         </div>
-                                        <Typography
-                                            className="folder-card-description"
-                                            variant="subtitle1"
-                                        >
-                                            {folder.tags}
-                                        </Typography>
                                     </CardContent>
                                 </Card>
                             </Grid>
@@ -477,7 +384,7 @@ function Inventory() {
                 </div>
                 <div className="items-grid">
                     <Grid container spacing={2}>
-                        {items.map((item) => (
+                        {filteredItems.map((item) => (
                             <Grid
                                 item
                                 xs={12}

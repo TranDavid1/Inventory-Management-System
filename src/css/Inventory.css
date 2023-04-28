@@ -227,12 +227,16 @@ input[type="number"] {
     justify-content: space-between;
 }
 
+.search-bar-dropdown-text {
+    margin-left: 1.5em;
+}
+
 .searchBar {
+    margin-left: 1em;
     margin-right: 1rem;
     display: flex;
     align-items: center;
     background-color: #f2f2f2;
-    margin-bottom: 1em;
     border-radius: 10px;
 }
 
@@ -258,12 +262,12 @@ input[type="number"] {
 }
 
 .inventory-grid-container .items-grid {
-    padding-left: 0.5em;
+    padding-left: 1.5em;
 }
 
 .inventory-grid-container .items-grid .item-card {
-    margin-right: 1em;
-    height: 9em;
+    /* margin-right: 1em; */
+    height: 8.5em;
     width: 10em;
     background-color: grey;
 }
@@ -278,8 +282,9 @@ input[type="number"] {
 }
 
 .inventory-grid-container .folders-grid {
-    padding-left: 0.5em;
-    padding-bottom: 1em;
+    padding-top: 1.5em;
+    padding-left: 2.5em;
+    padding-bottom: 2em;
 }
 
 .css-29hkq-MuiGrid-root {
@@ -294,12 +299,15 @@ input[type="number"] {
 }
 
 .inventory-grid-container .folders-grid .folder-card {
-    height: 7em;
+    height: 8em;
     background-color: grey;
     width: 10em;
-}
-
-.inventory-grid-container .folders-grid .folder-card .folder-card-description {
     display: inline-flex;
     align-items: center;
+}
+
+.inventory-grid-container .folders-grid .folder-card .folder-card-name {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: auto;
 }
