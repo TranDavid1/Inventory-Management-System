@@ -201,34 +201,34 @@ input[type="number"] {
     margin-right: 0.5em;
 }
 
-.inventory-grid-container .items-grid {
+.inventory-grid-container__items-grid {
     padding-left: 1.5em;
 }
 
-.inventory-grid-container .items-grid .item-card {
+.inventory-grid-container__items-grid .card--item {
     /* margin-right: 1em; */
     height: 10em;
     width: 10em;
     background-color: grey;
 }
 
-.inventory-grid-container .items-grid .item-card-name {
+.inventory-grid-container__items-grid .card_item-name {
     height: 4em;
 }
 
-.inventory-grid-container .items-grid .item-card .icon-wrapper {
+.inventory-grid-container__items-grid .card--item .card__icon-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 0.5rem;
 }
 
-.inventory-grid-container .items-grid .item-card-description {
+.inventory-grid-container__items-grid .card__item.description {
     display: inline-flex;
     align-items: center;
 }
 
-.inventory-grid-container .folders-grid {
+.inventory-grid-container__folders-grid {
     padding-top: 1.5em;
     padding-left: 2.5em;
     padding-bottom: 2em;
@@ -238,14 +238,24 @@ input[type="number"] {
     padding-left: 16px;
 }
 
-.inventory-grid-container .folders-grid .folder-card .icon-wrapper {
+.inventory-grid-container__folders-grid .card--folder {
     display: flex;
-    justify-content: center;
     align-items: center;
-    margin-bottom: 0.5rem;
+    justify-content: center;
+    background-color: grey;
+    height: 10em;
+    width: 10em;
 }
 
-.inventory-grid-container .folders-grid .folder-card {
+.inventory-grid-container__folders-grid .card--folder .card__icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* .inventory-grid-container__folders-grid .folder-card {
     height: 10em;
     background-color: grey;
     width: 10em;
@@ -253,7 +263,23 @@ input[type="number"] {
     align-items: center;
 }
 
-.inventory-grid-container .folders-grid .folder-card .folder-card-name {
+.inventory-grid-container__folders-grid .folder-card .icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5rem;
+} */
+
+/* .inventory-grid-container__folders-grid .folder-card .folder-card-name {
     display: inline-flex;
+    text-align: left;
+} */
+
+.css-46bh2p-MuiCardContent-root:last-child {
+    width: 100%;
+}
+
+.card__folder-name {
+    margin-top: 0.5em;
     text-align: left;
 }

@@ -118,16 +118,63 @@ function Inventory(props) {
         setTotalValue(total);
     };
 
+    // const handleSortOrder = () => {
+    //     const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
+    //     setSortOrder(newSortOrder);
+
+    //     const sortedItems = filteredItems.sort((a, b) =>
+    //         newSortOrder === "asc"
+    //             ? a.itemName.localeCompare(b.itemName)
+    //             : b.itemName.localeCompare(a.itemName)
+    //     );
+    //     setItems(sortedItems);
+    // };
+
     const handleSortOrder = () => {
         const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
         setSortOrder(newSortOrder);
 
         const sortedItems = filteredItems.sort((a, b) =>
-            newSortOrder === "asc"
-                ? a.itemName.localeCompare(b.itemName)
-                : b.itemName.localeCompare(a.itemName)
+            compareItems(a, b, newSortOrder)
         );
         setItems(sortedItems);
+        const sortedFolders = folders
+            .slice()
+            .sort((a, b) => compareFolders(a, b, newSortOrder));
+        setFolders(sortedFolders);
+    };
+
+    const compareItems = (a, b, sortOrder) => {
+        const aName = a.itemName.toLowerCase();
+        const bName = b.itemName.toLowerCase();
+        const aNum = parseInt(aName.match(/\d+/));
+        const bNum = parseInt(bName.match(/\d+/));
+        if (aNum && bNum) {
+            if (aNum !== bNum) {
+                return sortOrder === "asc" ? aNum - bNum : bNum - aNum;
+            } else {
+                const aStr = aName.replace(aNum, "").trim();
+                const bStr = bName.replace(bNum, "").trim();
+                return sortOrder === "asc"
+                    ? aStr.localeCompare(bStr)
+                    : bStr.localeCompare(aStr);
+            }
+        }
+        return sortOrder === "asc"
+            ? aName.localeCompare(bName)
+            : bName.localeCompare(aName);
+    };
+
+    const compareFolders = (a, b, sortOrder) => {
+        const aName = a.folderName.toLowerCase();
+        const bName = b.folderName.toLowerCase();
+        if (aName < bName) {
+            return sortOrder === "asc" ? -1 : 1;
+        }
+        if (aName > bName) {
+            return sortOrder === "asc" ? 1 : -1;
+        }
+        return 0;
     };
 
     return (
@@ -238,8 +285,8 @@ function Inventory(props) {
             </div>
 
             <div className="inventory-grid-container">
-                <div className="folders-grid">
-                    <Grid container spacing={2}>
+                <div className="inventory-grid-container__folders-grid">
+                    <Grid className="grid grid--folders" container spacing={2}>
                         {filteredFolders.map((folder) => (
                             <Grid
                                 folder
@@ -249,22 +296,24 @@ function Inventory(props) {
                                 lg={2}
                                 key={folder._id}
                             >
-                                <Card className="folder-card">
-                                    <CardContent>
-                                        <div className="icon-wrapper">
-                                            <FolderIcon fontSize="large" />
-                                        </div>
-                                        <div className="folder-card-name">
-                                            {folder.folderName}
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                                <Button variant="text" className="card-button">
+                                    <Card className="card card--folder">
+                                        <CardContent className="card__content">
+                                            <div className="card__icon-wrapper">
+                                                <FolderIcon fontSize="large" />
+                                            </div>
+                                            <div className="card__folder-name">
+                                                {folder.folderName}
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </Button>
                             </Grid>
                         ))}
                     </Grid>
                 </div>
-                <div className="items-grid">
-                    <Grid container spacing={2}>
+                <div className="inventory-grid-container__items-grid">
+                    <Grid className="grid grid--items" container spacing={2}>
                         {filteredItems.map((item) => (
                             <Grid
                                 item
@@ -274,16 +323,16 @@ function Inventory(props) {
                                 lg={2}
                                 key={item._id}
                             >
-                                <Card className="item-card">
-                                    <CardContent>
-                                        <div className="icon-wrapper">
+                                <Card className="card card--item">
+                                    <CardContent className="card__content">
+                                        <div className="card__icon-wrapper">
                                             <DescriptionIcon fontSize="large" />
                                         </div>
-                                        <div className="item-card-name">
+                                        <div className="card_item-name">
                                             {item.itemName}
                                         </div>
                                         <Typography
-                                            className="item-card-description"
+                                            className="card__item-description"
                                             variant="subtitle1"
                                         >
                                             {item.itemQuantity}{" "}

@@ -74,7 +74,9 @@ function AddItemDialog(props) {
                     fetchFolders();
                     onClose();
                 })
-                .catch((err) => console.error(err));
+                .catch((err) => {
+                    console.error(err);
+                });
         } catch (error) {
             console.error(error);
         }
@@ -82,6 +84,7 @@ function AddItemDialog(props) {
 
     const handleClose = () => {
         onClose();
+        window.location.reload();
     };
 
     return (

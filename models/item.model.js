@@ -16,6 +16,12 @@ const itemSchema = new Schema({
         type: Number,
         required: true,
     },
+
+    folder: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Folder",
+        default: null,
+    },
 });
 
 const Item = mongoose.model("Item", itemSchema);
