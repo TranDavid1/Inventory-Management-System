@@ -10,8 +10,9 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
+import Card from "@mui/material/Card";
 
-function Inventory(props) {
+function Inventory() {
     const [sortOrder, setSortOrder] = useState("asc");
     const [filterValue, setFilterValue] = useState("");
     const [searchValue, setSearchValue] = useState("");
@@ -20,8 +21,10 @@ function Inventory(props) {
     const dropDownRef = useRef(null);
     const [showAddNewOptions, setShowAddNewOptions] = useState(false);
     const [open, setOpen] = useState(false);
+    const [items, setItems] = useState([]);
 
     useEffect(() => {
+        fetchItems();
         const handleClickOutside = (event) => {
             if (
                 dropDownRef.current &&
@@ -38,77 +41,86 @@ function Inventory(props) {
         };
     }, [dropDownRef]);
 
-    const handleSortOrder = () => {
-        setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    const fetchItems = () => {
+        fetch("http://localhost:5000/items")
+            .then((res) => res.json())
+            .then((data) => {
+                setItems(data);
+            })
+            .catch((err) => console.error(err));
     };
 
-    const handleFilterValue = (event) => {
-        setFilterValue(event.target.value);
-    };
+    // const handleSortOrder = () => {
+    //     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    // };
 
-    const handleSearchValue = (event) => {
-        setSearchValue(event.target.value);
-    };
+    // const handleFilterValue = (event) => {
+    //     setFilterValue(event.target.value);
+    // };
 
-    const handleDeleteItem = (id) => {
-        const updatedInventory = props.inventory.filter(
-            (item) => item.id !== id
-        );
-        props.onDeleteItem(updatedInventory);
-    };
+    // const handleSearchValue = (event) => {
+    //     setSearchValue(event.target.value);
+    // };
 
-    const handleEditItem = (id, updatedItem) => {
-        const updatedInventory = props.inventory.map((item) =>
-            item.id === id ? updatedItem : item
-        );
-        props.onEditItem(updatedInventory);
-    };
+    // const handleDeleteItem = (id) => {
+    //     const updatedInventory = props.inventory.filter(
+    //         (item) => item.id !== id
+    //     );
+    //     props.onDeleteItem(updatedInventory);
+    // };
 
-    const sortedInventory = [...props.inventory].sort((a, b) => {
-        if (sortOrder === "asc") {
-            return a.name.localeCompare(b.name);
-        } else {
-            return b.name.localeCompare(a.name);
-        }
-    });
+    // const handleEditItem = (id, updatedItem) => {
+    //     const updatedInventory = props.inventory.map((item) =>
+    //         item.id === id ? updatedItem : item
+    //     );
+    //     props.onEditItem(updatedInventory);
+    // };
 
-    const groupedInventory = props.inventory.reduce((acc, item) => {
-        if (!acc[item.folder]) {
-            acc[item.folder] = [item];
-        } else {
-            acc[item.folder].push(item);
-        }
-        return acc;
-    }, {});
+    // const sortedInventory = [...props.inventory].sort((a, b) => {
+    //     if (sortOrder === "asc") {
+    //         return a.name.localeCompare(b.name);
+    //     } else {
+    //         return b.name.localeCompare(a.name);
+    //     }
+    // });
 
-    const filteredInventory = sortedInventory.filter((item) => {
-        return item.name.toLowerCase().includes(filterValue.toLowerCase());
-    });
+    // const groupedInventory = props.inventory.reduce((acc, item) => {
+    //     if (!acc[item.folder]) {
+    //         acc[item.folder] = [item];
+    //     } else {
+    //         acc[item.folder].push(item);
+    //     }
+    //     return acc;
+    // }, {});
 
-    const searchedInventory = Object.entries(groupedInventory).map(
-        ([folder, items]) => ({
-            folder,
-            items: items.filter((item) =>
-                item.name.toLowerCase().includes(searchValue.toLowerCase())
-            ),
-        })
-    );
+    // const filteredInventory = sortedInventory.filter((item) => {
+    //     return item.name.toLowerCase().includes(filterValue.toLowerCase());
+    // });
 
-    const filteredByFolderInventory =
-        selectedFolder === ""
-            ? searchedInventory
-            : searchedInventory.filter(
-                  (item) => item.folder === selectedFolder
-              );
+    // const searchedInventory = Object.entries(groupedInventory).map(
+    //     ([folder, items]) => ({
+    //         folder,
+    //         items: items.filter((item) =>
+    //             item.name.toLowerCase().includes(searchValue.toLowerCase())
+    //         ),
+    //     })
+    // );
 
-    const folderCount = Object.keys(groupedInventory).length;
+    // const filteredByFolderInventory =
+    //     selectedFolder === ""
+    //         ? searchedInventory
+    //         : searchedInventory.filter(
+    //               (item) => item.folder === selectedFolder
+    //           );
 
-    const itemsNotInFolder = props.inventory.filter((item) => !item.folder);
+    // const folderCount = Object.keys(groupedInventory).length;
 
-    const totalItemQuantity = props.inventory.reduce(
-        (total, item) => total + item.quantity,
-        0
-    );
+    // const itemsNotInFolder = props.inventory.filter((item) => !item.folder);
+
+    // const totalItemQuantity = props.inventory.reduce(
+    //     (total, item) => total + item.quantity,
+    //     0
+    // );
 
     const handleSearchBarClick = () => {
         setShowDropdown(true);
@@ -202,21 +214,27 @@ function Inventory(props) {
             // Add item to the list here
             try {
                 const newItem = {
-                    name: itemName,
-                    quantity: itemQuantity,
-                    price: itemPrice,
+                    itemName: itemName,
+                    itemQuantity: itemQuantity,
+                    itemPrice: itemPrice,
                 };
 
+                console.log("newItem:", newItem);
+
                 // Make an API call to add the new item
-                fetch("/items/add", {
+                fetch("http://localhost:5000/items/add", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(newItem),
                 })
-                    .then((res) => res.json())
-                    .then(() => onClose())
+                    .then((res) => res.text())
+                    .then((text) => console.log(text))
+                    .then(() => {
+                        fetchItems();
+                        onClose();
+                    })
                     .catch((err) => console.error(err));
             } catch (error) {
                 console.error(error);
@@ -314,14 +332,17 @@ function Inventory(props) {
                         type="text"
                         id="searchValue"
                         value={searchValue}
-                        onChange={handleSearchValue}
+                        // onChange={handleSearchValue}
                         placeholder="Search"
                         onFocus={handleSearchBarClick}
                     />
                 </div>
-                <div className="sort">
+                {/* <div className="sort">
                     <label htmlFor="sortOrder"></label>
-                    <button className="sortButton" onClick={handleSortOrder}>
+                    <button
+                        className="sortButton"
+                        // onClick={handleSortOrder}
+                    >
                         {sortOrder === "asc" ? (
                             <>
                                 Name <ArrowDropUpIcon />
@@ -332,7 +353,7 @@ function Inventory(props) {
                             </>
                         )}
                     </button>
-                </div>
+                </div> */}
                 {/* <div>
                     <label htmlFor="filterValue">Filter by Name:</label>
                     <input
@@ -348,7 +369,7 @@ function Inventory(props) {
                     Type at least 3 characters to search for items and folders
                 </div>
             )}
-            <div className="inventory-summary">
+            {/* <div className="inventory-summary">
                 <div>
                     <h3>Folders</h3>
                     <p>{Object.keys(groupedInventory).length}</p>
@@ -363,7 +384,7 @@ function Inventory(props) {
                     <h3>Total Quantity</h3>
                     <p>{props.inventory.length}</p>
                 </div>
-            </div>
+            </div> */}
             {/* <FolderList
                 inventory={props.inventory}
                 selectedFolder={selectedFolder}
@@ -371,19 +392,13 @@ function Inventory(props) {
             /> */}
 
             <div className="inventory-grid">
-                {Object.entries(groupedInventory).map(([folder, items]) => (
-                    <div key={folder} className="inventory-folder">
-                        <h3>{folder || "No Folder"}</h3>
-                        {items.map((item) => (
-                            <InventoryItem
-                                key={item.id}
-                                item={item}
-                                onDeleteItem={handleDeleteItem}
-                                onEditItem={handleEditItem}
-                            />
-                        ))}
-                    </div>
-                ))}
+                {items.map((item) => {
+                    <div key={items._id} className="card">
+                        <h2>{items.itemName}</h2>
+                        <p>Quantity: {items.itemQuantity}</p>
+                        <p>Price: {items.itemPrice}</p>
+                    </div>;
+                })}
             </div>
         </div>
     );
