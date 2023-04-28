@@ -23,11 +23,17 @@ router.route("/items").get((req, res) => {
 router.route("/folders/add").post((req, res) => {
     console.log("req.body", req.body);
     const { folderName, items, parent, children, tags } = req.body;
-    const newFolder = new Folder({ folderName, items, parent, chidlren, tags });
+    const newFolder = new Folder({ folderName, items, parent, children, tags });
 
     newFolder
         .save()
         .then(() => res.json("Folder added!"))
+        .catch((err) => res.status(400).json(`Error: ${err}`));
+});
+
+router.route("/folders").get((req, res) => {
+    Folder.find()
+        .then((folders) => res.json(folders))
         .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 

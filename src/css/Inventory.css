@@ -6,8 +6,8 @@
     /* max-width: 800px; */
     /* padding: 2em; */
     /* flex: 1; */
-    /* margin-left: 8vw; */
-    width: 100%;
+    margin-left: 8vw;
+    /* width: 100%; */
 }
 
 .Inventory h2 {
@@ -254,15 +254,33 @@ input[type="number"] {
     margin-right: 0.5em;
 }
 
-.inventory-grid .item-card {
-    height: 8em;
+.inventory-grid .items-grid {
+    padding-left: 0.5em;
 }
 
-.inventory-grid .item-card-name {
+.inventory-grid .items-grid .item-card {
+    height: 8em;
+    background-color: grey;
+}
+
+.inventory-grid .items-grid .item-card-name {
     height: 5em;
 }
 
-.inventory-grid .item-card-description {
+.inventory-grid .items-grid .item-card-description {
+    display: inline-flex;
+    align-items: center;
+}
+
+.inventory-grid .folders-grid {
+    padding-left: 0.5em;
+    padding-bottom: 1em;
+}
+.inventory-grid .folders-grid .folder-card {
+    height: 7em;
+}
+
+.inventory-grid .folders-grid .folder-card-description {
     display: inline-flex;
     align-items: center;
 }

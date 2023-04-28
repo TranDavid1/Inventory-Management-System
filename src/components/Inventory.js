@@ -22,10 +22,12 @@ function Inventory() {
     const [showAddNewOptions, setShowAddNewOptions] = useState(false);
     const [addItemOpen, setAddItemOpen] = useState(false);
     const [items, setItems] = useState([]);
+    const [folders, setFolders] = useState([]);
     const [addFolderOpen, setAddFolderOpen] = useState(false);
 
     useEffect(() => {
         fetchItems();
+        fetchFolders();
         console.log("updated items:", items);
         const handleClickOutside = (event) => {
             if (
@@ -49,6 +51,16 @@ function Inventory() {
             .then((data) => {
                 console.log("data retrieved: ", data);
                 setItems(data);
+            })
+            .catch((err) => console.error(err));
+    };
+
+    const fetchFolders = () => {
+        fetch("http://localhost:5000/folders")
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("folders retrieved: ", data);
+                setFolders(data);
             })
             .catch((err) => console.error(err));
     };
@@ -237,9 +249,9 @@ function Inventory() {
         const { open, onClose } = props;
         const [folderName, setFolderName] = useState("");
         const [tags, setTags] = useState("");
-        const [items, setItems] = useState({});
-        const [parent, setParent] = useState("");
-        const [children, setChildren] = useState({});
+        const [items, setItems] = useState([]);
+        const [parent, setParent] = useState(null);
+        const [children, setChildren] = useState([]);
 
         const handleFolderNameChange = (event) => {
             setFolderName(event.target.value);
@@ -438,32 +450,49 @@ function Inventory() {
             /> */}
 
             <div className="inventory-grid">
-                <Grid container spacing={2}>
-                    {items.map((item) => (
-                        <Grid item xs={12} sm={6} md={4} key={item._id}>
-                            <Card className="item-card">
-                                <CardContent>
-                                    {/* <Typography variant="h6">
-                                        {item.name}
-                                    </Typography> */}
-                                    <div className="item-card-name">
-                                        {item.itemName}
-                                    </div>
-                                    <Typography
-                                        className="item-card-description"
-                                        variant="subtitle1"
-                                    >
-                                        {item.itemQuantity} unit | $
-                                        {item.itemPrice}
-                                    </Typography>
-                                    {/* <Typography variant="subtitle1">
-                                        Price: {item.itemPrice}
-                                    </Typography> */}
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    ))}
-                </Grid>
+                <div className="folders-grid">
+                    <Grid container spacing={2}>
+                        {folders.map((folder) => (
+                            <Grid folder xs={12} sm={6} md={4} key={folder._id}>
+                                <Card className="folder-card">
+                                    <CardContent>
+                                        <div className="folder-card-name">
+                                            {folder.folderName}
+                                        </div>
+                                        <Typography
+                                            className="folder-card-description"
+                                            variant="subtitle1"
+                                        >
+                                            {folder.tags}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </div>
+                <div className="items-grid">
+                    <Grid container spacing={2}>
+                        {items.map((item) => (
+                            <Grid item xs={12} sm={6} md={4} key={item._id}>
+                                <Card className="item-card">
+                                    <CardContent>
+                                        <div className="item-card-name">
+                                            {item.itemName}
+                                        </div>
+                                        <Typography
+                                            className="item-card-description"
+                                            variant="subtitle1"
+                                        >
+                                            {item.itemQuantity} unit | $
+                                            {item.itemPrice}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </div>
             </div>
         </div>
     );
