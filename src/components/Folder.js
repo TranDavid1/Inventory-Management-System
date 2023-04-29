@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Grid, Paper, Typography } from "@mui/material";
+import { Grid, Card, CardContent, Typography } from "@mui/material";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 function Folder() {
     const { folderId } = useParams();
@@ -40,18 +41,18 @@ function Folder() {
                             className="FolderGrid__child"
                         >
                             <Link to={`/folders/${child._id}`}>
-                                <Paper className="FolderGrid__child-paper">
+                                {/* <Paper className="FolderGrid__child-paper">
                                     <Typography
                                         variant="h5"
                                         className="FolderGrid__child-title"
                                     >
                                         {child.folderName}
                                     </Typography>
-                                </Paper>
+                                </Paper> */}
                             </Link>
                         </Grid>;
                     })}
-                {items.map((item) => {
+                {/* {items.map((item) => {
                     <Grid item key={item._id} className="FolderGrid__item">
                         <Paper className="FolderGrid__item-paper">
                             <Typography
@@ -63,7 +64,33 @@ function Folder() {
                             </Typography>
                         </Paper>
                     </Grid>;
-                })}
+                })} */}
+                <Grid className="grid grid--items" container spacing={2}>
+                    {items.map((item) => (
+                        <Grid item xs={12} sm={6} md={4} lg={2} key={item._id}>
+                            <Card className="card card--item">
+                                <CardContent className="card__content">
+                                    <div className="card__icon-wrapper">
+                                        <DescriptionIcon fontSize="large" />
+                                    </div>
+                                    <div className="card_item-name">
+                                        {item.itemName}
+                                    </div>
+                                    <Typography
+                                        className="card__item-description"
+                                        variant="subtitle1"
+                                    >
+                                        {item.itemQuantity}{" "}
+                                        {item.itemQuantity > 1
+                                            ? "units"
+                                            : "unit"}{" "}
+                                        | ${item.itemPrice}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
             </Grid>
         </div>
     );
