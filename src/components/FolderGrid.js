@@ -4,6 +4,7 @@ import Folder from "./Folder";
 import { Grid, Card, CardContent } from "@mui/material";
 import Button from "@mui/material/Button";
 import FolderIcon from "@mui/icons-material/Folder";
+import { Link } from "react-router-dom";
 
 function FolderGrid({ filteredFolders }) {
     const [selectedFolderId, setSelectedFolderId] = useState(null);
@@ -18,6 +19,8 @@ function FolderGrid({ filteredFolders }) {
                 {filteredFolders.map((folder) => (
                     <Grid folder xs={12} sm={6} md={4} lg={2} key={folder._id}>
                         <Button
+                            component={Link}
+                            to={`/folder/${folder._id}`}
                             className="card-button"
                             onClick={() => handleFolderButtonClick(folder._id)}
                         >
@@ -35,11 +38,11 @@ function FolderGrid({ filteredFolders }) {
                     </Grid>
                 ))}
             </Grid>
-            {selectedFolderId && (
+            {/* {selectedFolderId && (
                 <div>
                     <Folder folderId={selectedFolderId} />
                 </div>
-            )}
+            )} */}
         </div>
     );
 }
