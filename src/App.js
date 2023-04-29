@@ -7,6 +7,7 @@ import Inventory from "./components/Inventory";
 import Dashboard from "./components/Dashboard";
 import Navbar from "./components/Navbar";
 import Folder from "./components/Folder";
+import Item from "./components/Item";
 
 function App() {
     const [inventory, setInventory] = useState([]);
@@ -33,6 +34,7 @@ function App() {
                         path="/folder/:folderId"
                         element={<Folder inventory={inventory} />}
                     />
+                    <Route path="/item/:itemId" element={<Item />} />
                 </Routes>
             </div>
         </Router>

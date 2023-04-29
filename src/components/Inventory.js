@@ -8,6 +8,8 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import Folder from "./Folder";
 import FolderGrid from "./FolderGrid";
 import StickyHeader from "./StickyHeader";
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
 
 function Inventory(props) {
     const [sortOrder, setSortOrder] = useState("asc");
@@ -172,6 +174,10 @@ function Inventory(props) {
         setShowFolderGrid(!showFolderGrid);
     };
 
+    // const handleItemCardButtonClick = () => {
+    //     set
+    // }
+
     return (
         <div className="Inventory">
             <StickyHeader />
@@ -241,26 +247,35 @@ function Inventory(props) {
                                     lg={2}
                                     key={item._id}
                                 >
-                                    <Card className="card card--item">
-                                        <CardContent className="card__content">
-                                            <div className="card__icon-wrapper">
-                                                <DescriptionIcon fontSize="large" />
-                                            </div>
-                                            <div className="card_item-name">
-                                                {item.itemName}
-                                            </div>
-                                            <Typography
-                                                className="card__item-description"
-                                                variant="subtitle1"
-                                            >
-                                                {item.itemQuantity}{" "}
-                                                {item.itemQuantity > 1
-                                                    ? "units"
-                                                    : "unit"}{" "}
-                                                | ${item.itemPrice}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
+                                    <Button
+                                        component={Link}
+                                        to={`/item/${item._id}`}
+                                        className="card-button"
+                                        // onClick={() =>
+                                        //     handleFolderButtonClick(folder._id)
+                                        // }
+                                    >
+                                        <Card className="card card--item">
+                                            <CardContent className="card__content">
+                                                <div className="card__icon-wrapper">
+                                                    <DescriptionIcon fontSize="large" />
+                                                </div>
+                                                <div className="card_item-name">
+                                                    {item.itemName}
+                                                </div>
+                                                <Typography
+                                                    className="card__item-description"
+                                                    variant="subtitle1"
+                                                >
+                                                    {item.itemQuantity}{" "}
+                                                    {item.itemQuantity > 1
+                                                        ? "units"
+                                                        : "unit"}{" "}
+                                                    | ${item.itemPrice}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </Button>
                                 </Grid>
                             ))}
                     </Grid>
