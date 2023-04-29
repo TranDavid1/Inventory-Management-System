@@ -1,16 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import InventoryItem from "./InventoryItem";
 import "../css/Inventory.css";
-import FolderList from "./FolderGrid";
 import SearchIcon from "@mui/icons-material/Search";
-import AddIcon from "@mui/icons-material/Add";
-import PostAddIcon from "@mui/icons-material/PostAdd";
-import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-import FolderIcon from "@mui/icons-material/Folder";
-import Button from "@mui/material/Button";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
-import AddItemDialog from "./AddItemDialog";
-import AddFolderDialog from "./AddFolderDialog";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -99,11 +90,11 @@ function Inventory(props) {
 
     const handleSearch = (value) => {
         setSearchValue(value);
-        if (value === "") {
+        if (value === "" || value < 2) {
             setFilteredItems(items);
             // setSearchResultsTotal(filteredItems.length);
             setShowSearchResults(false);
-        } else {
+        } else if (value.length > 2) {
             const filteredItems = items.filter((item) =>
                 item.itemName.toLowerCase().includes(value.toLowerCase())
             );
@@ -129,14 +120,19 @@ function Inventory(props) {
         const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
         setSortOrder(newSortOrder);
 
-        const sortedItems = filteredItems.sort((a, b) =>
-            compareItems(a, b, newSortOrder)
-        );
-        setItems(sortedItems);
-        const sortedFolders = folders
-            .slice()
-            .sort((a, b) => compareFolders(a, b, newSortOrder));
-        setFolders(sortedFolders);
+        if (filteredItems) {
+            const sortedItems = filteredItems.sort((a, b) =>
+                compareItems(a, b, newSortOrder)
+            );
+            setItems(sortedItems);
+        }
+
+        if (folders) {
+            const sortedFolders = folders
+                .slice()
+                .sort((a, b) => compareFolders(a, b, newSortOrder));
+            setFolders(sortedFolders);
+        }
     };
 
     const compareItems = (a, b, sortOrder) => {
@@ -215,12 +211,12 @@ function Inventory(props) {
             )}
             <div className="inventory-summary">
                 <div className="inventory-summary-sec-1">
-                    <div>
+                    {/* <div>
                         <h3>Folders: {filteredFolders.length}</h3>
                     </div>
                     <div>
                         <h3>Items: {filteredItems.length}</h3>
-                    </div>
+                    </div> */}
                     <div>{/* <h3>Total Value: {totalValue}</h3> */}</div>
                 </div>
                 {showSearchResults && (

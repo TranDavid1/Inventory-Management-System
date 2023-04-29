@@ -22,9 +22,9 @@ function Folder() {
     const [items, setItems] = useState([]);
     const [folders, setFolders] = useState([]);
     const dropDownRef = useRef(null);
-    // const [filteredFolders, setFilteredFolders] = useState([]);
 
     useEffect(() => {
+        setShowSearchResults(false);
         const fetchFolderData = async () => {
             const response = await fetch(
                 `http://localhost:5000/folders/${folderId}`
@@ -34,6 +34,7 @@ function Folder() {
             console.log("response data:", data);
             setFolder(data);
             setItems(data.items);
+            setFilteredItems(data.items);
         };
         fetchFolderData();
         // if (folder) setItems(folder.items);
@@ -53,6 +54,18 @@ function Folder() {
         };
     }, [folderId, dropDownRef, items]);
 
+    useEffect(() => {
+        if (searchValue === "") {
+            setFilteredItems(items);
+        } else if (searchValue.length > 2) {
+            const lowerCaseSearchValue = searchValue.toLowerCase();
+            const filtered = items.filter((item) =>
+                item.itemName.toLowerCase().includes(lowerCaseSearchValue)
+            );
+            setFilteredItems(filtered);
+        }
+    }, [searchValue, items]);
+
     if (!folder) {
         return <div>Folder not found</div>;
     }
@@ -60,11 +73,11 @@ function Folder() {
     const handleSearch = (value) => {
         setSearchValue(value);
         if (value === "") {
-            setFilteredItems(items);
+            setFilteredItems(folder.items);
             // setSearchResultsTotal(filteredItems.length);
             setShowSearchResults(false);
         } else if (value.length > 2) {
-            const filteredItems = items.filter((item) =>
+            const filteredItems = folder.items.filter((item) =>
                 item.itemName.toLowerCase().includes(value.toLowerCase())
             );
             setFilteredItems(filteredItems);
@@ -90,14 +103,19 @@ function Folder() {
         const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
         setSortOrder(newSortOrder);
 
-        const sortedItems = filteredItems.sort((a, b) =>
-            compareItems(a, b, newSortOrder)
-        );
-        setItems(sortedItems);
-        const sortedFolders = folders
-            .slice()
-            .sort((a, b) => compareFolders(a, b, newSortOrder));
-        setFolders(sortedFolders);
+        if (filteredItems) {
+            const sortedItems = filteredItems.sort((a, b) =>
+                compareItems(a, b, newSortOrder)
+            );
+            setFilteredItems(sortedItems);
+        }
+
+        if (folder.children) {
+            const sortedFolders = folder.children
+                .slice()
+                .sort((a, b) => compareFolders(a, b, newSortOrder));
+            setFolders(sortedFolders);
+        }
     };
 
     const compareItems = (a, b, sortOrder) => {
@@ -132,6 +150,10 @@ function Folder() {
         }
         return 0;
     };
+
+    const filteredFolders = folder.children.filter((folder) =>
+        folder.folderName.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
     const children = folder.children;
     console.log("items:", items);
@@ -176,12 +198,12 @@ function Folder() {
             )}
             <div className="inventory-summary">
                 <div className="inventory-summary-sec-1">
-                    <div>
-                        <h3>Folders: {folder.children.length}</h3>
+                    {/* <div>
+                        <h3>Folders: {filteredFolders.length}</h3>
                     </div>
                     <div>
                         <h3>Items: {folder.items.length}</h3>
-                    </div>
+                    </div> */}
                     <div>{/* <h3>Total Value: {totalValue}</h3> */}</div>
                 </div>
                 {showSearchResults && (
@@ -225,7 +247,7 @@ function Folder() {
                 })} */}
                 <div className="inventory-grid-container__items-grid">
                     <Grid className="grid grid--items" container spacing={2}>
-                        {items.map((item) => (
+                        {filteredItems.map((item) => (
                             <Grid
                                 item
                                 xs={12}
