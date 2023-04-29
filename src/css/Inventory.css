@@ -58,9 +58,9 @@
 }
 
 .Inventory input {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1.1rem;
+    /* border: 1px solid #ccc; */
+    /* border-radius: 5px; */
+    /* font-size: 1.1rem; */
     padding: 10px;
     width: 100%;
 }
@@ -139,14 +139,14 @@ input[type="number"] {
     margin-left: 1.5em;
 }
 
-.searchBar {
-    margin-left: 1em;
+/* .searchBar {
+    margin-left: 1rem;
     margin-right: 1rem;
     display: flex;
     align-items: center;
     background-color: #f2f2f2;
     border-radius: 10px;
-}
+} */
 
 .searchBar .searchIcon {
     padding-left: 0.5em;
@@ -156,6 +156,7 @@ input[type="number"] {
     margin: 0 auto;
     border: none;
     background-color: #f2f2f2;
+    height: 2rem;
 }
 
 .searchBar .searchInput:focus {

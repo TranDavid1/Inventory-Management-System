@@ -59,7 +59,7 @@ function Inventory(props) {
     useEffect(() => {
         if (searchValue === "") {
             setFilteredItems(items);
-        } else {
+        } else if (searchValue.length > 2) {
             const lowerCaseSearchValue = searchValue.toLowerCase();
             const filtered = items.filter((item) =>
                 item.itemName.toLowerCase().includes(lowerCaseSearchValue)
@@ -189,7 +189,7 @@ function Inventory(props) {
                         id="searchValue"
                         value={searchValue}
                         onChange={(e) => handleSearch(e.target.value)}
-                        placeholder="Search"
+                        placeholder="Search All Items"
                         onFocus={handleSearchBarClick}
                     />
                 </div>
@@ -207,15 +207,6 @@ function Inventory(props) {
                         )}
                     </button>
                 </div>
-                {/* <div>
-                    <label htmlFor="filterValue">Filter by Name:</label>
-                    <input
-                        type="text"
-                        id="filterValue"
-                        value={filterValue}
-                        onChange={handleFilterValue}
-                    />
-                </div> */}
             </div>
             {showDropDown && (
                 <div ref={dropDownRef} className="search-bar-dropdown-text">
