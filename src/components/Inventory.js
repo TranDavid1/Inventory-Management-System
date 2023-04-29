@@ -298,67 +298,42 @@ function Inventory(props) {
             </div>
 
             <div className="inventory-grid-container">
-                {/* <div className="inventory-grid-container__folders-grid">
-                    <Grid className="grid grid--folders" container spacing={2}>
-                        {filteredFolders.map((folder) => (
-                            <Grid
-                                folder
-                                xs={12}
-                                sm={6}
-                                md={4}
-                                lg={2}
-                                key={folder._id}
-                            >
-                                <Button className="card-button">
-                                    <Card className="card card--folder">
-                                        <CardContent className="card__content">
-                                            <div className="card__icon-wrapper">
-                                                <FolderIcon fontSize="large" />
-                                            </div>
-                                            <div className="card__folder-name">
-                                                {folder.folderName}
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                </Button>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </div> */}
                 <FolderGrid filteredFolders={filteredFolders} />
                 <div className="inventory-grid-container__items-grid">
                     <Grid className="grid grid--items" container spacing={2}>
-                        {filteredItems.map((item) => (
-                            <Grid
-                                item
-                                xs={12}
-                                sm={6}
-                                md={4}
-                                lg={2}
-                                key={item._id}
-                            >
-                                <Card className="card card--item">
-                                    <CardContent className="card__content">
-                                        <div className="card__icon-wrapper">
-                                            <DescriptionIcon fontSize="large" />
-                                        </div>
-                                        <div className="card_item-name">
-                                            {item.itemName}
-                                        </div>
-                                        <Typography
-                                            className="card__item-description"
-                                            variant="subtitle1"
-                                        >
-                                            {item.itemQuantity}{" "}
-                                            {item.itemQuantity > 1
-                                                ? "units"
-                                                : "unit"}{" "}
-                                            | ${item.itemPrice}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        ))}
+                        {filteredItems
+                            .filter((item) => item.folder === null)
+                            .map((item) => (
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={6}
+                                    md={4}
+                                    lg={2}
+                                    key={item._id}
+                                >
+                                    <Card className="card card--item">
+                                        <CardContent className="card__content">
+                                            <div className="card__icon-wrapper">
+                                                <DescriptionIcon fontSize="large" />
+                                            </div>
+                                            <div className="card_item-name">
+                                                {item.itemName}
+                                            </div>
+                                            <Typography
+                                                className="card__item-description"
+                                                variant="subtitle1"
+                                            >
+                                                {item.itemQuantity}{" "}
+                                                {item.itemQuantity > 1
+                                                    ? "units"
+                                                    : "unit"}{" "}
+                                                | ${item.itemPrice}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            ))}
                     </Grid>
                 </div>
             </div>

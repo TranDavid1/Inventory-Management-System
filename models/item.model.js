@@ -16,7 +16,18 @@ const itemSchema = new Schema({
         type: Number,
         required: true,
     },
-
+    // itemWeight: {
+    //     type: Number,
+    //     required: true,
+    // },
+    // itemDimensions: {
+    //     type: String,
+    //     required: false,
+    // },
+    // itemCategory: {
+    //     type: String,
+    //     required: false,
+    // },
     folder: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Folder",

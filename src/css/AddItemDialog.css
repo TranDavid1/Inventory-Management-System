@@ -39,3 +39,18 @@
     height: 2em;
     width: 8em;
 }
+
+.add-item-form .item-folder-select {
+    width: 10em;
+    margin-top: 0.5em;
+    /* background-color: white; */
+}
+
+.add-item-form .item-folder-form {
+    margin-top: 0.5em;
+}
+
+.add-item-form .item-folder-form .item-folder-input-label {
+    margin-left: 0.5em;
+    margin-top: 0.5em;
+}

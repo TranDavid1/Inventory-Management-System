@@ -2,7 +2,24 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Grid, Paper, Typography } from "@mui/material";
 
-function Folder({ folder }) {
+function Folder({ folderId }) {
+    const [folder, setFolder] = useState(null);
+
+    useEffect(() => {
+        const fetchFolderData = async () => {
+            const response = await fetch(`/api/folders/${folderId}`);
+            const data = await response.json();
+            console.log("response json:", response.json());
+            console.log("response data:", data);
+            setFolder(data);
+        };
+        fetchFolderData();
+    }, [folderId]);
+
+    if (!folder) {
+        return <div>Loading folder data...</div>;
+    }
+
     const { items, children } = folder;
 
     return (

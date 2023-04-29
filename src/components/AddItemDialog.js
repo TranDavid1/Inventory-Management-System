@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import "../css/AddItemDialog.css";
+import SelectInput from "@mui/material/Select/SelectInput";
+import { InputLabel, MenuItem } from "@mui/material";
+// import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
+import { Form } from "react-router-dom";
 
 function AddItemDialog(props) {
     const { open, onClose } = props;
     const [itemName, setItemName] = useState("");
     const [itemQuantity, setItemQuantity] = useState("");
     const [itemPrice, setItemPrice] = useState("");
+    const [selectedFolderId, setSelectedFolderId] = useState("");
     const [items, setItems] = useState([]);
     const [folders, setFolders] = useState([]);
 
@@ -47,6 +54,10 @@ function AddItemDialog(props) {
         setItemPrice(event.target.value);
     };
 
+    const handleFolderChange = (event) => {
+        setSelectedFolderId(event.target.value);
+    };
+
     const handleAddItem = (event) => {
         event.preventDefault();
         // Add item to the list here
@@ -55,12 +66,17 @@ function AddItemDialog(props) {
                 itemName: itemName,
                 itemQuantity: itemQuantity,
                 itemPrice: itemPrice,
+                folderId: selectedFolderId,
             };
+
+            const actionUrl = selectedFolderId
+                ? `http://localhost:5000/folders/${selectedFolderId}/items`
+                : "http://localhost:5000/items/add";
 
             console.log("newItem:", newItem);
 
             // Make an API call to add the new item
-            fetch("http://localhost:5000/items/add", {
+            fetch(actionUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -110,7 +126,6 @@ function AddItemDialog(props) {
                         id="item-quantity"
                         value={itemQuantity}
                         onChange={handleItemQuantityChange}
-                        defaultValue={1}
                         placeholder="Quantity"
                     />
                 </div>
@@ -124,6 +139,30 @@ function AddItemDialog(props) {
                         onChange={handleItemPriceChange}
                         placeholder="Price, USD"
                     />
+                </div>
+                <div>
+                    <FormControl className="item-folder-form">
+                        <InputLabel
+                            className="item-folder-input-label"
+                            htmlFor="item-folder"
+                            id="folder-select-label"
+                        >
+                            Add to Folder
+                        </InputLabel>
+                        <Select
+                            className="item-folder-select"
+                            id="folder-select-label"
+                            value={selectedFolderId}
+                            onChange={handleFolderChange}
+                            // InputLabel="Folder"
+                        >
+                            {folders.map((folder) => (
+                                <MenuItem value={folder._id}>
+                                    {folder.folderName}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </div>
                 <button className="add-item-button" type="submit">
                     Add
