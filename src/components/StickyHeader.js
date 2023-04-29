@@ -5,6 +5,7 @@ import AddItemDialog from "./AddItemDialog";
 import AddFolderDialog from "./AddFolderDialog";
 import AddIcon from "@mui/icons-material/Add";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
+import "../css/StickyHeader.css";
 
 function StickyHeader() {
     const handleAddNewButtonClick = () => {

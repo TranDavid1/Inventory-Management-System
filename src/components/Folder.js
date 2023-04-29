@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
 import "../css/Folder.css";
+import StickyHeader from "./StickyHeader";
 
 function Folder() {
     const { folderId } = useParams();
@@ -33,6 +34,7 @@ function Folder() {
 
     return (
         <div className="folder-container">
+            <StickyHeader />
             <Grid className="FolderGrid" container spacing={2}>
                 {children &&
                     children.map((child) => {

@@ -125,18 +125,6 @@ function Inventory(props) {
         setTotalValue(total);
     };
 
-    // const handleSortOrder = () => {
-    //     const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
-    //     setSortOrder(newSortOrder);
-
-    //     const sortedItems = filteredItems.sort((a, b) =>
-    //         newSortOrder === "asc"
-    //             ? a.itemName.localeCompare(b.itemName)
-    //             : b.itemName.localeCompare(a.itemName)
-    //     );
-    //     setItems(sortedItems);
-    // };
-
     const handleSortOrder = () => {
         const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
         setSortOrder(newSortOrder);
@@ -190,52 +178,6 @@ function Inventory(props) {
 
     return (
         <div className="Inventory">
-            {/* <div className="sticky-header">
-                <h1 className="inventory-header">All Items</h1>
-                <div className="add-new-options-container">
-                    <Button
-                        className="add-new-button"
-                        variant="contained"
-                        onClick={handleAddNewButtonClick}
-                    >
-                        <>
-                            <AddIcon /> Add New
-                        </>
-                    </Button>
-                    {showAddNewOptions && (
-                        <div className="add-new-options">
-                            <Button
-                                className="add-item-button"
-                                variant="contained"
-                                onClick={() => setAddItemOpen(true)}
-                            >
-                                <>
-                                    <PostAddIcon />
-                                    Add Item
-                                </>
-                            </Button>
-                            <Button
-                                className="add-folder-button"
-                                variant="contained"
-                                onClick={() => setAddFolderOpen(true)}
-                            >
-                                <>
-                                    <CreateNewFolderIcon />
-                                    Add Folder
-                                </>
-                            </Button>
-                        </div>
-                    )}
-                    <AddItemDialog
-                        open={addItemOpen}
-                        onClose={() => setAddItemOpen(false)}
-                    />
-                    <AddFolderDialog
-                        open={addFolderOpen}
-                        onClose={() => setAddFolderOpen(false)}
-                    />
-                </div>
-            </div> */}
             <StickyHeader />
             <div className="inventory-options">
                 <div className="searchBar">

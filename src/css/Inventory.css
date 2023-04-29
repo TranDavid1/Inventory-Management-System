@@ -89,38 +89,6 @@
     font-size: 2rem;
     border-bottom: 1px solid #fff;
     padding: 0.5em;
-    /* padding: 0 2em;
-    margin: 0px auto; */
-}
-
-.sticky-header .add-new-options-container {
-    margin-left: auto;
-    position: relative;
-    width: 125px;
-}
-
-.sticky-header .add-new-options-container .add-new-button {
-    /* align-items: center; */
-    width: 100%;
-}
-
-.sticky-header .add-new-options-container .add-new-options {
-    /* display: block; */
-    /* margin-left: auto; */
-    margin-right: auto;
-    /* align-items: center; */
-    /* text-align: left; */
-    position: absolute;
-}
-
-.sticky-header .add-new-options-container .add-new-options .add-item-button {
-    text-align: left;
-    width: 150px;
-}
-
-.sticky-header .add-new-options-container .add-new-options .add-folder-button {
-    text-align: left;
-    width: 150px;
 }
 
 /* Chrome, Safari, Edge, Opera */
