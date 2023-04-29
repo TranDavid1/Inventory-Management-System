@@ -9,13 +9,14 @@ import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import FolderIcon from "@mui/icons-material/Folder";
 import Button from "@mui/material/Button";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
-import AddItemDialog from "../components/AddItemDialog";
+import AddItemDialog from "./AddItemDialog";
 import AddFolderDialog from "./AddFolderDialog";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import DescriptionIcon from "@mui/icons-material/Description";
 import Folder from "./Folder";
 import FolderGrid from "./FolderGrid";
+import StickyHeader from "./StickyHeader";
 
 function Inventory(props) {
     const [sortOrder, setSortOrder] = useState("asc");
@@ -25,10 +26,8 @@ function Inventory(props) {
     const [showDropDown, setShowDropdown] = useState(false);
     const dropDownRef = useRef(null);
     const [showAddNewOptions, setShowAddNewOptions] = useState(false);
-    const [addItemOpen, setAddItemOpen] = useState(false);
     const [items, setItems] = useState([]);
     const [folders, setFolders] = useState([]);
-    const [addFolderOpen, setAddFolderOpen] = useState(false);
     const [totalValue, setTotalValue] = useState(0);
     const [filteredItems, setFilteredItems] = useState([]);
     const [searchResultsTotal, setSearchResultsTotal] = useState(0);
@@ -191,7 +190,7 @@ function Inventory(props) {
 
     return (
         <div className="Inventory">
-            <div className="sticky-header">
+            {/* <div className="sticky-header">
                 <h1 className="inventory-header">All Items</h1>
                 <div className="add-new-options-container">
                     <Button
@@ -236,7 +235,8 @@ function Inventory(props) {
                         onClose={() => setAddFolderOpen(false)}
                     />
                 </div>
-            </div>
+            </div> */}
+            <StickyHeader />
             <div className="inventory-options">
                 <div className="searchBar">
                     <SearchIcon className="searchIcon" />
