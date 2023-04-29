@@ -161,7 +161,7 @@ function Folder() {
 
     return (
         <div className="folder-container">
-            <StickyHeader />
+            <h2 className="folder-header">{folder.folderName}</h2>
             <div className="folder-options">
                 <div className="searchBar">
                     <SearchIcon className="searchIcon" />

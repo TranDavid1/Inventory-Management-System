@@ -1,3 +1,10 @@
 .item-container {
     margin-left: 8vw;
+    margin-top: 1rem;
+}
+
+.item-container .item-header {
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 20px;
 }

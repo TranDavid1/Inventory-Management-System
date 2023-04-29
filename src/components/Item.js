@@ -24,7 +24,7 @@ function Item() {
             {item ? (
                 <h2 className="item-header">{item.itemName}</h2>
             ) : (
-                <p> Loading </p>
+                <p> Loading item...</p>
             )}
         </div>
     );
