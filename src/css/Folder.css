@@ -81,3 +81,23 @@
     display: inline-flex;
     align-items: center;
 }
+
+.folder-container td.actions button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    margin-left: 5px;
+    padding: 5px;
+}
+
+.folder-container td.actions button:hover {
+    color: #007bff;
+}
+
+.folder-container button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+}

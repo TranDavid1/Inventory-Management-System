@@ -28,3 +28,11 @@
 .item-container .item-edit-container {
     padding: 1em;
 }
+/* 
+.item-container .save-button {
+    display: none;
+}
+
+.edit-item-form-container input[type="text"]:focus ~ .save-button {
+    display: block;
+} */

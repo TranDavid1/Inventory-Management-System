@@ -3,10 +3,16 @@ import "../css/Item.css";
 import { Form, Link, useParams } from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { InputLabel, MenuItem } from "@mui/material";
+import Select from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
+import Input from "@mui/material/Input";
 
 function Item() {
     const { itemId } = useParams();
     const [item, setItem] = useState(null);
+    const [formChanged, setFormChanged] = useState(false);
+    const [formValues, setFormValues] = useState({});
 
     useEffect(() => {
         const fetchItemData = async () => {
@@ -17,9 +23,49 @@ function Item() {
             // console.log("response json:", response.json());
             console.log("response data:", data);
             setItem(data);
+            setFormValues({
+                itemName: data.itemName,
+                itemQuantity: data.itemQuantity,
+                itemPrice: data.itemPrice,
+            });
         };
         fetchItemData();
     }, []);
+
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(
+                `http://localhost:5000/items/${itemId}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formValues),
+                }
+            );
+
+            if (response.ok) {
+                const data = await response.json();
+                setItem(data);
+                alert("Item updated successfully");
+            } else {
+                alert("Something went wrong.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Something went wrong.");
+        }
+    };
+
+    const handleInputChange = (e) => {
+        setFormValues((prevValues) => ({
+            ...prevValues,
+            [e.target.name]: e.target.value,
+        }));
+    };
 
     return (
         <div className="item-container">
@@ -28,7 +74,14 @@ function Item() {
                     <div className="item-header">
                         <h2 className="item-name">{item.itemName}</h2>
                         <div className="save-button-container">
-                            <Button className="save-button">Save</Button>
+                            <Button
+                                className="save-button"
+                                form="edit-item-form"
+                                type="submit"
+                                onClick={handleFormSubmit}
+                            >
+                                Save
+                            </Button>
                         </div>
                     </div>
                     <div className="item-info">
@@ -37,16 +90,29 @@ function Item() {
                             Quantity: {item.itemQuantity} units
                         </div>
                     </div>
-                    <div className="item-edit-container">
-                        <div className="edit-quantity-container">
-                            <TextField
-                                className="edit-quantity-text-field"
-                                variant="standard"
-                                id="edit-quantity-text-field"
-                                value={item.itemQuantity}
-                                label="Quantity"
-                            />
-                        </div>
+                    <div className="edit-item-form-container">
+                        <form className="edit-item-form" id="edit-item-form">
+                            <div className="edit-quantity-container">
+                                <Input
+                                    className="edit-quantity-input"
+                                    id="edit-quantity-input"
+                                    name="itemQuantity"
+                                    value={formValues.itemQuantity || ""}
+                                    label="Quantity"
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="edit-price-container">
+                                <Input
+                                    className="edit-price-input"
+                                    id="edit-price-input"
+                                    name="itemPrice"
+                                    label="Price USD"
+                                    value={formValues.itemPrice || ""}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                        </form>
                     </div>
                 </>
             ) : (

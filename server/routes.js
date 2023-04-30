@@ -20,19 +20,35 @@ router.route("/items").get((req, res) => {
         .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
-router.route("/items/:itemId").get((req, res) => {
-    const itemId = req.params.itemId;
+router
+    .route("/items/:itemId")
+    .get((req, res) => {
+        const itemId = req.params.itemId;
 
-    Item.findById(itemId)
-        .exec()
-        .then((item) => {
-            if (!item) {
-                return res.status(404).json({ message: "Item not found" });
-            }
-            res.json(item);
-        })
-        .catch((err) => res.status(400).json(`Error: ${err}`));
-});
+        Item.findById(itemId)
+            .exec()
+            .then((item) => {
+                if (!item) {
+                    return res.status(404).json({ message: "Item not found" });
+                }
+                res.json(item);
+            })
+            .catch((err) => res.status(400).json(`Error: ${err}`));
+    })
+    .put((req, res) => {
+        const itemId = req.params.itemId;
+        const updatedItem = req.body;
+
+        Item.findByIdAndUpdate(itemId, updatedItem, { new: true })
+            .exec()
+            .then((item) => {
+                if (!item) {
+                    return res.status(404).json({ message: "Item not found" });
+                }
+                res.json(item);
+            })
+            .catch((err) => res.status(400).json(`Error: $(err)`));
+    });
 
 router.route("/folders/add").post((req, res) => {
     console.log("req.body", req.body);

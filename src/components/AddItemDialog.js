@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import "../css/AddItemDialog.css";
-import SelectInput from "@mui/material/Select/SelectInput";
 import { InputLabel, MenuItem } from "@mui/material";
-// import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
-import { Form } from "react-router-dom";
 
 function AddItemDialog(props) {
     const { open, onClose } = props;

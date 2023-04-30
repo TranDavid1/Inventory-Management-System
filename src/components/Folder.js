@@ -107,7 +107,7 @@ function Folder() {
             const sortedItems = filteredItems.sort((a, b) =>
                 compareItems(a, b, newSortOrder)
             );
-            setFilteredItems(sortedItems);
+            setItems(sortedItems);
         }
 
         if (folder.children) {
