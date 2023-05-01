@@ -67,21 +67,41 @@ router.route("/folders").get((req, res) => {
         .catch((err) => res.status(400).json(`Error: ${err}`));
 });
 
-router.route("/folders/:folderId").get((req, res) => {
-    const folderId = req.params.folderId;
+router
+    .route("/folders/:folderId")
+    .get((req, res) => {
+        const folderId = req.params.folderId;
 
-    Folder.findById(folderId)
-        .populate("items children")
-        .exec()
-        .then((folder) => {
-            if (!folder) {
-                return res.status(404).json({ message: "Folder not found" });
-            }
+        Folder.findById(folderId)
+            .populate("items children")
+            .exec()
+            .then((folder) => {
+                if (!folder) {
+                    return res
+                        .status(404)
+                        .json({ message: "Folder not found" });
+                }
 
-            res.json(folder);
-        })
-        .catch((err) => res.status(400).json(`Error: ${err}`));
-});
+                res.json(folder);
+            })
+            .catch((err) => res.status(400).json(`Error: ${err}`));
+    })
+    .put((req, res) => {
+        const folderId = req.params.folderId;
+        const updatedFolder = req.body;
+
+        Folder.findByIdAndUpdate(folderId, updatedFolder, { new: true })
+            .exec()
+            .then((folder) => {
+                if (!folder) {
+                    return res
+                        .status(404)
+                        .json({ message: "Folder not found" });
+                }
+                res.json(folder);
+            })
+            .catch((err) => res.status(400).json(`Error: $(err)`));
+    });
 
 router.post("/folders/:folderId/items", async (req, res) => {
     // try {

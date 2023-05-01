@@ -195,7 +195,18 @@ input[type="number"] {
 .inventory-grid-container__items-grid .card__item.description {
     display: inline-flex;
     align-items: center;
+    font-size: 1em;
 }
+
+/* item card description*/
+/* .css-10wpov9-MuiTypography-root {
+    margin: 0;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.75;
+    letter-spacing: 0.00938em;
+} */
 
 .inventory-grid-container__folders-grid {
     padding-top: 1.5em;

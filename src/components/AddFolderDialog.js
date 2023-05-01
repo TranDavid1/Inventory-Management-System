@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import "../css/AddFolderDialog.css";
+import FormControl from "@mui/material/FormControl";
+import { InputLabel, MenuItem } from "@mui/material";
+import Select from "@mui/material/Select";
 
 function AddFolderDialog(props) {
     const { open, onClose } = props;
@@ -10,6 +13,7 @@ function AddFolderDialog(props) {
     const [parent, setParent] = useState(null);
     const [children, setChildren] = useState([]);
     const [folders, setFolders] = useState([]);
+    const [selectedFolderId, setSelectedFolderId] = useState("");
 
     useEffect(() => {
         fetchItems();
@@ -51,7 +55,7 @@ function AddFolderDialog(props) {
             const newFolder = {
                 folderName: folderName,
                 items: items,
-                parent: parent,
+                parent: selectedFolderId,
                 children: children,
                 tags: tags,
             };
@@ -69,6 +73,7 @@ function AddFolderDialog(props) {
                 .then((res) => res.text())
                 .then((text) => console.log(text))
                 .then(() => {
+                    if (selectedFolderId) updateParentFolder(selectedFolderId);
                     fetchItems();
                     fetchFolders();
                     onClose();
@@ -79,8 +84,39 @@ function AddFolderDialog(props) {
         }
     };
 
+    const updateParentFolder = async (folderId) => {
+        try {
+            const newFolder = {
+                folderName: folderName,
+                items: items,
+                parent: selectedFolderId,
+                children: children,
+                tags: tags,
+            };
+
+            const response = await fetch(
+                `http://localhost:5000/folders/${folderId}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        $addToSet: { children: newFolder._id },
+                    }),
+                }
+            );
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const handleClose = () => {
         onClose();
+    };
+
+    const handleFolderChange = (event) => {
+        setSelectedFolderId(event.target.value);
     };
 
     return (
@@ -108,6 +144,30 @@ function AddFolderDialog(props) {
                         onChange={handleFolderTagsChange}
                         placeholder="Tags"
                     />
+                </div>
+                <div>
+                    <FormControl className="item-folder-form">
+                        <InputLabel
+                            className="item-folder-input-label"
+                            htmlFor="item-folder"
+                            id="folder-select-label"
+                        >
+                            Add to Folder
+                        </InputLabel>
+                        <Select
+                            className="item-folder-select"
+                            id="folder-select-label"
+                            value={selectedFolderId}
+                            onChange={handleFolderChange}
+                            // InputLabel="Folder"
+                        >
+                            {folders.map((folder) => (
+                                <MenuItem value={folder._id}>
+                                    {folder.folderName}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </div>
                 <button className="add-folder-button" type="submit">
                     Add
