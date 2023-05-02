@@ -54,17 +54,17 @@
     outline: none;
 }
 
-.card--item {
-    /* margin-right: 1em; */
+/* .card--item {
+    margin-right: 1em;
     height: 10em;
     width: 10em;
     background-color: grey;
-}
+} */
 
-.inventory-grid-container__items-grid .card__item.description {
+/* .inventory-grid-container__items-grid .card__item.description {
     display: inline-flex;
     align-items: center;
-}
+} */
 
 .folder-container td.actions button {
     background-color: transparent;
@@ -109,7 +109,7 @@
     padding-bottom: 2em;
 } */
 
-.grid--folders .card--folder {
+/* .grid--folders .card--folder {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -124,14 +124,14 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-}
+} */
 
 /* .grid--items {
     padding-left: 2.5em;
 } */
 
-.grid--items .card--item {
+/* .grid--items .card--item {
     height: 10em;
     width: 10em;
     background-color: grey;
-}
+} */
