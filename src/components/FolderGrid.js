@@ -6,8 +6,9 @@ import Button from "@mui/material/Button";
 import FolderIcon from "@mui/icons-material/Folder";
 import { Link } from "react-router-dom";
 
-function FolderGrid({ filteredFolders }) {
+function FolderGrid({ folders }) {
     const [selectedFolderId, setSelectedFolderId] = useState(null);
+    console.log("FolderGrid folders:", folders);
 
     const handleFolderButtonClick = (folderId) => {
         setSelectedFolderId(folderId);
@@ -16,7 +17,7 @@ function FolderGrid({ filteredFolders }) {
     return (
         <div className="inventory-grid-container__folders-grid">
             <Grid className="grid grid--folders" container spacing={2}>
-                {filteredFolders
+                {folders
                     .filter((item) => item.parent === null)
                     .map((folder) => (
                         <Grid

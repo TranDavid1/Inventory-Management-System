@@ -7,6 +7,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import DescriptionIcon from "@mui/icons-material/Description";
 import Folder from "./Folder";
 import FolderGrid from "./FolderGrid";
+import ItemGrid from "./ItemGrid";
 import StickyHeader from "./StickyHeader";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
@@ -233,9 +234,10 @@ function Inventory(props) {
             </div>
 
             <div className="inventory-grid-container">
-                <FolderGrid filteredFolders={filteredFolders} />
-                <div className="inventory-grid-container__items-grid">
-                    <Grid className="grid grid--items" container spacing={2}>
+                <FolderGrid folders={filteredFolders} />
+                <ItemGrid items={filteredItems} />
+                {/* <div className="inventory-grid-container__items-grid">
+                    <Grid className="grid--items" container spacing={2}>
                         {filteredItems
                             .filter((item) => item.folder === null)
                             .map((item) => (
@@ -279,7 +281,7 @@ function Inventory(props) {
                                 </Grid>
                             ))}
                     </Grid>
-                </div>
+                </div> */}
             </div>
         </div>
     );

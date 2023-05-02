@@ -7,6 +7,9 @@ import StickyHeader from "./StickyHeader";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+// import FolderGrid from "./FolderGrid";
+import Button from "@mui/material/Button";
+import FolderIcon from "@mui/icons-material/Folder";
 
 function Folder() {
     const { folderId } = useParams();
@@ -22,6 +25,7 @@ function Folder() {
     const [items, setItems] = useState([]);
     const [folders, setFolders] = useState([]);
     const dropDownRef = useRef(null);
+    const [selectedFolderId, setSelectedFolderId] = useState(null);
 
     useEffect(() => {
         setShowSearchResults(false);
@@ -155,6 +159,10 @@ function Folder() {
         folder.folderName.toLowerCase().includes(searchValue.toLowerCase())
     );
 
+    const handleFolderButtonClick = (folderId) => {
+        setSelectedFolderId(folderId);
+    };
+
     const children = folder.children;
     console.log("items:", items);
     console.log("children", children);
@@ -196,91 +204,82 @@ function Folder() {
                     Type at least 3 characters to search for items and folders
                 </div>
             )}
-            <div className="inventory-summary">
-                <div className="inventory-summary-sec-1">
+            <div className="folder-summary">
+                <div className="folder-summary-sec-1">
                     {/* <div>
                         <h3>Folders: {filteredFolders.length}</h3>
                     </div>
                     <div>
                         <h3>Items: {folder.items.length}</h3>
                     </div> */}
-                    <div>{/* <h3>Total Value: {totalValue}</h3> */}</div>
+                    {/* <div><h3>Total Value: {totalValue}</h3></div> */}
                 </div>
                 {showSearchResults && (
-                    <div className="inventory-summary-sec-2">
+                    <div className="folder-summary-sec-2">
                         Search Results: {searchResultsTotal}
                     </div>
                 )}
             </div>
-            <Grid className="FolderGrid" container spacing={2}>
-                {children &&
-                    children.map((child) => {
+            <div className="folder-grid-container">
+                <Grid className="grid--folders" container spacing={2}>
+                    {folder.children.map((folder) => (
                         <Grid
-                            item
-                            key={child._id}
-                            className="FolderGrid__child"
+                            folder
+                            xs={12}
+                            sm={6}
+                            md={4}
+                            lg={2}
+                            key={folder._id}
                         >
-                            <Link to={`/folders/${child._id}`}>
-                                {/* <Paper className="FolderGrid__child-paper">
-                                    <Typography
-                                        variant="h5"
-                                        className="FolderGrid__child-title"
-                                    >
-                                        {child.folderName}
-                                    </Typography>
-                                </Paper> */}
-                            </Link>
-                        </Grid>;
-                    })}
-                {/* {items.map((item) => {
-                    <Grid item key={item._id} className="FolderGrid__item">
-                        <Paper className="FolderGrid__item-paper">
-                            <Typography
-                                variant="h5"
-                                className="FolderGrid__item-title"
+                            <Button
+                                component={Link}
+                                to={`/folder/${folder._id}`}
+                                className="card-button"
+                                onClick={() =>
+                                    handleFolderButtonClick(folder._id)
+                                }
                             >
-                                Test
-                                {item.itemName}
-                            </Typography>
-                        </Paper>
-                    </Grid>;
-                })} */}
-                <div className="inventory-grid-container__items-grid">
-                    <Grid className="grid grid--items" container spacing={2}>
-                        {filteredItems.map((item) => (
-                            <Grid
-                                item
-                                xs={12}
-                                sm={6}
-                                md={4}
-                                lg={2}
-                                key={item._id}
-                            >
-                                <Card className="card card--item">
+                                <Card className="card card--folder">
                                     <CardContent className="card__content">
                                         <div className="card__icon-wrapper">
-                                            <DescriptionIcon fontSize="large" />
+                                            <FolderIcon fontSize="large" />
                                         </div>
-                                        <div className="card_item-name">
-                                            {item.itemName}
+                                        <div className="card__folder-name">
+                                            {folder.folderName}
                                         </div>
-                                        <Typography
-                                            className="card__item-description"
-                                            variant="subtitle1"
-                                        >
-                                            {item.itemQuantity}{" "}
-                                            {item.itemQuantity > 1
-                                                ? "units"
-                                                : "unit"}{" "}
-                                            | ${item.itemPrice}
-                                        </Typography>
                                     </CardContent>
                                 </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </div>
-            </Grid>
+                            </Button>
+                        </Grid>
+                    ))}
+                </Grid>
+                <Grid className="grid--items" container spacing={2}>
+                    {filteredItems.map((item) => (
+                        <Grid item xs={12} sm={6} md={4} lg={2} key={item._id}>
+                            <Card className="card card--item">
+                                <CardContent className="card__content">
+                                    <div className="card__icon-wrapper">
+                                        <DescriptionIcon fontSize="large" />
+                                    </div>
+                                    <div className="card_item-name">
+                                        {item.itemName}
+                                    </div>
+                                    <Typography
+                                        className="card__item-description"
+                                        variant="subtitle1"
+                                    >
+                                        {item.itemQuantity}{" "}
+                                        {item.itemQuantity > 1
+                                            ? "units"
+                                            : "unit"}{" "}
+                                        | ${item.itemPrice}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </div>
         </div>
     );
 }
