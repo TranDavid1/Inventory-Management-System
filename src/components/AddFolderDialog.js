@@ -70,41 +70,57 @@ function AddFolderDialog(props) {
                 },
                 body: JSON.stringify(newFolder),
             })
-                .then((res) => res.text())
-                .then((text) => console.log(text))
-                .then(() => {
-                    if (selectedFolderId) updateParentFolder(selectedFolderId);
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error(res.statusText);
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    console.log("add folder data:", data);
+                    const newFolderId = data._id;
+                    if (selectedFolderId)
+                        updateParentFolder(selectedFolderId, newFolderId);
                     fetchItems();
                     fetchFolders();
                     onClose();
-                })
-                .catch((err) => console.error(err));
+                });
         } catch (error) {
             console.error(error);
         }
     };
 
-    const updateParentFolder = async (folderId) => {
+    const updateParentFolder = async (folderId, newChildId) => {
         try {
-            const newFolder = {
-                folderName: folderName,
-                items: items,
-                parent: selectedFolderId,
-                children: children,
-                tags: tags,
+            const response = await fetch(
+                `http://localhost:5000/folders/${folderId}`
+            );
+            const folder = await response.json();
+            console.log("parent folder fetched:", folder);
+
+            const updatedFolder = {
+                ...folder,
+                children: [...folder.children, newChildId],
             };
 
-            const response = await fetch(
+            const patchResponse = await fetch(
                 `http://localhost:5000/folders/${folderId}`,
                 {
-                    method: "PUT",
+                    method: "PATCH",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({
-                        $addToSet: { children: newFolder._id },
-                    }),
+                    body: JSON.stringify(updatedFolder),
                 }
+            );
+
+            if (!patchResponse.ok) {
+                throw new Error(`Failed to update folder with id ${folderId}`);
+            }
+
+            // Update the state of the parent folder in the folders array
+            setFolders((folders) =>
+                folders.map((f) => (f._id === folderId ? updatedFolder : f))
             );
         } catch (error) {
             console.error(error);
