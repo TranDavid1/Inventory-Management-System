@@ -1,0 +1,7 @@
+/* 
+    * below is needed to remove the padding causing
+    * the misalignment
+*/
+.css-mhc70k-MuiGrid-root > .MuiGrid-item {
+    padding-left: 0 !important;
+}
