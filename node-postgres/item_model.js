@@ -26,7 +26,11 @@ const item_model = {
 
     createItem: (body) => {
         return new Promise(function (resolve, reject) {
-            const { name, quantity } = body;
+            const { name, quantity, folder_id } = body;
+            let response = {};
+            let query = "";
+            let params = [name, quantity];
+
             pool.query(
                 "INSERT INTO items (name, quantity) VALUES ($1, $2) RETURNING *",
                 [name, quantity],
@@ -34,16 +38,54 @@ const item_model = {
                     if (error) {
                         reject(error);
                     }
+
                     const newItem = results.rows[0];
-                    const response = {
+                    const item_id = newItem.id;
+
+                    response = {
                         message: "A new item has been added.",
                         item: {
-                            id: newItem.id,
-                            name: newItem.name,
-                            quantity: newItem.quantity,
+                            id: item_id,
+                            name: name,
+                            quantity: quantity,
                         },
                     };
-                    resolve(response);
+
+                    if (folder_id) {
+                        query =
+                            "INSERT INTO folder_items (item_id, folder_id) VALUES ($1, $2)";
+
+                        params.push(folder_id);
+
+                        pool.query(
+                            query,
+                            [item_id, folder_id],
+                            (error, results) => {
+                                if (error) {
+                                    console.error(
+                                        "Error occured during query execution: ",
+                                        error
+                                    );
+                                    reject(error);
+                                }
+
+                                response = {
+                                    message:
+                                        "A new item has been added to the folder.",
+                                    item: {
+                                        id: item_id,
+                                        name: name,
+                                        quantity: quantity,
+                                        folder_id: folder_id,
+                                    },
+                                };
+
+                                resolve(response);
+                            }
+                        );
+                    } else {
+                        resolve(response);
+                    }
                 }
             );
         });

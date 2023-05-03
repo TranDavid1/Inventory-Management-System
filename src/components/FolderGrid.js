@@ -18,7 +18,7 @@ function FolderGrid({ folders }) {
         <div className="inventory-grid-container__folders-grid">
             <Grid className="grid grid--folders" container spacing={2}>
                 {folders
-                    .filter((item) => item.parent === null)
+                    .filter((item) => item.parent_folder_id === null)
                     .map((folder) => (
                         <Grid
                             folder
@@ -26,14 +26,14 @@ function FolderGrid({ folders }) {
                             sm={6}
                             md={4}
                             lg={2}
-                            key={folder._id}
+                            key={folder.id}
                         >
                             <Button
                                 component={Link}
-                                to={`/folder/${folder._id}`}
+                                to={`/folder/${folder.id}`}
                                 className="card-button"
                                 onClick={() =>
-                                    handleFolderButtonClick(folder._id)
+                                    handleFolderButtonClick(folder.id)
                                 }
                             >
                                 <Card className="card card--folder">
@@ -42,7 +42,7 @@ function FolderGrid({ folders }) {
                                             <FolderIcon fontSize="large" />
                                         </div>
                                         <div className="card__folder-name">
-                                            {folder.folderName}
+                                            {folder.name}
                                         </div>
                                     </CardContent>
                                 </Card>

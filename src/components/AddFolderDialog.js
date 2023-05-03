@@ -31,7 +31,7 @@ function AddFolderDialog(props) {
     };
 
     const fetchFolders = () => {
-        fetch("http://localhost:5000/folders")
+        fetch("http://localhost:3001/folders")
             .then((res) => res.json())
             .then((data) => {
                 console.log("folders retrieved: ", data);
@@ -53,17 +53,16 @@ function AddFolderDialog(props) {
         // Add item to the list here
         try {
             const newFolder = {
-                folderName: folderName,
-                items: items,
-                parent: selectedFolderId,
+                name: folderName,
+                items: [],
+                parent_folder_id: selectedFolderId,
                 children: children,
-                tags: tags,
             };
 
             console.log("newFolder:", newFolder);
 
             // Make an API call to add the new item
-            fetch("http://localhost:5000/folders/add", {
+            fetch("http://localhost:3001/folders/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -78,11 +77,11 @@ function AddFolderDialog(props) {
                 })
                 .then((data) => {
                     console.log("add folder data:", data);
-                    const newFolderId = data._id;
-                    if (selectedFolderId)
-                        updateParentFolder(selectedFolderId, newFolderId);
+                    const newFolderId = data.id;
+                    // if (selectedFolderId)
+                    //     updateParentFolder(selectedFolderId, newFolderId);
                     fetchItems();
-                    fetchFolders();
+                    // fetchFolders();
                     onClose();
                 });
         } catch (error) {

@@ -16,7 +16,7 @@ function AddItemDialog(props) {
 
     useEffect(() => {
         fetchItems();
-        // fetchFolders();
+        fetchFolders();
     }, []);
 
     const fetchItems = () => {
@@ -30,7 +30,7 @@ function AddItemDialog(props) {
     };
 
     const fetchFolders = () => {
-        fetch("http://localhost:5000/folders")
+        fetch("http://localhost:3001/folders")
             .then((res) => res.json())
             .then((data) => {
                 console.log("folders retrieved: ", data);
@@ -47,9 +47,9 @@ function AddItemDialog(props) {
         setItemQuantity(event.target.value);
     };
 
-    const handleItemPriceChange = (event) => {
-        setItemPrice(event.target.value);
-    };
+    // const handleItemPriceChange = (event) => {
+    //     setItemPrice(event.target.value);
+    // };
 
     const handleFolderChange = (event) => {
         setSelectedFolderId(event.target.value);
@@ -62,13 +62,8 @@ function AddItemDialog(props) {
         const newItem = {
             name: itemName,
             quantity: itemQuantity,
-            // itemPrice: itemPrice,
-            // folderId: selectedFolderId,
+            folder_id: selectedFolderId,
         };
-
-        // const actionUrl = selectedFolderId
-        //     ? `http://localhost:5000/folders/${selectedFolderId}/items`
-        //     : "http://localhost:5000/items/add";
 
         console.log("newItem:", newItem);
 
@@ -128,7 +123,7 @@ function AddItemDialog(props) {
                         placeholder="Quantity"
                     />
                 </div>
-                <div>
+                {/* <div>
                     <label htmlFor="item-price"></label>
                     <input
                         className="item-price-input"
@@ -138,7 +133,7 @@ function AddItemDialog(props) {
                         onChange={handleItemPriceChange}
                         placeholder="Price, USD"
                     />
-                </div>
+                </div> */}
                 <div>
                     <FormControl className="item-folder-form">
                         <InputLabel
@@ -156,8 +151,8 @@ function AddItemDialog(props) {
                             // InputLabel="Folder"
                         >
                             {folders.map((folder) => (
-                                <MenuItem value={folder._id}>
-                                    {folder.folderName}
+                                <MenuItem value={folder.id}>
+                                    {folder.name}
                                 </MenuItem>
                             ))}
                         </Select>

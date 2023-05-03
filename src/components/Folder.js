@@ -29,19 +29,18 @@ function Folder() {
 
     useEffect(() => {
         setShowSearchResults(false);
-        const fetchFolderData = async () => {
+
+        const fetchFolder = async () => {
             const response = await fetch(
-                `http://localhost:5000/folders/${folderId}`
+                `http://localhost:3001/folders/${folderId}`
             );
             const data = await response.json();
             // console.log("response json:", response.json());
-            console.log("response data:", data);
+            console.log("fetched folder: ", data);
             setFolder(data);
-            setItems(data.items);
-            setFilteredItems(data.items);
         };
-        fetchFolderData();
-        // if (folder) setItems(folder.items);
+        fetchFolder();
+
         const handleClickOutside = (event) => {
             if (
                 dropDownRef.current &&
@@ -50,6 +49,15 @@ function Folder() {
                 setShowDropdown(false);
             }
         };
+
+        const fetchItems = async () => {
+            const response = await fetch(
+                `http://localhost:3001/folders/${folderId}/items`
+            );
+            const data = await response.json();
+            console.log("fetched items: ", data);
+        };
+        fetchItems();
 
         document.addEventListener("mousedown", handleClickOutside);
 
@@ -155,17 +163,17 @@ function Folder() {
         return 0;
     };
 
-    const filteredFolders = folder.children.filter((folder) =>
-        folder.folderName.toLowerCase().includes(searchValue.toLowerCase())
-    );
+    // const filteredFolders = folder.children.filter((folder) =>
+    //     folder.folderName.toLowerCase().includes(searchValue.toLowerCase())
+    // );
 
     const handleFolderButtonClick = (folderId) => {
         setSelectedFolderId(folderId);
     };
 
-    const children = folder.children;
+    // const children = folder.children;
     console.log("items:", items);
-    console.log("children", children);
+    // console.log("children", children);
 
     return (
         <div className="folder-container">
@@ -222,7 +230,7 @@ function Folder() {
             </div>
             <div className="folder-grid-container">
                 <Grid className="grid--folders" container spacing={2}>
-                    {folder.children.map((folder) => (
+                    {folders.map((folder) => (
                         <Grid
                             folder
                             xs={12}

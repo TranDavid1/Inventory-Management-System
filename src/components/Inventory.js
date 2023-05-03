@@ -31,7 +31,7 @@ function Inventory(props) {
     useEffect(() => {
         setShowSearchResults(false);
         fetchItems();
-        // fetchFolders();
+        fetchFolders();
         console.log("updated items:", items);
         const handleClickOutside = (event) => {
             if (
@@ -72,19 +72,19 @@ function Inventory(props) {
             .catch((err) => console.error(err));
     };
 
-    // const fetchFolders = () => {
-    //     fetch("http://localhost:5000/folders")
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             console.log("folders retrieved: ", data);
-    //             setFolders(data);
-    //         })
-    //         .catch((err) => console.error(err));
-    // };
+    const fetchFolders = () => {
+        fetch("http://localhost:3001/folders")
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("folders retrieved: ", data);
+                setFolders(data);
+            })
+            .catch((err) => console.error(err));
+    };
 
-    // const filteredFolders = folders.filter((folder) =>
-    //     folder.folderName.toLowerCase().includes(searchValue.toLowerCase())
-    // );
+    const filteredFolders = folders.filter((folder) =>
+        folder.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
     const handleSearchBarClick = (e) => {
         setShowDropdown(true);
@@ -234,7 +234,7 @@ function Inventory(props) {
             </div>
 
             <div className="inventory-grid-container">
-                {/* <FolderGrid folders={filteredFolders} /> */}
+                <FolderGrid folders={filteredFolders} />
                 <ItemGrid items={items} />
                 {/* <div className="inventory-grid-container__items-grid">
                     <Grid className="grid--items" container spacing={2}>
