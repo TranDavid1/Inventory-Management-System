@@ -17,11 +17,11 @@ function AddFolderDialog(props) {
 
     useEffect(() => {
         fetchItems();
-        fetchFolders();
+        // fetchFolders();
     }, []);
 
     const fetchItems = () => {
-        fetch("http://localhost:5000/items")
+        fetch("http://localhost:3001/items")
             .then((res) => res.json())
             .then((data) => {
                 console.log("data retrieved: ", data);

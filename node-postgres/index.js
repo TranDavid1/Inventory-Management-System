@@ -1,8 +1,12 @@
 const express = require("express");
 const app = express();
 const port = 3001;
+const cors = require("cors");
+const item_model = require("./item_model");
 
+app.use(cors());
 app.use(express.json());
+
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
     res.setHeader(
@@ -16,7 +20,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get("/", (req, res) => {
+app.get("/items", (req, res) => {
     item_model
         .getItems()
         .then((response) => {
@@ -25,10 +29,20 @@ app.get("/", (req, res) => {
         .catch((error) => {
             res.status(500).send(error);
         });
-    res.status(200).send("Hello World");
 });
 
-app.post("/items", (req, res) => {
+app.get("/items/:id", (req, res) => {
+    item_model
+        .getItemById(req.params.id)
+        .then((response) => {
+            res.status(200).send(response);
+        })
+        .catch((error) => {
+            res.status(500).send(error);
+        });
+});
+
+app.post("/items/add", (req, res) => {
     item_model
         .createItem(req.body)
         .then((response) => {

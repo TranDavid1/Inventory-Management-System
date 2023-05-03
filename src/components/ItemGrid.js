@@ -12,12 +12,12 @@ function ItemGrid({ items }) {
         <div className="inventory-grid-container__items-grid">
             <Grid className="grid--items" container spacing={2}>
                 {items
-                    .filter((item) => item.folder === null)
+                    // .filter((item) => item.folder === null)
                     .map((item) => (
-                        <Grid item xs={12} sm={6} md={4} lg={2} key={item._id}>
+                        <Grid item xs={12} sm={6} md={4} lg={2} key={item.id}>
                             <Button
                                 component={Link}
-                                to={`/item/${item._id}`}
+                                to={`/item/${item.id}`}
                                 className="card-button"
                                 // onClick={() =>
                                 //     handleFolderButtonClick(folder._id)
@@ -29,17 +29,16 @@ function ItemGrid({ items }) {
                                             <DescriptionIcon fontSize="large" />
                                         </div>
                                         <div className="card_item-name">
-                                            {item.itemName}
+                                            {item.name}
                                         </div>
                                         <Typography
                                             className="card__item-description"
                                             variant="subtitle1"
                                         >
-                                            {item.itemQuantity}{" "}
-                                            {item.itemQuantity > 1
+                                            {item.quantity}{" "}
+                                            {item.quantity > 1
                                                 ? "units"
                                                 : "unit"}{" "}
-                                            | ${item.itemPrice}
                                         </Typography>
                                     </CardContent>
                                 </Card>

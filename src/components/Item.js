@@ -16,18 +16,26 @@ function Item() {
 
     useEffect(() => {
         const fetchItemData = async () => {
-            const response = await fetch(
-                `http://localhost:5000/items/${itemId}`
-            );
-            const data = await response.json();
-            // console.log("response json:", response.json());
-            console.log("response data:", data);
-            setItem(data);
-            setFormValues({
-                itemName: data.itemName,
-                itemQuantity: data.itemQuantity,
-                itemPrice: data.itemPrice,
-            });
+            try {
+                const response = await fetch(
+                    `http://localhost:3001/items/${itemId}`
+                );
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                console.log("response: ", response);
+                const data = await response.json();
+                // console.log("response json:", response.json());
+                console.log("response data:", data);
+                setItem(data);
+                setFormValues({
+                    itemName: data.name,
+                    itemQuantity: data.quantity,
+                    // itemPrice: data.itemPrice,
+                });
+            } catch (error) {
+                console.error("Error fetching item data:", error);
+            }
         };
         fetchItemData();
     }, []);
@@ -72,7 +80,7 @@ function Item() {
             {item ? (
                 <>
                     <div className="item-header">
-                        <h2 className="item-name">{item.itemName}</h2>
+                        <h2 className="item-name">{item.name}</h2>
                         <div className="save-button-container">
                             <Button
                                 className="save-button"
@@ -87,7 +95,7 @@ function Item() {
                     <div className="item-info">
                         <div className="item-id">Item ID: {item.id}</div>
                         <div className="item-quantity">
-                            Quantity: {item.itemQuantity} units
+                            Quantity: {item.quantity} units
                         </div>
                     </div>
                     <div className="edit-item-form-container">

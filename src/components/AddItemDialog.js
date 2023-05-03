@@ -16,11 +16,11 @@ function AddItemDialog(props) {
 
     useEffect(() => {
         fetchItems();
-        fetchFolders();
+        // fetchFolders();
     }, []);
 
     const fetchItems = () => {
-        fetch("http://localhost:5000/items")
+        fetch("http://localhost:3001/items")
             .then((res) => res.json())
             .then((data) => {
                 console.log("data retrieved: ", data);
@@ -58,41 +58,43 @@ function AddItemDialog(props) {
     const handleAddItem = (event) => {
         event.preventDefault();
         // Add item to the list here
-        try {
-            const newItem = {
-                itemName: itemName,
-                itemQuantity: itemQuantity,
-                itemPrice: itemPrice,
-                folderId: selectedFolderId,
-            };
 
-            const actionUrl = selectedFolderId
-                ? `http://localhost:5000/folders/${selectedFolderId}/items`
-                : "http://localhost:5000/items/add";
+        const newItem = {
+            name: itemName,
+            quantity: itemQuantity,
+            // itemPrice: itemPrice,
+            // folderId: selectedFolderId,
+        };
 
-            console.log("newItem:", newItem);
+        // const actionUrl = selectedFolderId
+        //     ? `http://localhost:5000/folders/${selectedFolderId}/items`
+        //     : "http://localhost:5000/items/add";
 
-            // Make an API call to add the new item
-            fetch(actionUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newItem),
+        console.log("newItem:", newItem);
+
+        // Make an API call to add the new item
+        fetch("http://localhost:3001/items/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newItem),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to add item");
+                }
+                return response.json();
             })
-                .then((res) => res.text())
-                .then((text) => console.log(text))
-                .then(() => {
-                    fetchItems();
-                    fetchFolders();
-                    onClose();
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        } catch (error) {
-            console.error(error);
-        }
+            .then((data) => {
+                console.log("Item added successfully: ", data);
+                // fetchItems();
+                // fetchFolders();
+                onClose();
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     };
 
     const handleClose = () => {

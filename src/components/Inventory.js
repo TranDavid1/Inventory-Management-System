@@ -31,7 +31,7 @@ function Inventory(props) {
     useEffect(() => {
         setShowSearchResults(false);
         fetchItems();
-        fetchFolders();
+        // fetchFolders();
         console.log("updated items:", items);
         const handleClickOutside = (event) => {
             if (
@@ -55,15 +55,15 @@ function Inventory(props) {
             setFilteredItems(items);
         } else if (searchValue.length > 2) {
             const lowerCaseSearchValue = searchValue.toLowerCase();
-            const filtered = items.filter((item) =>
-                item.itemName.toLowerCase().includes(lowerCaseSearchValue)
-            );
-            setFilteredItems(filtered);
+            // const filtered = items.filter((item) =>
+            //     item.itemName.toLowerCase().includes(lowerCaseSearchValue)
+            // );
+            // setFilteredItems(filtered);
         }
     }, [searchValue, items]);
 
     const fetchItems = () => {
-        fetch("http://localhost:5000/items")
+        fetch("http://localhost:3001/items")
             .then((res) => res.json())
             .then((data) => {
                 console.log("data retrieved: ", data);
@@ -72,23 +72,23 @@ function Inventory(props) {
             .catch((err) => console.error(err));
     };
 
-    const fetchFolders = () => {
-        fetch("http://localhost:5000/folders")
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("folders retrieved: ", data);
-                setFolders(data);
-            })
-            .catch((err) => console.error(err));
-    };
+    // const fetchFolders = () => {
+    //     fetch("http://localhost:5000/folders")
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             console.log("folders retrieved: ", data);
+    //             setFolders(data);
+    //         })
+    //         .catch((err) => console.error(err));
+    // };
 
-    const filteredFolders = folders.filter((folder) =>
-        folder.folderName.toLowerCase().includes(searchValue.toLowerCase())
-    );
+    // const filteredFolders = folders.filter((folder) =>
+    //     folder.folderName.toLowerCase().includes(searchValue.toLowerCase())
+    // );
 
     const handleSearchBarClick = (e) => {
         setShowDropdown(true);
-        calcTotalValue();
+        // calcTotalValue();
     };
 
     const handleSearch = (value) => {
@@ -98,9 +98,9 @@ function Inventory(props) {
             // setSearchResultsTotal(filteredItems.length);
             setShowSearchResults(false);
         } else if (value.length > 2) {
-            const filteredItems = items.filter((item) =>
-                item.itemName.toLowerCase().includes(value.toLowerCase())
-            );
+            // const filteredItems = items.filter((item) =>
+            //     item.itemName.toLowerCase().includes(value.toLowerCase())
+            // );
             setFilteredItems(filteredItems);
             setSearchResultsTotal(filteredItems.length);
             setShowSearchResults(true);
@@ -111,13 +111,13 @@ function Inventory(props) {
         setShowAddNewOptions(!showAddNewOptions);
     };
 
-    const calcTotalValue = () => {
-        let total = 0;
-        filteredItems.forEach((item) => {
-            total += item.itemPrice * item.itemQuantity;
-        });
-        setTotalValue(total);
-    };
+    // const calcTotalValue = () => {
+    //     let total = 0;
+    //     filteredItems.forEach((item) => {
+    //         total += item.itemPrice * item.itemQuantity;
+    //     });
+    //     setTotalValue(total);
+    // };
 
     const handleSortOrder = () => {
         const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
@@ -234,8 +234,8 @@ function Inventory(props) {
             </div>
 
             <div className="inventory-grid-container">
-                <FolderGrid folders={filteredFolders} />
-                <ItemGrid items={filteredItems} />
+                {/* <FolderGrid folders={filteredFolders} /> */}
+                <ItemGrid items={items} />
                 {/* <div className="inventory-grid-container__items-grid">
                     <Grid className="grid--items" container spacing={2}>
                         {filteredItems
