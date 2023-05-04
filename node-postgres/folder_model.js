@@ -66,15 +66,23 @@ const folder_model = {
 
     getItemsInFolder: (id) => {
         return new Promise(function (resolve, reject) {
+            const items = [];
             pool.query(
                 "SELECT items.id, items.name, items.quantity FROM items JOIN folder_items ON items.id = folder_items.item_id WHERE folder_items.folder_id = $1",
                 [id],
                 (error, results) => {
                     if (error) {
+                        console.error(
+                            "Error occurred during query execution: ",
+                            error
+                        );
                         reject(error);
                     }
-                    const items = results.rows[0];
-                    resolve(JSON.stringify(items));
+                    if (results) {
+                        console.log("results: ", results);
+                        // items = results.rows;
+                    }
+                    resolve(results.rows);
                 }
             );
         });

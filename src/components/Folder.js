@@ -55,7 +55,10 @@ function Folder() {
                 `http://localhost:3001/folders/${folderId}/items`
             );
             const data = await response.json();
-            console.log("fetched items: ", data);
+            console.log("response data: ", data);
+            setItems(data);
+            // console.log("fetched items: ", data.items);
+            console.log("items: ", items);
         };
         fetchItems();
 
@@ -64,7 +67,7 @@ function Folder() {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [folderId, dropDownRef, items]);
+    }, [folderId, dropDownRef]);
 
     useEffect(() => {
         if (searchValue === "") {
@@ -85,12 +88,12 @@ function Folder() {
     const handleSearch = (value) => {
         setSearchValue(value);
         if (value === "") {
-            setFilteredItems(folder.items);
+            setFilteredItems(items);
             // setSearchResultsTotal(filteredItems.length);
             setShowSearchResults(false);
         } else if (value.length > 2) {
-            const filteredItems = folder.items.filter((item) =>
-                item.itemName.toLowerCase().includes(value.toLowerCase())
+            const filteredItems = items.filter((item) =>
+                item.name.toLowerCase().includes(value.toLowerCase())
             );
             setFilteredItems(filteredItems);
             setSearchResultsTotal(filteredItems.length);
@@ -270,17 +273,15 @@ function Folder() {
                                         <DescriptionIcon fontSize="large" />
                                     </div>
                                     <div className="card_item-name">
-                                        {item.itemName}
+                                        {item.name}
                                     </div>
                                     <Typography
                                         className="card__item-description"
                                         variant="subtitle1"
                                     >
-                                        {item.itemQuantity}{" "}
-                                        {item.itemQuantity > 1
-                                            ? "units"
-                                            : "unit"}{" "}
-                                        | ${item.itemPrice}
+                                        {item.quantity}{" "}
+                                        {item.quantity > 1 ? "units" : "unit"}
+                                        {/* ${item.itemPrice} */}
                                     </Typography>
                                 </CardContent>
                             </Card>

@@ -99,6 +99,7 @@ app.get("/folders/:id", (req, res) => {
 });
 
 app.get("/folders/:id/items", (req, res) => {
+    console.log("getItemsInFolder req.params: ", req.params);
     folder_model
         .getItemsInFolder(req.params.id)
         .then((response) => {
