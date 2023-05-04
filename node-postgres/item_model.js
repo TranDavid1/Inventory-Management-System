@@ -122,6 +122,22 @@ const item_model = {
             );
         });
     },
+
+    checkItemForFolder: (id) => {
+        return new Promise(function (resolve, reject) {
+            pool.query(
+                "SELECT * FROM folder_items WHERE item_id = $1",
+                [id],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    const data = results.rows;
+                    resolve(JSON.stringify(data));
+                }
+            );
+        });
+    },
 };
 
 module.exports = item_model;
