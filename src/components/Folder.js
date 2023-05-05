@@ -137,7 +137,7 @@ function Folder() {
         }
 
         if (folder.children) {
-            const sortedFolders = folder.children
+            const sortedFolders = folders
                 .slice()
                 .sort((a, b) => compareFolders(a, b, newSortOrder));
             setFolders(sortedFolders);
@@ -145,8 +145,8 @@ function Folder() {
     };
 
     const compareItems = (a, b, sortOrder) => {
-        const aName = a.itemName.toLowerCase();
-        const bName = b.itemName.toLowerCase();
+        const aName = a.name.toLowerCase();
+        const bName = b.name.toLowerCase();
         const aNum = parseInt(aName.match(/\d+/));
         const bNum = parseInt(bName.match(/\d+/));
         if (aNum && bNum) {
@@ -166,8 +166,8 @@ function Folder() {
     };
 
     const compareFolders = (a, b, sortOrder) => {
-        const aName = a.folderName.toLowerCase();
-        const bName = b.folderName.toLowerCase();
+        const aName = a.name.toLowerCase();
+        const bName = b.name.toLowerCase();
         if (aName < bName) {
             return sortOrder === "asc" ? -1 : 1;
         }
@@ -177,16 +177,12 @@ function Folder() {
         return 0;
     };
 
-    // const filteredFolders = folder.children.filter((folder) =>
-    //     folder.folderName.toLowerCase().includes(searchValue.toLowerCase())
-    // );
-
     const handleFolderButtonClick = (folderId) => {
         setSelectedFolderId(folderId);
     };
 
     // const children = folder.children;
-    console.log("items:", items);
+    // console.log("items:", items);
     // console.log("children", children);
 
     return (
