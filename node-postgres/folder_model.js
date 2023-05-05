@@ -66,8 +66,29 @@ const folder_model = {
                                     console.error(error);
                                     reject(error);
                                 } else {
+                                    // update children array in the parent folder
                                     pool.query(
-                                        "UPDATE folders SET parent_folder_id = $1, children = (SELECT array_append(children, $2) FROM folders WHERE id = $1) WHERE id = $2",
+                                        "UPDATE folders SET children = array_append(children, $2) WHERE id = $1",
+                                        [parent_folder_id, newFolder.id],
+                                        (error, results) => {
+                                            if (error) {
+                                                console.error(error);
+                                                reject(error);
+                                            }
+                                            response = {
+                                                message:
+                                                    "A new relationship has been added.",
+                                                entry: {
+                                                    parent_id: parent_folder_id,
+                                                    children: newFolder.id,
+                                                },
+                                            };
+                                            resolve(response);
+                                        }
+                                    );
+                                    // update parent_folder_id in the child folder
+                                    pool.query(
+                                        "UPDATE folders SET parent_folder_id = $1 WHERE id = $2",
                                         [parent_folder_id, newFolder.id],
                                         (error, results) => {
                                             if (error) {
