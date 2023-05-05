@@ -152,6 +152,31 @@ const item_model = {
             );
         });
     },
+
+    editItem: (body) => {
+        return new Promise(function (resolve, reject) {
+            const { id, name, quantity } = body;
+            let response = {};
+            pool.query(
+                "UPDATE items SET name=$2, quantity=$3 WHERE id=$1",
+                [id, name, quantity],
+                (error, results) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    const response = {
+                        message: "Item has been edited",
+                        item: {
+                            id: id,
+                            name: name,
+                            quantity: quantity,
+                        },
+                    };
+                    resolve(response);
+                }
+            );
+        });
+    },
 };
 
 module.exports = item_model;

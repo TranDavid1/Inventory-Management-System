@@ -134,6 +134,18 @@ app.get("/items/:id/check-for-folder", (req, res) => {
         });
 });
 
+app.put("/items/:id", (req, res) => {
+    console.log("put items req.params: ", req.params);
+    item_model
+        .editItem(req.body)
+        .then((response) => {
+            res.status(200).send(response);
+        })
+        .catch((error) => {
+            res.status(500).send(error);
+        });
+});
+
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);
 });

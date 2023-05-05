@@ -14,6 +14,7 @@ function Item() {
     const [item, setItem] = useState(null);
     const [formChanged, setFormChanged] = useState(false);
     const [formValues, setFormValues] = useState({});
+    const [name, setName] = useState("");
 
     useEffect(() => {
         const fetchItemData = async () => {
@@ -29,7 +30,9 @@ function Item() {
                 // console.log("response json:", response.json());
                 console.log("response data:", data);
                 setItem(data);
+                setName(data.name);
                 setFormValues({
+                    id: data.id,
                     name: data.name,
                     quantity: data.quantity,
                     // itemPrice: data.itemPrice,
@@ -43,28 +46,21 @@ function Item() {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        console.log("formValues: ", formValues);
 
-        try {
-            const response = await fetch(
-                `http://localhost:3001/items/${itemId}`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(formValues),
-                }
-            );
+        const response = await fetch(`http://localhost:3001/items/${itemId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formValues),
+        });
 
-            if (response.ok) {
-                const data = await response.json();
-                setItem(data);
-                alert("Item updated successfully");
-            } else {
-                alert("Something went wrong.");
-            }
-        } catch (err) {
-            console.error(err);
+        if (response.ok) {
+            const data = await response.json();
+            setItem(data);
+            alert("Item updated successfully");
+        } else {
             alert("Something went wrong.");
         }
     };
@@ -81,7 +77,12 @@ function Item() {
             {item ? (
                 <>
                     <div className="item-header">
-                        <h2 className="item-name">{item.name}</h2>
+                        <input
+                            className="item-name"
+                            name="name"
+                            value={formValues.name || ""}
+                            onChange={handleInputChange}
+                        />
                         <div className="save-button-container">
                             <Button
                                 className="save-button"
@@ -103,13 +104,13 @@ function Item() {
                         <form className="edit-item-form" id="edit-item-form">
                             <div className="edit-quantity-container">
                                 <label className="edit-quantity-label">
-                                    Quantity*
+                                    Quantity:
                                 </label>
                                 <div className="edit-quantity-input">
                                     <input
                                         className="edit-quantity"
                                         id="edit-quantity"
-                                        name="itemQuantity"
+                                        name="quantity"
                                         value={formValues.quantity || ""}
                                         label="Quantity"
                                         onChange={handleInputChange}

@@ -13,6 +13,17 @@
     justify-content: space-between;
 }
 
+.item-container .item-header .item-name {
+    border: none;
+    background-color: transparent;
+    font-size: 2rem;
+    border-radius: 5px;
+}
+
+.item-container .item-header .item-name:hover {
+    background-color: rgb(53, 53, 53);
+}
+
 .item-header .item-name {
     padding-left: 0.5em;
 }
