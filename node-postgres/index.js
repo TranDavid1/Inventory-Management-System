@@ -110,6 +110,18 @@ app.get("/folders/:id/items", (req, res) => {
         });
 });
 
+app.get("/folders/:id/children", (req, res) => {
+    console.log("getChildrenInFolder req.params: ", req.params);
+    folder_model
+        .getChildrenInFolder(req.params.id)
+        .then((response) => {
+            res.status(200).send(response);
+        })
+        .catch((error) => {
+            res.status(500).send(error);
+        });
+});
+
 app.get("/items/:id/check-for-folder", (req, res) => {
     console.log("checkItemForFolder req.params: ", req.params);
     item_model

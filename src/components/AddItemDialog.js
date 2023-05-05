@@ -47,10 +47,6 @@ function AddItemDialog(props) {
         setItemQuantity(event.target.value);
     };
 
-    // const handleItemPriceChange = (event) => {
-    //     setItemPrice(event.target.value);
-    // };
-
     const handleFolderChange = (event) => {
         setSelectedFolderId(event.target.value);
     };

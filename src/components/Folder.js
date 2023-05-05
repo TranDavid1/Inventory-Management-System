@@ -55,12 +55,23 @@ function Folder() {
                 `http://localhost:3001/folders/${folderId}/items`
             );
             const data = await response.json();
-            console.log("response data: ", data);
+            console.log("fetchItems response data: ", data);
             setItems(data);
             // console.log("fetched items: ", data.items);
             console.log("items: ", items);
         };
         fetchItems();
+
+        const fetchChildren = async () => {
+            const response = await fetch(
+                `http://localhost:3001/folders/${folderId}/children`
+            );
+            const data = await response.json();
+            console.log("fetchChildren response data: ", data);
+            setFolders(data);
+            console.log("items: ", items);
+        };
+        fetchChildren();
 
         document.addEventListener("mousedown", handleClickOutside);
 
@@ -244,10 +255,10 @@ function Folder() {
                         >
                             <Button
                                 component={Link}
-                                to={`/folder/${folder._id}`}
+                                to={`/folder/${folder.id}`}
                                 className="card-button"
                                 onClick={() =>
-                                    handleFolderButtonClick(folder._id)
+                                    handleFolderButtonClick(folder.id)
                                 }
                             >
                                 <Card className="card card--folder">
@@ -256,7 +267,7 @@ function Folder() {
                                             <FolderIcon fontSize="large" />
                                         </div>
                                         <div className="card__folder-name">
-                                            {folder.folderName}
+                                            {folder.name}
                                         </div>
                                     </CardContent>
                                 </Card>

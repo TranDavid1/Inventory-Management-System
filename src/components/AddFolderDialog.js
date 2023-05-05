@@ -17,7 +17,7 @@ function AddFolderDialog(props) {
 
     useEffect(() => {
         fetchItems();
-        // fetchFolders();
+        fetchFolders();
     }, []);
 
     const fetchItems = () => {
@@ -54,9 +54,9 @@ function AddFolderDialog(props) {
         try {
             const newFolder = {
                 name: folderName,
-                items: [],
+                items: null,
                 parent_folder_id: selectedFolderId,
-                children: children,
+                children: null,
             };
 
             console.log("newFolder:", newFolder);
@@ -149,7 +149,7 @@ function AddFolderDialog(props) {
                         placeholder="Name*"
                     />
                 </div>
-                <div>
+                {/* <div>
                     <label htmlFor="folder-tags"></label>
                     <input
                         className="folder-tags-input"
@@ -159,7 +159,7 @@ function AddFolderDialog(props) {
                         onChange={handleFolderTagsChange}
                         placeholder="Tags"
                     />
-                </div>
+                </div> */}
                 <div>
                     <FormControl className="item-folder-form">
                         <InputLabel
@@ -177,8 +177,8 @@ function AddFolderDialog(props) {
                             // InputLabel="Folder"
                         >
                             {folders.map((folder) => (
-                                <MenuItem value={folder._id}>
-                                    {folder.folderName}
+                                <MenuItem value={folder.id}>
+                                    {folder.name}
                                 </MenuItem>
                             ))}
                         </Select>

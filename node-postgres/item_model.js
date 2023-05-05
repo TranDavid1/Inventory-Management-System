@@ -30,6 +30,7 @@ const item_model = {
             let response = {};
             let query = "";
             let params = [name, quantity];
+            let item_id;
 
             pool.query(
                 "INSERT INTO items (name, quantity) VALUES ($1, $2) RETURNING *",
@@ -62,25 +63,38 @@ const item_model = {
                             [item_id, folder_id],
                             (error, results) => {
                                 if (error) {
-                                    console.error(
-                                        "Error occured during query execution: ",
-                                        error
+                                    pool.query(
+                                        "DELETE FROM items WHERE id = $1",
+                                        [item_id],
+                                        (error, results) => {
+                                            if (error) {
+                                                console.error(error);
+                                            }
+                                        }
                                     );
+                                    console.error(error);
                                     reject(error);
+                                } else {
+                                    pool.query(
+                                        "UPDATE items SET folder_id = $1 WHERE id = $2",
+                                        [folder_id, newItem.id],
+                                        (error, results) => {
+                                            if (error) {
+                                                console.error(error);
+                                                reject(error);
+                                            }
+                                            response = {
+                                                message:
+                                                    "A new relationship has been added.",
+                                                entry: {
+                                                    folder_id: folder_id,
+                                                    item_id: newItem.id,
+                                                },
+                                            };
+                                            resolve(response);
+                                        }
+                                    );
                                 }
-
-                                response = {
-                                    message:
-                                        "A new item has been added to the folder.",
-                                    item: {
-                                        id: item_id,
-                                        name: name,
-                                        quantity: quantity,
-                                        folder_id: folder_id,
-                                    },
-                                };
-
-                                resolve(response);
                             }
                         );
                     } else {

@@ -30,6 +30,7 @@ function Inventory(props) {
     useEffect(() => {
         setShowSearchResults(false);
         fetchItems();
+        // checkItemsForFolder();
         fetchFolders();
         console.log("updated items:", items);
         const handleClickOutside = (event) => {
@@ -65,7 +66,7 @@ function Inventory(props) {
         fetch("http://localhost:3001/items")
             .then((res) => res.json())
             .then((data) => {
-                console.log("data retrieved: ", data);
+                console.log("fetchItems data retrieved: ", data);
                 setItems(data);
             })
             .catch((err) => console.error(err));
@@ -75,20 +76,20 @@ function Inventory(props) {
         fetch("http://localhost:3001/folders")
             .then((res) => res.json())
             .then((data) => {
-                console.log("folders retrieved: ", data);
+                console.log("fetchFolders data retrieved: ", data);
                 setFolders(data);
             })
             .catch((err) => console.error(err));
     };
 
-    const checkItemsForFolder = (id) => {
-        fetch(`http://localhost:3001/${id}/check-for-folder`)
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("data retrieved: ", data);
-            })
-            .catch((err) => console.error(err));
-    };
+    // const checkItemsForFolder = (id) => {
+    //     fetch(`http://localhost:3001/${id}/check-for-folder`)
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             console.log("checkItemsForFolder data retrieved: ", data);
+    //         })
+    //         .catch((err) => console.error(err));
+    // };
 
     const filteredFolders = folders.filter((folder) =>
         folder.name.toLowerCase().includes(searchValue.toLowerCase())
@@ -138,8 +139,8 @@ function Inventory(props) {
     };
 
     const compareItems = (a, b, sortOrder) => {
-        const aName = a.itemName.toLowerCase();
-        const bName = b.itemName.toLowerCase();
+        const aName = a.name.toLowerCase();
+        const bName = b.name.toLowerCase();
         const aNum = parseInt(aName.match(/\d+/));
         const bNum = parseInt(bName.match(/\d+/));
         if (aNum && bNum) {
@@ -159,8 +160,8 @@ function Inventory(props) {
     };
 
     const compareFolders = (a, b, sortOrder) => {
-        const aName = a.folderName.toLowerCase();
-        const bName = b.folderName.toLowerCase();
+        const aName = a.name.toLowerCase();
+        const bName = b.name.toLowerCase();
         if (aName < bName) {
             return sortOrder === "asc" ? -1 : 1;
         }
@@ -224,11 +225,11 @@ function Inventory(props) {
                         <h3>Items: {filteredItems.length}</h3>
                     </div> */}
                 </div>
-                {showSearchResults && (
+                {/* {showSearchResults && (
                     <div className="inventory-summary-sec-2">
                         Search Results: {searchResultsTotal}
                     </div>
-                )}
+                )} */}
             </div>
 
             <div className="inventory-grid-container">

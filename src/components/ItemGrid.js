@@ -12,7 +12,7 @@ function ItemGrid({ items }) {
         <div className="inventory-grid-container__items-grid">
             <Grid className="grid--items" container spacing={2}>
                 {items
-                    // .filter((item) => item.folder === null)
+                    .filter((item) => item.folder_id === null)
                     .map((item) => (
                         <Grid item xs={12} sm={6} md={4} lg={2} key={item.id}>
                             <Button
