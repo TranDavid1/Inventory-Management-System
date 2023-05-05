@@ -79,6 +79,7 @@ function AddItemDialog(props) {
             })
             .then((data) => {
                 console.log("Item added successfully: ", data);
+                window.location.reload();
                 // fetchItems();
                 // fetchFolders();
                 onClose();

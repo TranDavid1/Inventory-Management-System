@@ -44,6 +44,14 @@ function Item() {
         fetchItemData();
     }, []);
 
+    useEffect(() => {
+        const isFormChanged =
+            item &&
+            (formValues.name !== item.name ||
+                formValues.quantity !== item.quantity);
+        setFormChanged(isFormChanged);
+    }, [item, formValues]);
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         console.log("formValues: ", formValues);
@@ -60,6 +68,7 @@ function Item() {
             const data = await response.json();
             setItem(data);
             alert("Item updated successfully");
+            window.location.reload();
         } else {
             alert("Something went wrong.");
         }
@@ -83,16 +92,18 @@ function Item() {
                             value={formValues.name || ""}
                             onChange={handleInputChange}
                         />
-                        <div className="save-button-container">
-                            <Button
-                                className="save-button"
-                                form="edit-item-form"
-                                type="submit"
-                                onClick={handleFormSubmit}
-                            >
-                                Save
-                            </Button>
-                        </div>
+                        {formChanged && (
+                            <div className="save-button-container">
+                                <Button
+                                    className="save-button"
+                                    form="edit-item-form"
+                                    type="submit"
+                                    onClick={handleFormSubmit}
+                                >
+                                    Save
+                                </Button>
+                            </div>
+                        )}
                     </div>
                     <div className="item-info">
                         <div className="item-id">Item ID: {item.id}</div>
