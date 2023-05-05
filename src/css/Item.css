@@ -1,5 +1,5 @@
 .item-container {
-    margin-left: 8vw;
+    margin-left: 80px;
     margin-top: 1rem;
 }
 
@@ -13,10 +13,14 @@
     justify-content: space-between;
 }
 
+.item-header .item-name {
+    padding-left: 0.5em;
+}
+
 .item-container .item-info {
     display: flex;
     font-size: 1.2rem;
-    padding: 1em;
+    padding: 1.5em;
     /* justify-content: ; */
     /* text-align: left; */
 }
@@ -25,8 +29,24 @@
     margin-right: 2em;
 }
 
-.item-container .item-edit-container {
-    padding: 1em;
+.item-container .edit-item-form-container {
+    padding-left: 1.5em;
+}
+
+.edit-item-form-container .edit-quantity-input {
+    display: flex;
+}
+
+.edit-quantity-input .edit-quantity {
+    border: none;
+    border-radius: 0.5em;
+    height: 2rem;
+    width: 12rem;
+    background-color: grey;
+}
+
+.edit-quantity-input .IsoIcon {
+    height: 2rem;
 }
 /* 
 .item-container .save-button {

@@ -5,3 +5,7 @@
 .css-mhc70k-MuiGrid-root > .MuiGrid-item {
     padding-left: 0 !important;
 }
+
+.inventory-grid-container__items-grid {
+    padding-left: 1.5em;
+}

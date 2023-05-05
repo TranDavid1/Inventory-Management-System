@@ -124,7 +124,7 @@ const item_model = {
     getItemById: (id) => {
         return new Promise(function (resolve, reject) {
             pool.query(
-                "SELECT name, quantity FROM items WHERE id = $1",
+                "SELECT * FROM items WHERE id = $1",
                 [id],
                 (error, results) => {
                     if (error) {

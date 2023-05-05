@@ -7,6 +7,7 @@ import { InputLabel, MenuItem } from "@mui/material";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import Input from "@mui/material/Input";
+import IsoIcon from "@mui/icons-material/Iso";
 
 function Item() {
     const { itemId } = useParams();
@@ -23,14 +24,14 @@ function Item() {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
-                console.log("response: ", response);
+                // console.log("response: ", response);
                 const data = await response.json();
                 // console.log("response json:", response.json());
                 console.log("response data:", data);
                 setItem(data);
                 setFormValues({
-                    itemName: data.name,
-                    itemQuantity: data.quantity,
+                    name: data.name,
+                    quantity: data.quantity,
                     // itemPrice: data.itemPrice,
                 });
             } catch (error) {
@@ -45,7 +46,7 @@ function Item() {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/items/${itemId}`,
+                `http://localhost:3001/items/${itemId}`,
                 {
                     method: "PUT",
                     headers: {
@@ -101,24 +102,20 @@ function Item() {
                     <div className="edit-item-form-container">
                         <form className="edit-item-form" id="edit-item-form">
                             <div className="edit-quantity-container">
-                                <Input
-                                    className="edit-quantity-input"
-                                    id="edit-quantity-input"
-                                    name="itemQuantity"
-                                    value={formValues.itemQuantity || ""}
-                                    label="Quantity"
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div className="edit-price-container">
-                                <Input
-                                    className="edit-price-input"
-                                    id="edit-price-input"
-                                    name="itemPrice"
-                                    label="Price USD"
-                                    value={formValues.itemPrice || ""}
-                                    onChange={handleInputChange}
-                                />
+                                <label className="edit-quantity-label">
+                                    Quantity*
+                                </label>
+                                <div className="edit-quantity-input">
+                                    <input
+                                        className="edit-quantity"
+                                        id="edit-quantity"
+                                        name="itemQuantity"
+                                        value={formValues.quantity || ""}
+                                        label="Quantity"
+                                        onChange={handleInputChange}
+                                    />
+                                    <IsoIcon className="IsoIcon" />
+                                </div>
                             </div>
                         </form>
                     </div>
