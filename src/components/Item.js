@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+// import * as React from "react";
 import "../css/Item.css";
 import { Form, Link, useParams } from "react-router-dom";
 import Button from "@mui/material/Button";
@@ -8,6 +9,7 @@ import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import Input from "@mui/material/Input";
 import IsoIcon from "@mui/icons-material/Iso";
+import Menu from "@mui/material/Menu";
 
 function Item() {
     const { itemId } = useParams();
@@ -15,6 +17,9 @@ function Item() {
     const [formChanged, setFormChanged] = useState(false);
     const [formValues, setFormValues] = useState({});
     const [name, setName] = useState("");
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const menuRef = useRef(null);
 
     useEffect(() => {
         const fetchItemData = async () => {
@@ -81,6 +86,27 @@ function Item() {
         }));
     };
 
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    useEffect(() => {
+        const handleOutsideClick = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                handleClose();
+            }
+        };
+        document.addEventListener("click", handleOutsideClick);
+
+        return () => {
+            document.removeEventListener("click", handleOutsideClick);
+        };
+    }, []);
+
     return (
         <div className="item-container">
             {item ? (
@@ -92,6 +118,44 @@ function Item() {
                             value={formValues.name || ""}
                             onChange={handleInputChange}
                         />
+                        <div className="options-menu-container">
+                            <Button
+                                id="options-menu-button"
+                                aria-controls={
+                                    open ? "options-menu" : undefined
+                                }
+                                aria-haspopup="true"
+                                aria-expanded={open ? "true" : undefined}
+                                onClick={handleClick}
+                            >
+                                Options
+                            </Button>
+                            <Menu
+                                id="options-menu"
+                                aria-labelledby="options-menu-button"
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleClose}
+                                anchorOrigin={{
+                                    vertical: "top",
+                                    horizontal: "left",
+                                }}
+                                transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "left",
+                                }}
+                            >
+                                <MenuItem onClick={handleClose}>
+                                    Update Quantity
+                                </MenuItem>
+                                <MenuItem onClick={handleClose}>
+                                    Move to Folder
+                                </MenuItem>
+                                <MenuItem onClick={handleClose}>
+                                    Delete
+                                </MenuItem>
+                            </Menu>
+                        </div>
                         {formChanged && (
                             <div className="save-button-container">
                                 <Button
