@@ -40,6 +40,9 @@ function Item() {
                     id: data.id,
                     name: data.name,
                     quantity: data.quantity,
+                    serial_number: data.serial_number,
+                    part_number: data.part_number,
+                    memo: data.memo,
                     // itemPrice: data.itemPrice,
                 });
             } catch (error) {
@@ -53,7 +56,10 @@ function Item() {
         const isFormChanged =
             item &&
             (formValues.name !== item.name ||
-                formValues.quantity !== item.quantity);
+                formValues.quantity !== item.quantity ||
+                formValues.serial_number !== item.serial_number ||
+                formValues.part_number !== item.part_number ||
+                formValues.memo !== item.memo);
         setFormChanged(isFormChanged);
     }, [item, formValues]);
 
@@ -191,6 +197,49 @@ function Item() {
                                         onChange={handleInputChange}
                                     />
                                     <IsoIcon className="IsoIcon" />
+                                </div>
+                            </div>
+                            <div className="edit-serial-number-container">
+                                <label className="edit-serial-number-label">
+                                    S/N:
+                                </label>
+                                <div className="edit-serial-number-input">
+                                    <input
+                                        className="edit-serial-number"
+                                        id="edit-serial-number"
+                                        name="serial_number"
+                                        value={formValues.serial_number || ""}
+                                        // label="Serial Number"
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="edit-part-number-container">
+                                <label className="edit-part-number-label">
+                                    P/N:
+                                </label>
+                                <div className="edit-part-number-input">
+                                    <input
+                                        className="edit-part-number"
+                                        id="edit-part-number"
+                                        name="part_number"
+                                        value={formValues.part_number || ""}
+                                        // label="Serial Number"
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="edit-memo-container">
+                                <label className="edit-memo-label">Memo:</label>
+                                <div className="edit-memo-input">
+                                    <input
+                                        className="edit-memo"
+                                        id="edit-memo"
+                                        name="memo"
+                                        value={formValues.memo || ""}
+                                        // label="Serial Number"
+                                        onChange={handleInputChange}
+                                    />
                                 </div>
                             </div>
                         </form>

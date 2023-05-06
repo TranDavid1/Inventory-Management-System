@@ -155,11 +155,11 @@ const item_model = {
 
     editItem: (body) => {
         return new Promise(function (resolve, reject) {
-            const { id, name, quantity } = body;
+            const { id, name, quantity, serial_number, part_number } = body;
             let response = {};
             pool.query(
-                "UPDATE items SET name=$2, quantity=$3 WHERE id=$1",
-                [id, name, quantity],
+                "UPDATE items SET name=$2, quantity=$3, serial_number=$4, part_number=$5, memo=$6 WHERE id=$1",
+                [id, name, quantity, serial_number, part_number, memo],
                 (error, results) => {
                     if (error) {
                         reject(error);
@@ -170,6 +170,9 @@ const item_model = {
                             id: id,
                             name: name,
                             quantity: quantity,
+                            serial_number: serial_number,
+                            part_number: part_number,
+                            memo: memo,
                         },
                     };
                     resolve(response);

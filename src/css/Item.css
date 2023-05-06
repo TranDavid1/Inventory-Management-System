@@ -56,6 +56,45 @@
     background-color: grey;
 }
 
+.edit-serial-number-container {
+    margin-top: 1em;
+}
+
+.edit-serial-number-container .edit-serial-number {
+    border: none;
+    border-radius: 0.5em;
+    height: 2rem;
+    width: 12rem;
+    background-color: grey;
+}
+
+.edit-part-number-container {
+    margin-top: 1em;
+}
+
+.edit-part-number-container .edit-part-number {
+    border: none;
+    border-radius: 0.5em;
+    height: 2rem;
+    width: 12rem;
+    background-color: grey;
+}
+
+.edit-memo-container {
+    margin-top: 1em;
+}
+
+.edit-memo-container .edit-memo {
+    border: none;
+    border-radius: 0.5em;
+    height: 10rem;
+    width: 24rem;
+    background-color: grey;
+    vertical-align: top;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
 .edit-quantity-input .IsoIcon {
     height: 2rem;
 }
