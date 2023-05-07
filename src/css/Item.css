@@ -56,7 +56,39 @@
     border: none;
     border-radius: 0.5em;
     height: 2rem;
-    width: 12rem;
+    width: 15rem;
+    background-color: grey;
+}
+
+.edit-item-form-container .edit-dimensions-input {
+    display: flex;
+}
+
+.edit-dimensions-container {
+    margin-top: 1em;
+}
+
+.edit-dimensions-input .edit-dimensions {
+    border: none;
+    border-radius: 0.5em;
+    height: 2rem;
+    width: 15rem;
+    background-color: grey;
+}
+
+.edit-weight-container {
+    margin-top: 1em;
+}
+
+.edit-item-form-container .edit-weight-input {
+    display: flex;
+}
+
+.edit-weight-input .edit-weight {
+    border: none;
+    border-radius: 0.5em;
+    height: 2rem;
+    width: 15rem;
     background-color: grey;
 }
 
@@ -68,7 +100,7 @@
     border: none;
     border-radius: 0.5em;
     height: 2rem;
-    width: 12rem;
+    width: 15rem;
     background-color: grey;
 }
 
@@ -80,7 +112,7 @@
     border: none;
     border-radius: 0.5em;
     height: 2rem;
-    width: 12rem;
+    width: 15rem;
     background-color: grey;
 }
 
@@ -93,7 +125,7 @@
     border: none;
     border-radius: 5px;
     height: 10rem;
-    width: 24rem;
+    width: 30rem;
     background-color: gray;
     padding: 0.5rem;
     text-align: left;

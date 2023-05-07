@@ -43,6 +43,8 @@ function Item() {
                     serial_number: data.serial_number,
                     part_number: data.part_number,
                     memo: data.memo,
+                    dimensions: data.dimensions,
+                    weight: data.weight,
                     // itemPrice: data.itemPrice,
                 });
             } catch (error) {
@@ -204,6 +206,36 @@ function Item() {
                                         onChange={handleInputChange}
                                     />
                                     <IsoIcon className="IsoIcon" />
+                                </div>
+                            </div>
+                            <div className="edit-dimensions-container">
+                                <label className="edit-dimensions-label">
+                                    Dimensions:
+                                </label>
+                                <div className="edit-dimensions-input">
+                                    <input
+                                        className="edit-dimensions"
+                                        id="edit-dimensions"
+                                        name="dimensions"
+                                        value={formValues.dimensions || ""}
+                                        label="Dimensions"
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="edit-weight-container">
+                                <label className="edit-weight-label">
+                                    Weight:
+                                </label>
+                                <div className="edit-weight-input">
+                                    <input
+                                        className="edit-weight"
+                                        id="edit-weight"
+                                        name="weight"
+                                        value={formValues.weight || ""}
+                                        label="Weight"
+                                        onChange={handleInputChange}
+                                    />
                                 </div>
                             </div>
                             <div className="edit-serial-number-container">
