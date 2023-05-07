@@ -10,6 +10,7 @@ import FormControl from "@mui/material/FormControl";
 import Input from "@mui/material/Input";
 import IsoIcon from "@mui/icons-material/Iso";
 import Menu from "@mui/material/Menu";
+import ItemBarcode from "./ItemBarcode";
 
 function Item() {
     const { itemId } = useParams();
@@ -61,7 +62,9 @@ function Item() {
                 formValues.quantity !== item.quantity ||
                 formValues.serial_number !== item.serial_number ||
                 formValues.part_number !== item.part_number ||
-                formValues.memo !== item.memo);
+                formValues.memo !== item.memo ||
+                formValues.dimensions !== item.dimensions ||
+                formValues.weight !== item.weight);
         setFormChanged(isFormChanged);
     }, [item, formValues]);
 
@@ -192,7 +195,40 @@ function Item() {
                     </div>
                     <div className="edit-item-form-container">
                         <form className="edit-item-form" id="edit-item-form">
-                            <div className="edit-quantity-container">
+                            <div className="quantity-and-dimensions-container">
+                                <div className="edit-quantity-container">
+                                    <label className="edit-quantity-label">
+                                        Quantity:
+                                    </label>
+                                    <div className="edit-quantity-input">
+                                        <input
+                                            className="edit-quantity"
+                                            id="edit-quantity"
+                                            name="quantity"
+                                            value={formValues.quantity || ""}
+                                            label="Quantity"
+                                            onChange={handleInputChange}
+                                        />
+                                        {/* <IsoIcon className="IsoIcon" /> */}
+                                    </div>
+                                </div>
+                                <div className="edit-dimensions-container">
+                                    <label className="edit-dimensions-label">
+                                        Dimensions:
+                                    </label>
+                                    <div className="edit-dimensions-input">
+                                        <input
+                                            className="edit-dimensions"
+                                            id="edit-dimensions"
+                                            name="dimensions"
+                                            value={formValues.dimensions || ""}
+                                            label="Dimensions"
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            {/* <div className="edit-quantity-container">
                                 <label className="edit-quantity-label">
                                     Quantity:
                                 </label>
@@ -222,10 +258,44 @@ function Item() {
                                         onChange={handleInputChange}
                                     />
                                 </div>
+                            </div> */}
+                            <div className="weight-and-sn-container">
+                                <div className="edit-weight-container">
+                                    <label className="edit-weight-label">
+                                        Weight (lbs):
+                                    </label>
+                                    <div className="edit-weight-input">
+                                        <input
+                                            className="edit-weight"
+                                            id="edit-weight"
+                                            name="weight"
+                                            value={formValues.weight || ""}
+                                            label="Weight"
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="edit-serial-number-container">
+                                    <label className="edit-serial-number-label">
+                                        S/N:
+                                    </label>
+                                    <div className="edit-serial-number-input">
+                                        <input
+                                            className="edit-serial-number"
+                                            id="edit-serial-number"
+                                            name="serial_number"
+                                            value={
+                                                formValues.serial_number || ""
+                                            }
+                                            // label="Serial Number"
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                            <div className="edit-weight-container">
+                            {/* <div className="edit-weight-container">
                                 <label className="edit-weight-label">
-                                    Weight:
+                                    Weight (lbs):
                                 </label>
                                 <div className="edit-weight-input">
                                     <input
@@ -252,7 +322,7 @@ function Item() {
                                         onChange={handleInputChange}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="edit-part-number-container">
                                 <label className="edit-part-number-label">
                                     P/N:
@@ -283,6 +353,7 @@ function Item() {
                             </div>
                         </form>
                     </div>
+                    <ItemBarcode item={item} />
                 </>
             ) : (
                 <p> Loading item...</p>

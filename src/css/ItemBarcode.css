@@ -1,0 +1,12 @@
+.svg-container {
+    margin-left: 1.5em;
+}
+
+.svg-container .svgRef {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.svg-container .svgText {
+    font-size: 12px;
+}
