@@ -144,6 +144,7 @@ const item_model = {
                 [id],
                 (error, results) => {
                     if (error) {
+                        console.error(error);
                         reject(error);
                     }
                     const data = results.rows;
@@ -155,13 +156,15 @@ const item_model = {
 
     editItem: (body) => {
         return new Promise(function (resolve, reject) {
-            const { id, name, quantity, serial_number, part_number } = body;
+            const { id, name, quantity, serial_number, part_number, memo } =
+                body;
             let response = {};
             pool.query(
                 "UPDATE items SET name=$2, quantity=$3, serial_number=$4, part_number=$5, memo=$6 WHERE id=$1",
                 [id, name, quantity, serial_number, part_number, memo],
                 (error, results) => {
                     if (error) {
+                        console.error(error);
                         reject(error);
                     }
                     const response = {

@@ -36,7 +36,11 @@
     /* text-align: left; */
 }
 
-.item-info .item-id {
+.item-info .item-sn {
+    margin-right: 2em;
+}
+
+.item-info .item-pn {
     margin-right: 2em;
 }
 
@@ -85,12 +89,14 @@
 }
 
 .edit-memo-container .edit-memo {
+    display: block;
     border: none;
-    border-radius: 0.5em;
+    border-radius: 5px;
     height: 10rem;
     width: 24rem;
-    background-color: grey;
-    vertical-align: top;
+    background-color: gray;
+    padding: 0.5rem;
+    text-align: left;
     resize: vertical;
     box-sizing: border-box;
 }

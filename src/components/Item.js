@@ -67,21 +67,27 @@ function Item() {
         e.preventDefault();
         console.log("formValues: ", formValues);
 
-        const response = await fetch(`http://localhost:3001/items/${itemId}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formValues),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            setItem(data);
-            alert("Item updated successfully");
-            window.location.reload();
-        } else {
-            alert("Something went wrong.");
+        try {
+            const response = await fetch(
+                `http://localhost:3001/items/${itemId}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formValues),
+                }
+            );
+            if (response.ok) {
+                const data = await response.json();
+                setItem(data);
+                alert("Item updated successfully");
+                window.location.reload();
+            } else {
+                alert("Something went wrong.");
+            }
+        } catch (error) {
+            console.error("Error setting item data: ", error);
         }
     };
 
@@ -176,7 +182,8 @@ function Item() {
                         )}
                     </div>
                     <div className="item-info">
-                        <div className="item-id">Item ID: {item.id}</div>
+                        <div className="item-sn">S\N: {item.serial_number}</div>
+                        <div className="item-pn">P\N: {item.part_number}</div>
                         <div className="item-quantity">
                             Quantity: {item.quantity} units
                         </div>
@@ -232,7 +239,7 @@ function Item() {
                             <div className="edit-memo-container">
                                 <label className="edit-memo-label">Memo:</label>
                                 <div className="edit-memo-input">
-                                    <input
+                                    <textarea
                                         className="edit-memo"
                                         id="edit-memo"
                                         name="memo"

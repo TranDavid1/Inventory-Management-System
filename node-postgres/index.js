@@ -136,6 +136,7 @@ app.get("/items/:id/check-for-folder", (req, res) => {
 
 app.put("/items/:id", (req, res) => {
     console.log("put items req.params: ", req.params);
+    console.log("put items req.body: ", req.body);
     item_model
         .editItem(req.body)
         .then((response) => {
