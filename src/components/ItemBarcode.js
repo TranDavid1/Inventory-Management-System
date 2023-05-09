@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import JsBarcode from "jsbarcode";
 import "../css/ItemBarcode.css";
+
+import JsBarcode from "jsbarcode";
 
 function ItemBarcode({ item }) {
     const svgRef = useRef(null);

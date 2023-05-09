@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import "../css/ItemGrid.css";
+
 import { Grid, Card, CardContent, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+
 import Button from "@mui/material/Button";
 import DescriptionIcon from "@mui/icons-material/Description";
-import "../css/ItemGrid.css";
 
 function ItemGrid({ items }) {
     console.log("ItemGrid items:", items);

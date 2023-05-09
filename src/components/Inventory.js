@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../css/Inventory.css";
-import SearchIcon from "@mui/icons-material/Search";
-import { Grid, Card, CardContent, Typography } from "@mui/material";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import DescriptionIcon from "@mui/icons-material/Description";
-import Folder from "./Folder";
+
 import FolderGrid from "./FolderGrid";
 import ItemGrid from "./ItemGrid";
 import StickyHeader from "./StickyHeader";
-import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+
+import SearchIcon from "@mui/icons-material/Search";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 
 function Inventory(props) {
     const [sortOrder, setSortOrder] = useState("asc");

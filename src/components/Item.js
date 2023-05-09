@@ -1,18 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-// import * as React from "react";
+
 import "../css/Item.css";
-import { Form, Link, useParams } from "react-router-dom";
+import MoveFolderDialog from "./MoveFolderDialog";
+import Menu from "@mui/material/Menu";
+import ItemBarcode from "./ItemBarcode";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
+
+import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+
+import { Form, Link, useParams } from "react-router-dom";
+
 import TextField from "@mui/material/TextField";
 import { InputLabel, MenuItem } from "@mui/material";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import Input from "@mui/material/Input";
 import IsoIcon from "@mui/icons-material/Iso";
-import Menu from "@mui/material/Menu";
-import ItemBarcode from "./ItemBarcode";
-import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
-import { useNavigate } from "react-router-dom";
 
 function Item() {
     const { itemId } = useParams();
@@ -26,6 +30,7 @@ function Item() {
     const [showDeleteOption, setShowDeleteOption] = useState(false);
     const [totalWeight, setTotalWeight] = useState(null);
     const history = useNavigate;
+    const [showMoveFolderOption, setShowMoveFolderOption] = useState(false);
 
     useEffect(() => {
         const fetchItemData = async () => {
@@ -133,6 +138,10 @@ function Item() {
         setShowDeleteOption(!showDeleteOption);
     };
 
+    const handleMoveFolderButtonClick = () => {
+        setShowMoveFolderOption(!showMoveFolderOption);
+    };
+
     const calculateTotalWeight = () => {
         setTotalWeight(item.weight * item.quantity);
     };
@@ -175,10 +184,7 @@ function Item() {
                                     horizontal: "left",
                                 }}
                             >
-                                <MenuItem onClick={handleClose}>
-                                    Update Quantity
-                                </MenuItem>
-                                <MenuItem onClick={handleClose}>
+                                <MenuItem onClick={handleMoveFolderButtonClick}>
                                     Move to Folder
                                 </MenuItem>
                                 <MenuItem onClick={handleDeleteButtonClick}>
@@ -225,7 +231,6 @@ function Item() {
                                             label="Quantity"
                                             onChange={handleInputChange}
                                         />
-                                        {/* <IsoIcon className="IsoIcon" /> */}
                                     </div>
                                 </div>
                                 <div className="edit-dimensions-container">
@@ -244,37 +249,7 @@ function Item() {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="edit-quantity-container">
-                                <label className="edit-quantity-label">
-                                    Quantity:
-                                </label>
-                                <div className="edit-quantity-input">
-                                    <input
-                                        className="edit-quantity"
-                                        id="edit-quantity"
-                                        name="quantity"
-                                        value={formValues.quantity || ""}
-                                        label="Quantity"
-                                        onChange={handleInputChange}
-                                    />
-                                    <IsoIcon className="IsoIcon" />
-                                </div>
-                            </div>
-                            <div className="edit-dimensions-container">
-                                <label className="edit-dimensions-label">
-                                    Dimensions:
-                                </label>
-                                <div className="edit-dimensions-input">
-                                    <input
-                                        className="edit-dimensions"
-                                        id="edit-dimensions"
-                                        name="dimensions"
-                                        value={formValues.dimensions || ""}
-                                        label="Dimensions"
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                            </div> */}
+
                             <div className="weight-and-sn-container">
                                 <div className="edit-weight-container">
                                     <label className="edit-weight-label">
@@ -303,42 +278,12 @@ function Item() {
                                             value={
                                                 formValues.serial_number || ""
                                             }
-                                            // label="Serial Number"
                                             onChange={handleInputChange}
                                         />
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="edit-weight-container">
-                                <label className="edit-weight-label">
-                                    Weight (lbs):
-                                </label>
-                                <div className="edit-weight-input">
-                                    <input
-                                        className="edit-weight"
-                                        id="edit-weight"
-                                        name="weight"
-                                        value={formValues.weight || ""}
-                                        label="Weight"
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                            </div>
-                            <div className="edit-serial-number-container">
-                                <label className="edit-serial-number-label">
-                                    S/N:
-                                </label>
-                                <div className="edit-serial-number-input">
-                                    <input
-                                        className="edit-serial-number"
-                                        id="edit-serial-number"
-                                        name="serial_number"
-                                        value={formValues.serial_number || ""}
-                                        // label="Serial Number"
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                            </div> */}
+
                             <div className="edit-part-number-container">
                                 <label className="edit-part-number-label">
                                     P/N:
@@ -376,16 +321,15 @@ function Item() {
                         id={item.id}
                         history={history}
                     />
+                    <MoveFolderDialog
+                        open={showMoveFolderOption}
+                        onClose={() => setShowMoveFolderOption(false)}
+                        id={item.id}
+                    />
                 </>
             ) : (
                 <p> Loading item...</p>
             )}
-            {/* <div className="item-info">
-                <div className="item-id">Item ID: {item.id}</div>
-                <div className="item-quantity">
-                    Quantity: {item.itemQuantity} units
-                </div>
-            </div> */}
         </div>
     );
 }

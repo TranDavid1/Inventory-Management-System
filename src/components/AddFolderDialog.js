@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Dialog from "@mui/material/Dialog";
 import "../css/AddFolderDialog.css";
+
+import Dialog from "@mui/material/Dialog";
 import FormControl from "@mui/material/FormControl";
 import { InputLabel, MenuItem } from "@mui/material";
 import Select from "@mui/material/Select";

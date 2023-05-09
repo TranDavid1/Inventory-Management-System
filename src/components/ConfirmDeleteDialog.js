@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Dialog from "@mui/material/Dialog";
 import "../css/AddFolderDialog.css";
-import FormControl from "@mui/material/FormControl";
-import { InputLabel, MenuItem } from "@mui/material";
-import Select from "@mui/material/Select";
+
+import Dialog from "@mui/material/Dialog";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function ConfirmDeleteDialog(props) {
-    // const { id } = useParams();
     const { id, open, onClose } = props;
+    const navigate = useNavigate();
 
     const handleClose = () => {
         onClose();
@@ -24,6 +22,10 @@ function ConfirmDeleteDialog(props) {
         })
             .then((response) => {
                 if (response.ok) {
+                    onClose();
+                    // window.location.reload();
+                    navigate("/items");
+                    alert("Item deleted successfully!");
                     console.log("Item deleted successfully");
                 } else {
                     console.log("Error deleting item");
