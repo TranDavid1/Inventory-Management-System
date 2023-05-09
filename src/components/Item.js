@@ -11,6 +11,8 @@ import Input from "@mui/material/Input";
 import IsoIcon from "@mui/icons-material/Iso";
 import Menu from "@mui/material/Menu";
 import ItemBarcode from "./ItemBarcode";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
+import { useNavigate } from "react-router-dom";
 
 function Item() {
     const { itemId } = useParams();
@@ -21,6 +23,9 @@ function Item() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const menuRef = useRef(null);
+    const [showDeleteOption, setShowDeleteOption] = useState(false);
+    const [totalWeight, setTotalWeight] = useState(null);
+    const history = useNavigate;
 
     useEffect(() => {
         const fetchItemData = async () => {
@@ -124,6 +129,14 @@ function Item() {
         };
     }, []);
 
+    const handleDeleteButtonClick = () => {
+        setShowDeleteOption(!showDeleteOption);
+    };
+
+    const calculateTotalWeight = () => {
+        setTotalWeight(item.weight * item.quantity);
+    };
+
     return (
         <div className="item-container">
             {item ? (
@@ -168,7 +181,7 @@ function Item() {
                                 <MenuItem onClick={handleClose}>
                                     Move to Folder
                                 </MenuItem>
-                                <MenuItem onClick={handleClose}>
+                                <MenuItem onClick={handleDeleteButtonClick}>
                                     Delete
                                 </MenuItem>
                             </Menu>
@@ -191,6 +204,9 @@ function Item() {
                         <div className="item-pn">P\N: {item.part_number}</div>
                         <div className="item-quantity">
                             Quantity: {item.quantity} units
+                        </div>
+                        <div className="item-total-weight">
+                            Total weight: {totalWeight}
                         </div>
                     </div>
                     <div className="edit-item-form-container">
@@ -354,6 +370,12 @@ function Item() {
                         </form>
                     </div>
                     <ItemBarcode item={item} />
+                    <ConfirmDeleteDialog
+                        open={showDeleteOption}
+                        onClose={() => setShowDeleteOption(false)}
+                        id={item.id}
+                        history={history}
+                    />
                 </>
             ) : (
                 <p> Loading item...</p>

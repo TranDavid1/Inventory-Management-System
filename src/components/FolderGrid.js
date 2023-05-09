@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../css/FolderGrid.css";
-import Folder from "./Folder";
 import { Grid, Card, CardContent } from "@mui/material";
 import Button from "@mui/material/Button";
 import FolderIcon from "@mui/icons-material/Folder";

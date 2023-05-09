@@ -129,6 +129,7 @@ function AddFolderDialog(props) {
 
     const handleClose = () => {
         onClose();
+        window.location.reload();
     };
 
     const handleFolderChange = (event) => {

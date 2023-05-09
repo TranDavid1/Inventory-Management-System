@@ -8,7 +8,7 @@ function ItemBarcode({ item }) {
 
     useEffect(() => {
         // Combine item id and name to generate barcode text
-        const barcodeText = `${item.id} - ${item.name}`;
+        const barcodeText = `${item.id} ${item.name} ${item.serial_number} ${item.part_number} ${item.quantity} ${item.dimensions} ${item.weight} ${item.memo}`;
 
         // Set barcode text and generate SVG
         setSvgText(barcodeText);
@@ -16,7 +16,7 @@ function ItemBarcode({ item }) {
             format: "CODE128",
             displayValue: false,
             height: 40,
-            width: 1.5,
+            width: 0.5,
         });
     }, [item]);
 

@@ -107,12 +107,25 @@ const item_model = {
 
     deleteItem: (id) => {
         return new Promise(function (resolve, reject) {
+            // delete item relationship
+            pool.query(
+                "DELETE from folder_items WHERE item_id = $1",
+                [id],
+                (error, result) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    }
+                    resolve(`Item relationship deleted with ID: ${id}`);
+                }
+            );
             // const id = parseInt(request.params.id);
             pool.query(
                 "DELETE FROM items WHERE id = $1",
                 [id],
                 (error, result) => {
                     if (error) {
+                        console.error(error);
                         reject(error);
                     }
                     resolve(`Item deleted with ID: ${id}`);
@@ -168,7 +181,7 @@ const item_model = {
             } = body;
             let response = {};
             pool.query(
-                "UPDATE items SET name=$2, quantity=$3, serial_number=$4, part_number=$5, memo=$6 WHERE id=$1",
+                "UPDATE items SET name=$2, quantity=$3, serial_number=$4, part_number=$5, memo=$6, dimensions=$7, weight=$8 WHERE id=$1",
                 [
                     id,
                     name,

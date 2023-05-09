@@ -50,6 +50,10 @@
     margin-right: 2em;
 }
 
+.item-info .item-quantity {
+    margin-right: 2em;
+}
+
 .item-container .edit-item-form-container {
     padding-left: 1.5em;
 }
@@ -68,7 +72,7 @@
     border-radius: 0.5em;
     height: 2rem;
     width: 15rem;
-    background-color: grey;
+    background-color: rgb(180, 173, 173);
 }
 
 .edit-item-form-container .edit-dimensions-input {
@@ -85,7 +89,7 @@
     border-radius: 0.5em;
     height: 2rem;
     width: 15rem;
-    background-color: grey;
+    background-color: rgb(180, 173, 173);
 }
 
 .edit-item-form-container .weight-and-sn-container {
@@ -106,7 +110,7 @@
     border-radius: 0.5em;
     height: 2rem;
     width: 15rem;
-    background-color: grey;
+    background-color: rgb(180, 173, 173);
 }
 
 .edit-serial-number-container {
@@ -119,7 +123,7 @@
     border-radius: 0.5em;
     height: 2rem;
     width: 15rem;
-    background-color: grey;
+    background-color: rgb(180, 173, 173);
 }
 
 .edit-part-number-container {
@@ -131,7 +135,7 @@
     border-radius: 0.5em;
     height: 2rem;
     width: 15rem;
-    background-color: grey;
+    background-color: rgb(180, 173, 173);
 }
 
 .edit-memo-container {
@@ -144,7 +148,7 @@
     border-radius: 5px;
     height: 10rem;
     width: 30rem;
-    background-color: gray;
+    background-color: rgb(180, 173, 173);
     padding: 0.5rem;
     text-align: left;
     resize: vertical;
