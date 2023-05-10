@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
+import "../css/Folder.css";
+
+import StickyHeader from "./StickyHeader";
+import FolderGrid from "./FolderGrid";
+
 import { Link, useParams } from "react-router-dom";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
-import "../css/Folder.css";
-import StickyHeader from "./StickyHeader";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 // import FolderGrid from "./FolderGrid";
 import Button from "@mui/material/Button";
 import FolderIcon from "@mui/icons-material/Folder";
-import FolderGrid from "./FolderGrid";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 function Folder() {
     const { folderId } = useParams();
@@ -27,6 +31,10 @@ function Folder() {
     const [folders, setFolders] = useState([]);
     const dropDownRef = useRef(null);
     const [selectedFolderId, setSelectedFolderId] = useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const menuRef = useRef(null);
+    const [formValues, setFormValues] = useState({});
 
     useEffect(() => {
         setShowSearchResults(false);
@@ -182,13 +190,78 @@ function Folder() {
         setSelectedFolderId(folderId);
     };
 
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    // useEffect(() => {
+    //     const handleOutsideClick = (e) => {
+    //         if (menuRef.current && !menuRef.current.contains(e.target)) {
+    //             handleClose();
+    //         }
+    //     };
+    //     document.addEventListener("click", handleOutsideClick);
+
+    //     return () => {
+    //         document.removeEventListener("click", handleOutsideClick);
+    //     };
+    // }, []);
+
+    const handleInputChange = (e) => {
+        setFormValues((prevValues) => ({
+            ...prevValues,
+            [e.target.name]: e.target.value,
+        }));
+    };
+
     // const children = folder.children;
     // console.log("items:", items);
     // console.log("children", children);
 
     return (
         <div className="folder-container">
-            <h2 className="folder-header">{folder.name}</h2>
+            <div className="folder-header">
+                <input
+                    className="folder-name"
+                    name="name"
+                    value={folder.name || ""}
+                    onChange={handleInputChange}
+                />
+                <div className="options-menu-container">
+                    <Button
+                        id="options-menu-button"
+                        aria-controls={open ? "options-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleClick}
+                    >
+                        Options
+                    </Button>
+                    <Menu
+                        id="options-menu"
+                        aria-labelledby="options-menu-button"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                            vertical: "top",
+                            horizontal: "left",
+                        }}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "left",
+                        }}
+                    >
+                        <MenuItem>Move to Folder</MenuItem>
+                        <MenuItem>Delete</MenuItem>
+                    </Menu>
+                </div>
+            </div>
+
             <div className="folder-options">
                 <div className="searchBar">
                     <SearchIcon className="searchIcon" />

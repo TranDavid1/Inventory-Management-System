@@ -23,11 +23,27 @@
 }
 
 .folder-container .folder-header {
+    display: flex;
     font-size: 2rem;
     position: sticky;
     top: 0;
     padding: 0.5em;
     border-bottom: 1px solid #fff;
+    justify-content: space-between;
+    background-color: white;
+}
+
+.folder-container .folder-header .folder-name {
+    border: none;
+    background-color: transparent;
+    font-size: 2rem;
+    border-radius: 5px;
+    position: relative;
+    width: 10em;
+}
+
+.folder-container .folder-header .folder-name:hover {
+    background-color: rgb(180, 173, 173);
 }
 
 .searchBar {
