@@ -76,6 +76,7 @@ function Item() {
                 formValues.dimensions !== item.dimensions ||
                 formValues.weight !== item.weight);
         setFormChanged(isFormChanged);
+        calculateTotalWeight();
     }, [item, formValues]);
 
     const handleFormSubmit = async (e) => {
@@ -143,7 +144,14 @@ function Item() {
     };
 
     const calculateTotalWeight = () => {
-        setTotalWeight(item.weight * item.quantity);
+        if (
+            item &&
+            typeof item.weight === "number" &&
+            typeof item.quantity === "number"
+        ) {
+            setTotalWeight(item.weight * item.quantity);
+        }
+        console.log("calc'd total weight: ", totalWeight);
     };
 
     return (
@@ -212,7 +220,7 @@ function Item() {
                             Quantity: {item.quantity} units
                         </div>
                         <div className="item-total-weight">
-                            Total weight: {totalWeight}
+                            Total weight: {totalWeight} lbs
                         </div>
                     </div>
                     <div className="edit-item-form-container">

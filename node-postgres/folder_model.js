@@ -183,6 +183,85 @@ const folder_model = {
             );
         });
     },
+
+    deleteFolder: (id) => {
+        return new Promise(function (resolve, reject) {
+            let response = {};
+            // Delete all items in the folder
+            pool.query(
+                "DELETE FROM folder_items WHERE folder_id = $1",
+                [id],
+                (error, results) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    }
+                    response = {
+                        message: "All items in the folder have been deleted.",
+                    };
+                }
+            );
+            // Delete all child folders and their items
+            pool.query(
+                "SELECT id FROM folders WHERE parent_folder_id = $1",
+                [id],
+                (error, results) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    }
+                    const childIds = results.rows.map((row) => row.id);
+                    if (childIds.length === 0) {
+                        // If no child folders exist, delete the folder itself
+                        pool.query(
+                            "DELETE FROM folders WHERE id = $1",
+                            [id],
+                            (error, results) => {
+                                if (error) {
+                                    console.error(error);
+                                    reject(error);
+                                }
+                                response = {
+                                    message: "The folder has been deleted.",
+                                };
+                                resolve(response);
+                            }
+                        );
+                    } else {
+                        // If child folders exist, delete them recursively
+                        childIds.forEach((childId, index) => {
+                            folder_model
+                                .deleteFolder(childId)
+                                .then((childResponse) => {
+                                    if (index === childIds.length - 1) {
+                                        // After all child folders have been deleted, delete the parent folder
+                                        pool.query(
+                                            "DELETE FROM folders WHERE id = $1",
+                                            [id],
+                                            (error, results) => {
+                                                if (error) {
+                                                    console.error(error);
+                                                    reject(error);
+                                                }
+                                                response = {
+                                                    message:
+                                                        "The folder and all its children have been deleted.",
+                                                };
+                                                resolve(response);
+                                            }
+                                        );
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                    reject(error);
+                                });
+                        });
+                    }
+                }
+            );
+        });
+    },
 };
 
 module.exports = folder_model;

@@ -35,6 +35,7 @@ function Folder() {
     const open = Boolean(anchorEl);
     const menuRef = useRef(null);
     const [formValues, setFormValues] = useState({});
+    const [showDeleteOption, setShowDeleteOption] = useState(false);
 
     useEffect(() => {
         setShowSearchResults(false);
@@ -218,6 +219,10 @@ function Folder() {
         }));
     };
 
+    const handleDeleteButtonClick = () => {
+        setShowDeleteOption(!showDeleteOption);
+    };
+
     // const children = folder.children;
     // console.log("items:", items);
     // console.log("children", children);
@@ -257,7 +262,9 @@ function Folder() {
                         }}
                     >
                         <MenuItem>Move to Folder</MenuItem>
-                        <MenuItem>Delete</MenuItem>
+                        <MenuItem onClick={handleDeleteButtonClick}>
+                            Delete
+                        </MenuItem>
                     </Menu>
                 </div>
             </div>

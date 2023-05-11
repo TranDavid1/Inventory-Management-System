@@ -215,6 +215,27 @@ const item_model = {
             );
         });
     },
+
+    // getTotalQuantity: (body) => {
+    //     return new Promise(function (resolve, reject) {
+    //         const { id } = body;
+    //         let response = {};
+    //         pool.query(
+    //             "SELECT items.id, items.name, SUM(folder_items.quantity) as total_quantity FROM items LEFT JOIN folder_items ON items.id = folder_items.item_id WHERE items.id = $1 GROUP BY items.id, items.name;",
+    //             [id],
+    //             (error, results) => {
+    //                 if (error) {
+    //                     console.error(error);
+    //                     reject(error);
+    //                 }
+    //                 if (results) {
+    //                     console.log("results: ", results);
+    //                 }
+    //                 resolve(results.rows);
+    //             }
+    //         );
+    //     });
+    // },
 };
 
 module.exports = item_model;
