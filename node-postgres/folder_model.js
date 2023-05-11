@@ -124,7 +124,7 @@ const folder_model = {
     getFolderById: (id) => {
         return new Promise(function (resolve, reject) {
             pool.query(
-                "SELECT name, parent_folder_id, children, items FROM folders WHERE id = $1",
+                "SELECT id, name, parent_folder_id, children, items FROM folders WHERE id = $1",
                 [id],
                 (error, results) => {
                     if (error) {
@@ -277,8 +277,10 @@ const folder_model = {
             );
         });
     },
-    moveFolder: (folder_id, new_parent_id) => {
+
+    moveFolder: (body) => {
         return new Promise(function (resolve, reject) {
+            const { folder_id, new_parent_id } = body;
             // Get the old parent folder ID
             pool.query(
                 "SELECT parent_folder_id FROM folders WHERE id = $1",

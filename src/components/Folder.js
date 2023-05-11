@@ -4,6 +4,7 @@ import "../css/Folder.css";
 import StickyHeader from "./StickyHeader";
 import FolderGrid from "./FolderGrid";
 import ConfirmDeleteFolderDialog from "./ConfirmDeleteFolderDialog";
+import MoveFolderDialog from "./MoveFolderDialog";
 
 import { Link, useParams } from "react-router-dom";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
@@ -37,6 +38,7 @@ function Folder() {
     const menuRef = useRef(null);
     const [formValues, setFormValues] = useState({});
     const [showDeleteOption, setShowDeleteOption] = useState(false);
+    const [showMoveFolderOption, setShowMoveFolderOption] = useState(false);
 
     useEffect(() => {
         setShowSearchResults(false);
@@ -224,6 +226,10 @@ function Folder() {
         setShowDeleteOption(!showDeleteOption);
     };
 
+    const handleMoveButtonClick = () => {
+        setShowMoveFolderOption(!showMoveFolderOption);
+    };
+
     // const children = folder.children;
     // console.log("items:", items);
     // console.log("children", children);
@@ -262,7 +268,9 @@ function Folder() {
                             horizontal: "left",
                         }}
                     >
-                        <MenuItem>Move to Folder</MenuItem>
+                        <MenuItem onClick={handleMoveButtonClick}>
+                            Move to Folder
+                        </MenuItem>
                         <MenuItem onClick={handleDeleteButtonClick}>
                             Delete
                         </MenuItem>
@@ -393,6 +401,11 @@ function Folder() {
             <ConfirmDeleteFolderDialog
                 open={showDeleteOption}
                 onClose={() => setShowDeleteOption(false)}
+                id={folderId}
+            />
+            <MoveFolderDialog
+                open={showMoveFolderOption}
+                onClose={() => setShowMoveFolderOption(false)}
                 id={folderId}
             />
         </div>

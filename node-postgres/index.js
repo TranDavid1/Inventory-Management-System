@@ -160,6 +160,19 @@ app.delete("/folders/:id", (req, res) => {
         });
 });
 
+app.post("/folders/:id/move", (req, res) => {
+    console.log("move folder req.params: ", req.params);
+    console.log("move folder req.body", req.body);
+    folder_model
+        .moveFolder(req.body)
+        .then((response) => {
+            res.status(200).send(response);
+        })
+        .catch((error) => {
+            res.status(500).send(error);
+        });
+});
+
 app.listen(port, () => {
     console.log(`App running on port ${port}.`);
 });
