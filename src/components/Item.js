@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import "../css/Item.css";
-import MoveFolderDialog from "./MoveFolderDialog";
+import MoveItemToFolderDialog from "./MoveItemToFolderDialog";
 import Menu from "@mui/material/Menu";
 import ItemBarcode from "./ItemBarcode";
-import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
+import ConfirmDeleteItemDialog from "./ConfirmDeleteItemDialog";
 
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
@@ -323,13 +323,13 @@ function Item() {
                         </form>
                     </div>
                     <ItemBarcode item={item} />
-                    <ConfirmDeleteDialog
+                    <ConfirmDeleteItemDialog
                         open={showDeleteOption}
                         onClose={() => setShowDeleteOption(false)}
                         id={item.id}
                         history={history}
                     />
-                    <MoveFolderDialog
+                    <MoveItemToFolderDialog
                         open={showMoveFolderOption}
                         onClose={() => setShowMoveFolderOption(false)}
                         id={item.id}

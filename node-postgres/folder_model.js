@@ -189,6 +189,20 @@ const folder_model = {
             let response = {};
             // Delete all items in the folder
             pool.query(
+                "DELETE FROM folder_relationships WHERE parent_id = $1",
+                [id],
+                (error, results) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    }
+                    response = {
+                        message:
+                            "All items in the folder_relationships have been deleted.",
+                    };
+                }
+            );
+            pool.query(
                 "DELETE FROM folder_items WHERE folder_id = $1",
                 [id],
                 (error, results) => {
@@ -197,7 +211,8 @@ const folder_model = {
                         reject(error);
                     }
                     response = {
-                        message: "All items in the folder have been deleted.",
+                        message:
+                            "All items in the folder_items have been deleted.",
                     };
                 }
             );
@@ -257,6 +272,65 @@ const folder_model = {
                                     reject(error);
                                 });
                         });
+                    }
+                }
+            );
+        });
+    },
+    moveFolder: (folder_id, new_parent_id) => {
+        return new Promise(function (resolve, reject) {
+            // Get the old parent folder ID
+            pool.query(
+                "SELECT parent_folder_id FROM folders WHERE id = $1",
+                [folder_id],
+                (error, results) => {
+                    if (error) {
+                        console.error(
+                            "Error occurred during query execution: ",
+                            error
+                        );
+                        reject(error);
+                    } else if (!results.rows.length) {
+                        const error = new Error(
+                            `Folder with id ${folder_id} not found`
+                        );
+                        console.error(error);
+                        reject(error);
+                    } else {
+                        const old_parent_id = results.rows[0].parent_folder_id;
+                        // Update folder_relationships table to move the folder
+                        pool.query(
+                            "UPDATE folder_relationships SET parent_id = $1 WHERE parent_id = $2 AND children = $3",
+                            [new_parent_id, old_parent_id, folder_id],
+                            (error, results) => {
+                                if (error) {
+                                    console.error(
+                                        "Error occurred during query execution: ",
+                                        error
+                                    );
+                                    reject(error);
+                                } else {
+                                    // Update folders table to update the parent_folder_id
+                                    pool.query(
+                                        "UPDATE folders SET parent_folder_id = $1 WHERE id = $2",
+                                        [new_parent_id, folder_id],
+                                        (error, results) => {
+                                            if (error) {
+                                                console.error(
+                                                    "Error occurred during query execution: ",
+                                                    error
+                                                );
+                                                reject(error);
+                                            } else {
+                                                resolve({
+                                                    message: `Folder ${folder_id} has been moved to folder ${new_parent_id}`,
+                                                });
+                                            }
+                                        }
+                                    );
+                                }
+                            }
+                        );
                     }
                 }
             );

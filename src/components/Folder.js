@@ -3,6 +3,7 @@ import "../css/Folder.css";
 
 import StickyHeader from "./StickyHeader";
 import FolderGrid from "./FolderGrid";
+import ConfirmDeleteFolderDialog from "./ConfirmDeleteFolderDialog";
 
 import { Link, useParams } from "react-router-dom";
 import { Grid, Card, CardContent, Typography } from "@mui/material";
@@ -389,6 +390,11 @@ function Folder() {
                     ))}
                 </Grid>
             </div>
+            <ConfirmDeleteFolderDialog
+                open={showDeleteOption}
+                onClose={() => setShowDeleteOption(false)}
+                id={folderId}
+            />
         </div>
     );
 }

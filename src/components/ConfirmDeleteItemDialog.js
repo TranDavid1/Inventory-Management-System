@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "../css/AddFolderDialog.css";
 
 import Dialog from "@mui/material/Dialog";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 
-function ConfirmDeleteDialog(props) {
+function ConfirmDeleteItemDialog(props) {
     const { id, open, onClose } = props;
     const navigate = useNavigate();
 
@@ -35,7 +34,7 @@ function ConfirmDeleteDialog(props) {
     };
 
     return (
-        <div className="confirm-delete-container">
+        <div className="confirm-delete-item-container">
             <Dialog open={open} onClose={handleClose}>
                 <h2 className="delete-item-header">Delete</h2>
                 <DeleteIcon className="delete-icon" />
@@ -52,4 +51,4 @@ function ConfirmDeleteDialog(props) {
     );
 }
 
-export default ConfirmDeleteDialog;
+export default ConfirmDeleteItemDialog;
