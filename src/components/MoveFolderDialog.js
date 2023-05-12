@@ -51,9 +51,10 @@ function MoveFolderDialog(props) {
         console.log("id: ", id);
         console.log("selectedFolderId: ", selectedFolderId);
         const moveParams = {
-            folder_id: folder.id,
-            new_folder_id: selectedFolderId,
+            folder_id: id,
+            new_parent_id: selectedFolderId,
         };
+        console.log("moveParams: ", moveParams);
         fetch(`http://localhost:3001/folders/${folder.id}/move`, {
             method: "POST",
             headers: {

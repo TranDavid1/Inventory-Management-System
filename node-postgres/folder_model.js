@@ -312,6 +312,26 @@ const folder_model = {
                                     );
                                     reject(error);
                                 } else {
+                                    if (results.rowCount === 0) {
+                                        // If no rows were updated, create a new relationship entry
+                                        pool.query(
+                                            "INSERT INTO folder_relationships (parent_id, children) VALUES ($1, $2)",
+                                            [new_parent_id, folder_id],
+                                            (error, results) => {
+                                                if (error) {
+                                                    console.error(
+                                                        "Error occurred during query execution: ",
+                                                        error
+                                                    );
+                                                    reject(error);
+                                                } else {
+                                                    console.log(
+                                                        `New relationship entry created for parent ${new_parent_id} and child ${folder_id}`
+                                                    );
+                                                }
+                                            }
+                                        );
+                                    }
                                     // Update folders table to update the parent_folder_id
                                     pool.query(
                                         "UPDATE folders SET parent_folder_id = $1 WHERE id = $2",
@@ -330,12 +350,30 @@ const folder_model = {
                                             }
                                         }
                                     );
+                                    pool.query(
+                                        "UPDATE folders SET children = array_append(children, $2) WHERE id = $1",
+                                        [new_parent_id, folder_id],
+                                        (error, results) => {
+                                            if (error) {
+                                                console.error(
+                                                    "Error occurred during query execution: ",
+                                                    error
+                                                );
+                                                reject(error);
+                                            } else {
+                                                resolve({
+                                                    message: `Folder ${folder_id} has been added as a child to Folder ${new_parent_id}`,
+                                                });
+                                            }
+                                        }
+                                    );
                                 }
                             }
                         );
                     }
                 }
             );
+            console.log("move folder complete");
         });
     },
 };
