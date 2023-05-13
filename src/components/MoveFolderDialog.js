@@ -88,6 +88,7 @@ function MoveFolderDialog(props) {
                     onChange={handleSelectFolder}
                     // InputLabel="Folder"
                 >
+                    <MenuItem value="none">None</MenuItem>
                     {folders.map((folder) => (
                         <MenuItem value={folder.id}>{folder.name}</MenuItem>
                     ))}
