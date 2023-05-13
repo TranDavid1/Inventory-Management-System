@@ -89,9 +89,13 @@ function MoveFolderDialog(props) {
                     // InputLabel="Folder"
                 >
                     <MenuItem value="none">None</MenuItem>
-                    {folders.map((folder) => (
-                        <MenuItem value={folder.id}>{folder.name}</MenuItem>
-                    ))}
+                    {folders
+                        .filter((f) => f.id !== folder.id)
+                        .map((folder) => (
+                            <MenuItem key={folder.id} value={folder.id}>
+                                {folder.name}
+                            </MenuItem>
+                        ))}
                 </Select>
                 <Button
                     className="move-button"
