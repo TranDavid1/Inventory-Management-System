@@ -352,6 +352,17 @@ const item_model = {
                         console.error(error);
                         reject(error);
                     }
+                    const eventTimestamp = new Date();
+                    pool.query(
+                        "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4)",
+                        [id, "item", "update", eventTimestamp],
+                        (error, results) => {
+                            if (error) {
+                                console.error(error);
+                                reject(error);
+                            }
+                        }
+                    );
                     const response = {
                         message: "Item has been edited",
                         item: {
@@ -365,6 +376,7 @@ const item_model = {
                             weight: weight,
                         },
                     };
+
                     resolve(response);
                 }
             );
