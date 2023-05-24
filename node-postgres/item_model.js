@@ -41,7 +41,7 @@ const item_model = {
                     }
 
                     const newItem = results.rows[0];
-                    const item_id = newItem.id;
+                    item_id = newItem.id;
 
                     response = {
                         message: "A new item has been added.",
@@ -52,6 +52,7 @@ const item_model = {
                         },
                     };
 
+                    // insert row into folder_items for item-folder association
                     if (folder_id) {
                         query =
                             "INSERT INTO folder_items (item_id, folder_id) VALUES ($1, $2)";
@@ -91,19 +92,158 @@ const item_model = {
                                                     item_id: newItem.id,
                                                 },
                                             };
-                                            resolve(response);
+
+                                            // insert row into history table
+                                            const eventTimestamp = new Date();
+                                            pool.query(
+                                                "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4) RETURNING *",
+                                                [
+                                                    newItem.id,
+                                                    "item",
+                                                    "create",
+                                                    eventTimestamp,
+                                                ],
+                                                (error, results) => {
+                                                    if (error) {
+                                                        console.error(error);
+                                                        reject(error);
+                                                    }
+                                                    resolve(response); // Resolve here
+                                                }
+                                            );
                                         }
                                     );
                                 }
                             }
                         );
                     } else {
-                        resolve(response);
+                        // insert row into history table
+                        const eventTimestamp = new Date();
+                        console.log("history query item_id value: ", item_id);
+                        pool.query(
+                            "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4)",
+                            [item_id, "item", "create", eventTimestamp],
+                            (error, results) => {
+                                if (error) {
+                                    console.error(error);
+                                    reject(error);
+                                }
+                                resolve(response); // Resolve here
+                            }
+                        );
                     }
                 }
             );
         });
     },
+
+    // working
+    // createItem: (body) => {
+    //     return new Promise(function (resolve, reject) {
+    //         const { name, quantity, folder_id } = body;
+    //         let response = {};
+    //         let query = "";
+    //         let params = [name, quantity];
+    //         let item_id;
+
+    //         pool.query(
+    //             "INSERT INTO items (name, quantity) VALUES ($1, $2) RETURNING *",
+    //             [name, quantity],
+    //             (error, results) => {
+    //                 if (error) {
+    //                     reject(error);
+    //                 }
+
+    //                 const newItem = results.rows[0];
+    //                 item_id = newItem.id;
+
+    //                 response = {
+    //                     message: "A new item has been added.",
+    //                     item: {
+    //                         id: item_id,
+    //                         name: name,
+    //                         quantity: quantity,
+    //                     },
+    //                 };
+
+    //                 // insert row into folder_items for item-folder association
+    //                 if (folder_id) {
+    //                     query =
+    //                         "INSERT INTO folder_items (item_id, folder_id) VALUES ($1, $2)";
+
+    //                     params.push(folder_id);
+
+    //                     pool.query(
+    //                         query,
+    //                         [item_id, folder_id],
+    //                         (error, results) => {
+    //                             if (error) {
+    //                                 pool.query(
+    //                                     "DELETE FROM items WHERE id = $1",
+    //                                     [item_id],
+    //                                     (error, results) => {
+    //                                         if (error) {
+    //                                             console.error(error);
+    //                                         }
+    //                                     }
+    //                                 );
+    //                                 console.error(error);
+    //                                 reject(error);
+    //                             } else {
+    //                                 pool.query(
+    //                                     "UPDATE items SET folder_id = $1 WHERE id = $2",
+    //                                     [folder_id, newItem.id],
+    //                                     (error, results) => {
+    //                                         if (error) {
+    //                                             console.error(error);
+    //                                             reject(error);
+    //                                         }
+    //                                         response = {
+    //                                             message:
+    //                                                 "A new relationship has been added.",
+    //                                             entry: {
+    //                                                 folder_id: folder_id,
+    //                                                 item_id: newItem.id,
+    //                                             },
+    //                                         };
+    //                                         resolve(response);
+    //                                     }
+    //                                 );
+    //                             }
+    //                         }
+    //                     );
+    //                 } else {
+    //                     // insert row into history table
+    //                     const eventTimestamp = new Date();
+    //                     pool.query(
+    //                         "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4)",
+    //                         [item_id, "item", "create", eventTimestamp],
+    //                         (error, results) => {
+    //                             if (error) {
+    //                                 console.error(error);
+    //                                 reject(error);
+    //                             }
+    //                             resolve(response);
+    //                         }
+    //                     );
+    //                 }
+
+    //                 // insert row into history table
+    //                 // const eventTimestamp = new Date();
+    //                 // pool.query(
+    //                 //     "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4)",
+    //                 //     [item_id, "item", "create", eventTimestamp],
+    //                 //     (error, results) => {
+    //                 //         if (error) {
+    //                 //             console.error(error);
+    //                 //             reject(error);
+    //                 //         }
+    //                 //     }
+    //                 // );
+    //             }
+    //         );
+    //     });
+    // },
 
     deleteItem: (id) => {
         return new Promise(function (resolve, reject) {
@@ -120,6 +260,8 @@ const item_model = {
                 }
             );
             // const id = parseInt(request.params.id);
+
+            // delete item row
             pool.query(
                 "DELETE FROM items WHERE id = $1",
                 [id],
@@ -128,6 +270,19 @@ const item_model = {
                         console.error(error);
                         reject(error);
                     }
+
+                    // create new history entry
+                    const eventTimestamp = new Date();
+                    pool.query(
+                        "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4)",
+                        [id, "item", "delete", eventTimestamp],
+                        (error, results) => {
+                            if (error) {
+                                console.error(error);
+                                reject(error);
+                            }
+                        }
+                    );
                     resolve(`Item deleted with ID: ${id}`);
                 }
             );

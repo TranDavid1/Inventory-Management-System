@@ -22,6 +22,7 @@ function Folder() {
     const { folderId } = useParams();
     console.log("folderId:", folderId);
     const [folder, setFolder] = useState(null);
+    const [parentFolder, setParentFolder] = useState(null);
     const [searchValue, setSearchValue] = useState("");
     const [filteredItems, setFilteredItems] = useState([]);
     const [showSearchResults, setShowSearchResults] = useState(false);
@@ -53,6 +54,17 @@ function Folder() {
             setFolder(data);
         };
         fetchFolder();
+
+        const fetchParentFolder = async () => {
+            const response = await fetch(
+                `http://localhost:3001/folders/${folder.parent_folder_id}`
+            );
+            const data = await response.json();
+            console.log("fetched parent folder: ", data);
+            setParentFolder(data);
+        };
+
+        fetchParentFolder();
 
         const handleClickOutside = (event) => {
             if (
@@ -237,6 +249,7 @@ function Folder() {
     return (
         <div className="folder-container">
             <div className="folder-header">
+                {parentFolder && <div>{parentFolder.name}</div>}
                 <input
                     className="folder-name"
                     name="name"
