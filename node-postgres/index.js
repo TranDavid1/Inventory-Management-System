@@ -4,8 +4,8 @@ const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
 const cors = require("cors");
 
-const item_model = require("./item_model");
-const folder_model = require("./folder_model");
+const item_model = require("./models/item_model");
+const folder_model = require("./models/folder_model");
 // const user_model = require("./user_model");
 
 const app = express();
