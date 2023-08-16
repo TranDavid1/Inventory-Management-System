@@ -1,12 +1,19 @@
 const express = require("express");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const session = require("express-session");
 const cors = require("cors");
+
 const item_model = require("./item_model");
 const folder_model = require("./folder_model");
+// const user_model = require("./user_model");
 
 const app = express();
 const port = 3001;
 
 app.use(cors());
+
+// parse requests of type - application/json
 app.use(express.json());
 
 app.use(function (req, res, next) {
