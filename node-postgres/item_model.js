@@ -95,13 +95,15 @@ const item_model = {
 
                                             // insert row into history table
                                             const eventTimestamp = new Date();
+                                            const description = `Create new item: ${newItem.name} in ${folder_id}`;
                                             pool.query(
-                                                "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4) RETURNING *",
+                                                "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5) RETURNING *",
                                                 [
                                                     newItem.id,
                                                     "item",
                                                     "create",
                                                     eventTimestamp,
+                                                    description,
                                                 ],
                                                 (error, results) => {
                                                     if (error) {
@@ -119,10 +121,17 @@ const item_model = {
                     } else {
                         // insert row into history table
                         const eventTimestamp = new Date();
-                        console.log("history query item_id value: ", item_id);
+                        const description = `Create new item: ${newItem.name}`;
+                        // console.log("history query item_id value: ", item_id);
                         pool.query(
-                            "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4)",
-                            [item_id, "item", "create", eventTimestamp],
+                            "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
+                            [
+                                item_id,
+                                "item",
+                                "create",
+                                eventTimestamp,
+                                description,
+                            ],
                             (error, results) => {
                                 if (error) {
                                     console.error(error);
@@ -136,114 +145,6 @@ const item_model = {
             );
         });
     },
-
-    // working
-    // createItem: (body) => {
-    //     return new Promise(function (resolve, reject) {
-    //         const { name, quantity, folder_id } = body;
-    //         let response = {};
-    //         let query = "";
-    //         let params = [name, quantity];
-    //         let item_id;
-
-    //         pool.query(
-    //             "INSERT INTO items (name, quantity) VALUES ($1, $2) RETURNING *",
-    //             [name, quantity],
-    //             (error, results) => {
-    //                 if (error) {
-    //                     reject(error);
-    //                 }
-
-    //                 const newItem = results.rows[0];
-    //                 item_id = newItem.id;
-
-    //                 response = {
-    //                     message: "A new item has been added.",
-    //                     item: {
-    //                         id: item_id,
-    //                         name: name,
-    //                         quantity: quantity,
-    //                     },
-    //                 };
-
-    //                 // insert row into folder_items for item-folder association
-    //                 if (folder_id) {
-    //                     query =
-    //                         "INSERT INTO folder_items (item_id, folder_id) VALUES ($1, $2)";
-
-    //                     params.push(folder_id);
-
-    //                     pool.query(
-    //                         query,
-    //                         [item_id, folder_id],
-    //                         (error, results) => {
-    //                             if (error) {
-    //                                 pool.query(
-    //                                     "DELETE FROM items WHERE id = $1",
-    //                                     [item_id],
-    //                                     (error, results) => {
-    //                                         if (error) {
-    //                                             console.error(error);
-    //                                         }
-    //                                     }
-    //                                 );
-    //                                 console.error(error);
-    //                                 reject(error);
-    //                             } else {
-    //                                 pool.query(
-    //                                     "UPDATE items SET folder_id = $1 WHERE id = $2",
-    //                                     [folder_id, newItem.id],
-    //                                     (error, results) => {
-    //                                         if (error) {
-    //                                             console.error(error);
-    //                                             reject(error);
-    //                                         }
-    //                                         response = {
-    //                                             message:
-    //                                                 "A new relationship has been added.",
-    //                                             entry: {
-    //                                                 folder_id: folder_id,
-    //                                                 item_id: newItem.id,
-    //                                             },
-    //                                         };
-    //                                         resolve(response);
-    //                                     }
-    //                                 );
-    //                             }
-    //                         }
-    //                     );
-    //                 } else {
-    //                     // insert row into history table
-    //                     const eventTimestamp = new Date();
-    //                     pool.query(
-    //                         "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4)",
-    //                         [item_id, "item", "create", eventTimestamp],
-    //                         (error, results) => {
-    //                             if (error) {
-    //                                 console.error(error);
-    //                                 reject(error);
-    //                             }
-    //                             resolve(response);
-    //                         }
-    //                     );
-    //                 }
-
-    //                 // insert row into history table
-    //                 // const eventTimestamp = new Date();
-    //                 // pool.query(
-    //                 //     "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4)",
-    //                 //     [item_id, "item", "create", eventTimestamp],
-    //                 //     (error, results) => {
-    //                 //         if (error) {
-    //                 //             console.error(error);
-    //                 //             reject(error);
-    //                 //         }
-    //                 //     }
-    //                 // );
-    //             }
-    //         );
-    //     });
-    // },
 
     deleteItem: (id) => {
         return new Promise(function (resolve, reject) {
@@ -273,9 +174,10 @@ const item_model = {
 
                     // create new history entry
                     const eventTimestamp = new Date();
+                    const description = `Delete item with id: ${id}`;
                     pool.query(
-                        "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4)",
-                        [id, "item", "delete", eventTimestamp],
+                        "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
+                        [id, "item", "delete", eventTimestamp, description],
                         (error, results) => {
                             if (error) {
                                 console.error(error);
@@ -335,6 +237,18 @@ const item_model = {
                 weight,
             } = body;
             let response = {};
+            const old_item = {};
+            pool.query("SELECT * FROM items where id=$1", [
+                id,
+                (error, results) => {
+                    if (error) {
+                        console.error(error);
+                        reject(error);
+                    }
+                    old_item = results.rows[0];
+                    resolve(JSON.stringify(old_item));
+                },
+            ]);
             pool.query(
                 "UPDATE items SET name=$2, quantity=$3, serial_number=$4, part_number=$5, memo=$6, dimensions=$7, weight=$8 WHERE id=$1",
                 [
@@ -353,9 +267,32 @@ const item_model = {
                         reject(error);
                     }
                     const eventTimestamp = new Date();
+                    const description = `Updated ${new_item.name}: `;
+
+                    new_item = {
+                        id: id,
+                        name: name,
+                        quantity: quantity,
+                        serial_number: serial_number,
+                        part_number: part_number,
+                        memo: memo,
+                        dimensions: dimensions,
+                        weight: weight,
+                    };
+
+                    // Compare old_item and new_item to find differences
+                    for (const key in old_item) {
+                        if (old_item[key] !== new_item[key]) {
+                            description += `${key} changed from ${old_item[key]} to ${new_item[key]}; `;
+                        }
+                    }
+
+                    // Remove the trailing semicolon and whitespace
+                    description = description.trim().slice(0, -1);
+
                     pool.query(
-                        "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp) VALUES ($1, $2, $3, $4)",
-                        [id, "item", "update", eventTimestamp],
+                        "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
+                        [id, "item", "update", eventTimestamp, description],
                         (error, results) => {
                             if (error) {
                                 console.error(error);
