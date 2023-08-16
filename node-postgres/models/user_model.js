@@ -33,6 +33,7 @@ const userModel = {
             return result.rows[0];
         } catch (error) {
             console.error("getUserByUsername error: ", error);
+            throw error;
         }
     },
 
@@ -41,6 +42,22 @@ const userModel = {
             return await bcrypt.compare(password, hashedPassword);
         } catch (error) {
             console.error("verifyPassword error: ", error);
+            throw error;
+        }
+    },
+
+    getUserById: async (id) => {
+        try {
+            const query = "SELECT * FROM users WHERE id = $1";
+            const result = await pool.query(query, [id]);
+
+            if (result.rows.length === 0) {
+                return null; // no user found from the given id
+            }
+
+            return result.rows[0];
+        } catch (error) {
+            console.error("getUserById error: ", error);
             throw error;
         }
     },
