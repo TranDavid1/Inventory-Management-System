@@ -125,25 +125,22 @@ const item_model = {
         }
     },
 
-    checkItemForFolder: (id) => {
-        return new Promise(function (resolve, reject) {
-            pool.query(
+    checkItemForFolder: async (id) => {
+        try {
+            results = await pool.query(
                 "SELECT * FROM folder_items WHERE item_id = $1",
-                [id],
-                (error, results) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    }
-                    const data = results.rows;
-                    resolve(JSON.stringify(data));
-                }
+                [id]
             );
-        });
+            const data = results.rows;
+            return JSON.stringify(data);
+        } catch (error) {
+            console.error("checkItemForFolder error: ", error);
+            throw error;
+        }
     },
 
-    editItem: (body) => {
-        return new Promise(function (resolve, reject) {
+    editItem: async (body) => {
+        try {
             const {
                 id,
                 name,
@@ -154,20 +151,19 @@ const item_model = {
                 dimensions,
                 weight,
             } = body;
+
             let response = {};
-            const old_item = {};
-            pool.query("SELECT * FROM items where id=$1", [
-                id,
-                (error, results) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    }
-                    old_item = results.rows[0];
-                    resolve(JSON.stringify(old_item));
-                },
-            ]);
-            pool.query(
+            let old_item = {};
+
+            // Fetch the old item data
+            const oldItemQueryResult = await pool.query(
+                "SELECT * FROM items WHERE id=$1",
+                [id]
+            );
+            old_item = oldItemQueryResult.rows[0];
+
+            // Update the item data
+            await pool.query(
                 "UPDATE items SET name=$2, quantity=$3, serial_number=$4, part_number=$5, memo=$6, dimensions=$7, weight=$8 WHERE id=$1",
                 [
                     id,
@@ -178,64 +174,49 @@ const item_model = {
                     memo,
                     dimensions,
                     weight,
-                ],
-                (error, results) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    }
-                    const eventTimestamp = new Date();
-                    const description = `Updated ${new_item.name}: `;
-
-                    new_item = {
-                        id: id,
-                        name: name,
-                        quantity: quantity,
-                        serial_number: serial_number,
-                        part_number: part_number,
-                        memo: memo,
-                        dimensions: dimensions,
-                        weight: weight,
-                    };
-
-                    // Compare old_item and new_item to find differences
-                    for (const key in old_item) {
-                        if (old_item[key] !== new_item[key]) {
-                            description += `${key} changed from ${old_item[key]} to ${new_item[key]}; `;
-                        }
-                    }
-
-                    // Remove the trailing semicolon and whitespace
-                    description = description.trim().slice(0, -1);
-
-                    pool.query(
-                        "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
-                        [id, "item", "update", eventTimestamp, description],
-                        (error, results) => {
-                            if (error) {
-                                console.error(error);
-                                reject(error);
-                            }
-                        }
-                    );
-                    const response = {
-                        message: "Item has been edited",
-                        item: {
-                            id: id,
-                            name: name,
-                            quantity: quantity,
-                            serial_number: serial_number,
-                            part_number: part_number,
-                            memo: memo,
-                            dimensions: dimensions,
-                            weight: weight,
-                        },
-                    };
-
-                    resolve(response);
-                }
+                ]
             );
-        });
+
+            const eventTimestamp = new Date();
+            const description = `Updated ${name}: `;
+
+            const new_item = {
+                id: id,
+                name: name,
+                quantity: quantity,
+                serial_number: serial_number,
+                part_number: part_number,
+                memo: memo,
+                dimensions: dimensions,
+                weight: weight,
+            };
+
+            // Compare old_item and new_item to find differences
+            for (const key in old_item) {
+                if (old_item[key] !== new_item[key]) {
+                    description += `${key} changed from ${old_item[key]} to ${new_item[key]}; `;
+                }
+            }
+
+            // Remove the trailing semicolon and whitespace
+            const trimmedDescription = description.trim().slice(0, -1);
+
+            // Insert row into history table
+            await pool.query(
+                "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
+                [id, "item", "update", eventTimestamp, trimmedDescription]
+            );
+
+            response = {
+                message: "Item has been edited",
+                item: new_item,
+            };
+
+            return response;
+        } catch (error) {
+            console.error("editItem error: ", error);
+            throw error;
+        }
     },
 
     // getTotalQuantity: (body) => {
