@@ -104,27 +104,25 @@ const item_model = {
             ]);
 
             // delete item row
-            pool.query("DELETE FROM items WHERE id = $1", [id]);
+            await pool.query("DELETE FROM items WHERE id = $1", [id]);
         } catch (error) {
             console.error("deleteItem error: ", error);
             throw error;
         }
     },
 
-    getItemById: (id) => {
-        return new Promise(function (resolve, reject) {
-            pool.query(
+    getItemById: async (id) => {
+        try {
+            const results = await pool.query(
                 "SELECT * FROM items WHERE id = $1",
-                [id],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    const item = results.rows[0];
-                    resolve(JSON.stringify(item));
-                }
+                [id]
             );
-        });
+            const item = results.rows[0];
+            return JSON.stringify(item);
+        } catch (error) {
+            console.error("getItemById error: ", error);
+            throw error;
+        }
     },
 
     checkItemForFolder: (id) => {
