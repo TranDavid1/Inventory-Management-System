@@ -1,5 +1,6 @@
 const Pool = require("pg").Pool;
 require("dotenv").config();
+const eventLogger = require("./eventLogger");
 
 const pool = new Pool({
     user: process.env.user,
@@ -55,13 +56,16 @@ const item_model = {
 
                 await pool.query(updateItemQuery, [folder_id, newItem.id]);
 
-                // Insert row into history table
+                // Insert row into history table using eventLogger
                 const eventTimestamp = new Date();
                 const description = `Create new item: ${newItem.name} in ${folder_id}`;
 
-                await pool.query(
-                    "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
-                    [newItem.id, "item", "create", eventTimestamp, description]
+                await eventLogger.logEvent(
+                    newItem.id,
+                    "item",
+                    "create",
+                    eventTimestamp,
+                    description
                 );
 
                 response = {
@@ -72,13 +76,16 @@ const item_model = {
                     },
                 };
             } else {
-                // Insert row into history table
+                // Insert row into history table using eventLogger
                 const eventTimestamp = new Date();
                 const description = `Create new item: ${newItem.name}`;
 
-                await pool.query(
-                    "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
-                    [item_id, "item", "create", eventTimestamp, description]
+                await eventLogger.logEvent(
+                    newItem.id,
+                    "item",
+                    "create",
+                    eventTimestamp,
+                    description
                 );
             }
 
