@@ -13,6 +13,7 @@ const pool = new Pool({
 const userModel = {
     createUser: async (username, password) => {
         try {
+            //
             const hashedPassword = await bcrypt.hash(password, saltRounds);
             const query =
                 "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *";

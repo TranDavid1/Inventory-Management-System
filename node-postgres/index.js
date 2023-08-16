@@ -12,10 +12,7 @@ const app = express();
 const port = 3001;
 
 app.use(cors());
-
-// parse requests of type - application/json
-app.use(express.json());
-
+app.use(express.json()); // parse requests of type - application/json
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
     res.setHeader(
@@ -27,6 +24,61 @@ app.use(function (req, res, next) {
         "Content-Type, Access-Control-Allow-Headers"
     );
     next();
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(
+    new LocalStrategy(
+        {
+            usernameField: "username",
+            passwordField: "password",
+        },
+        async (username, password, done) => {
+            try {
+                const user = await user_model.findByUsername(username);
+
+                if (!user) {
+                    return done(null, false, {
+                        message: "Incorrect username.",
+                    });
+                }
+
+                const isPasswordValid = await user_model.verifyPassword(
+                    password,
+                    user.password
+                );
+
+                if (!isPasswordValid) {
+                    return done(null, false, {
+                        message: "Incorrect password.",
+                    });
+                }
+                return done(null, user);
+            } catch (error) {
+                return done("passport login error: ", error);
+            }
+        }
+    )
+);
+
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await user_model.findById(id);
+        done(null, user);
+    } catch (error) {
+        done("deserialize error: ", error);
+    }
+});
+
+app.post("/login", passport.authenticate("local"), (req, res) => {
+    // Authentication successful
+    res.status(200).send({ message: "Login successful!" });
 });
 
 app.get("/items", (req, res) => {
