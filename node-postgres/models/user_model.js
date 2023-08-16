@@ -35,6 +35,15 @@ const userModel = {
             console.error("getUserByUsername error: ", error);
         }
     },
+
+    verifyPassword: async (password, hashedPassword) => {
+        try {
+            return await bcrypt.compare(password, hashedPassword);
+        } catch (error) {
+            console.error("verifyPassword error: ", error);
+            throw error;
+        }
+    },
 };
 
 module.export = userModel;
