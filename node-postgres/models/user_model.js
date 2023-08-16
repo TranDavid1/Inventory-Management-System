@@ -25,6 +25,16 @@ const userModel = {
             throw error;
         }
     },
+
+    getUserByUsername: async (username) => {
+        try {
+            const query = "SELECT * FROM users WHERE USERNAME = $1";
+            const result = await pool.query(query, [username]);
+            return result.rows[0];
+        } catch (error) {
+            console.error("getUserByUsername error: ", error);
+        }
+    },
 };
 
 module.export = userModel;
