@@ -1,9 +1,10 @@
 const express = require("express");
-const app = express();
-const port = 3001;
 const cors = require("cors");
 const item_model = require("./item_model");
 const folder_model = require("./folder_model");
+
+const app = express();
+const port = 3001;
 
 app.use(cors());
 app.use(express.json());
