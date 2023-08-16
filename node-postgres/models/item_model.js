@@ -10,29 +10,27 @@ const pool = new Pool({
 });
 
 const item_model = {
-    getItems: () => {
-        return new Promise(function (resolve, reject) {
-            pool.query(
-                "SELECT * FROM items ORDER BY id ASC",
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    resolve(results.rows);
-                }
+    getItems: async () => {
+        try {
+            const response = await pool.query(
+                "SELECT * FROM items ORDER BY id ASC"
             );
-        });
+            return response.rows;
+        } catch (error) {
+            console.error("getItems error: ", error);
+            throw error;
+        }
     },
 
-    createItem: (body) => {
-        return new Promise(function (resolve, reject) {
+    createItem: async (body) => {
+        try {
             const { name, quantity, folder_id } = body;
             let response = {};
             let query = "";
             let params = [name, quantity];
             let item_id;
 
-            pool.query(
+            const newItem = await pool.query(
                 "INSERT INTO items (name, quantity) VALUES ($1, $2) RETURNING *",
                 [name, quantity],
                 (error, results) => {
@@ -59,12 +57,10 @@ const item_model = {
 
                         params.push(folder_id);
 
-                        pool.query(
-                            query,
-                            [item_id, folder_id],
+                        await pool.query(query,[item_id, folder_id])
                             (error, results) => {
                                 if (error) {
-                                    pool.query(
+                                    await pool.query(
                                         "DELETE FROM items WHERE id = $1",
                                         [item_id],
                                         (error, results) => {
@@ -76,7 +72,7 @@ const item_model = {
                                     console.error(error);
                                     reject(error);
                                 } else {
-                                    pool.query(
+                                    await pool.query(
                                         "UPDATE items SET folder_id = $1 WHERE id = $2",
                                         [folder_id, newItem.id],
                                         (error, results) => {
@@ -96,7 +92,7 @@ const item_model = {
                                             // insert row into history table
                                             const eventTimestamp = new Date();
                                             const description = `Create new item: ${newItem.name} in ${folder_id}`;
-                                            pool.query(
+                                            await pool.query(
                                                 "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5) RETURNING *",
                                                 [
                                                     newItem.id,
@@ -123,7 +119,7 @@ const item_model = {
                         const eventTimestamp = new Date();
                         const description = `Create new item: ${newItem.name}`;
                         // console.log("history query item_id value: ", item_id);
-                        pool.query(
+                        await pool.query(
                             "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
                             [
                                 item_id,
@@ -143,52 +139,24 @@ const item_model = {
                     }
                 }
             );
-        });
+        } catch (error) {
+            console.error("createItem error: ", error) {
+                throw error
+            }
+        }
     },
 
-    deleteItem: (id) => {
-        return new Promise(function (resolve, reject) {
+    deleteItem: async (id) => {
+        try {
             // delete item relationship
-            pool.query(
-                "DELETE from folder_items WHERE item_id = $1",
-                [id],
-                (error, result) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    }
-                    resolve(`Item relationship deleted with ID: ${id}`);
-                }
-            );
-            // const id = parseInt(request.params.id);
+            await pool.query("DELETE from folder_items WHERE item_id = $1", [id]);
 
             // delete item row
-            pool.query(
-                "DELETE FROM items WHERE id = $1",
-                [id],
-                (error, result) => {
-                    if (error) {
-                        console.error(error);
-                        reject(error);
-                    }
-
-                    // create new history entry
-                    const eventTimestamp = new Date();
-                    const description = `Delete item with id: ${id}`;
-                    pool.query(
-                        "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
-                        [id, "item", "delete", eventTimestamp, description],
-                        (error, results) => {
-                            if (error) {
-                                console.error(error);
-                                reject(error);
-                            }
-                        }
-                    );
-                    resolve(`Item deleted with ID: ${id}`);
-                }
-            );
-        });
+            pool.query("DELETE FROM items WHERE id = $1", [id]);
+        } catch (error) {
+            console.error("deleteItem error: ", error);
+            throw error;
+        }
     },
 
     getItemById: (id) => {
