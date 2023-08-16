@@ -25,131 +25,76 @@ const item_model = {
     createItem: async (body) => {
         try {
             const { name, quantity, folder_id } = body;
-            let response = {};
-            let query = "";
-            let params = [name, quantity];
-            let item_id;
 
-            const newItem = await pool.query(
+            const newItemResponse = await pool.query(
                 "INSERT INTO items (name, quantity) VALUES ($1, $2) RETURNING *",
-                [name, quantity],
-                (error, results) => {
-                    if (error) {
-                        reject(error);
-                    }
-
-                    const newItem = results.rows[0];
-                    item_id = newItem.id;
-
-                    response = {
-                        message: "A new item has been added.",
-                        item: {
-                            id: item_id,
-                            name: name,
-                            quantity: quantity,
-                        },
-                    };
-
-                    // insert row into folder_items for item-folder association
-                    if (folder_id) {
-                        query =
-                            "INSERT INTO folder_items (item_id, folder_id) VALUES ($1, $2)";
-
-                        params.push(folder_id);
-
-                        await pool.query(query,[item_id, folder_id])
-                            (error, results) => {
-                                if (error) {
-                                    await pool.query(
-                                        "DELETE FROM items WHERE id = $1",
-                                        [item_id],
-                                        (error, results) => {
-                                            if (error) {
-                                                console.error(error);
-                                            }
-                                        }
-                                    );
-                                    console.error(error);
-                                    reject(error);
-                                } else {
-                                    await pool.query(
-                                        "UPDATE items SET folder_id = $1 WHERE id = $2",
-                                        [folder_id, newItem.id],
-                                        (error, results) => {
-                                            if (error) {
-                                                console.error(error);
-                                                reject(error);
-                                            }
-                                            response = {
-                                                message:
-                                                    "A new relationship has been added.",
-                                                entry: {
-                                                    folder_id: folder_id,
-                                                    item_id: newItem.id,
-                                                },
-                                            };
-
-                                            // insert row into history table
-                                            const eventTimestamp = new Date();
-                                            const description = `Create new item: ${newItem.name} in ${folder_id}`;
-                                            await pool.query(
-                                                "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-                                                [
-                                                    newItem.id,
-                                                    "item",
-                                                    "create",
-                                                    eventTimestamp,
-                                                    description,
-                                                ],
-                                                (error, results) => {
-                                                    if (error) {
-                                                        console.error(error);
-                                                        reject(error);
-                                                    }
-                                                    resolve(response); // Resolve here
-                                                }
-                                            );
-                                        }
-                                    );
-                                }
-                            }
-                        );
-                    } else {
-                        // insert row into history table
-                        const eventTimestamp = new Date();
-                        const description = `Create new item: ${newItem.name}`;
-                        // console.log("history query item_id value: ", item_id);
-                        await pool.query(
-                            "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
-                            [
-                                item_id,
-                                "item",
-                                "create",
-                                eventTimestamp,
-                                description,
-                            ],
-                            (error, results) => {
-                                if (error) {
-                                    console.error(error);
-                                    reject(error);
-                                }
-                                resolve(response); // Resolve here
-                            }
-                        );
-                    }
-                }
+                [name, quantity]
             );
-        } catch (error) {
-            console.error("createItem error: ", error) {
-                throw error
+
+            const newItem = newItemResponse.rows[0];
+            const item_id = newItem.id;
+
+            let response = {
+                message: "A new item has been added.",
+                item: {
+                    id: item_id,
+                    name: name,
+                    quantity: quantity,
+                },
+            };
+
+            // Insert row into folder_items for item-folder association
+            if (folder_id) {
+                const folderItemQuery =
+                    "INSERT INTO folder_items (item_id, folder_id) VALUES ($1, $2)";
+
+                await pool.query(folderItemQuery, [item_id, folder_id]);
+
+                const updateItemQuery =
+                    "UPDATE items SET folder_id = $1 WHERE id = $2";
+
+                await pool.query(updateItemQuery, [folder_id, newItem.id]);
+
+                // Insert row into history table
+                const eventTimestamp = new Date();
+                const description = `Create new item: ${newItem.name} in ${folder_id}`;
+
+                await pool.query(
+                    "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
+                    [newItem.id, "item", "create", eventTimestamp, description]
+                );
+
+                response = {
+                    message: "A new relationship has been added.",
+                    entry: {
+                        folder_id: folder_id,
+                        item_id: newItem.id,
+                    },
+                };
+            } else {
+                // Insert row into history table
+                const eventTimestamp = new Date();
+                const description = `Create new item: ${newItem.name}`;
+
+                await pool.query(
+                    "INSERT INTO history (entity_id, entity_type, event_type, event_timestamp, description) VALUES ($1, $2, $3, $4, $5)",
+                    [item_id, "item", "create", eventTimestamp, description]
+                );
             }
+
+            return response;
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
     },
 
     deleteItem: async (id) => {
         try {
             // delete item relationship
-            await pool.query("DELETE from folder_items WHERE item_id = $1", [id]);
+            await pool.query("DELETE from folder_items WHERE item_id = $1", [
+                id,
+            ]);
 
             // delete item row
             pool.query("DELETE FROM items WHERE id = $1", [id]);
