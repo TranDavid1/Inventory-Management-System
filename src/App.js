@@ -8,6 +8,7 @@ import Dashboard from "./components/Dashboard";
 import Navbar from "./components/Navbar";
 import Folder from "./components/Folder";
 import Item from "./components/Item";
+import Login from "./components/Login";
 
 function App() {
     const [inventory, setInventory] = useState([]);
@@ -21,6 +22,11 @@ function App() {
                         exact
                         path="/"
                         element={<Inventory inventory={inventory} />}
+                    />
+                    <Route
+                        exact
+                        path="/login"
+                        element={<Login inventory={inventory} />}
                     />
                     <Route
                         path="/dashboard"
