@@ -7,8 +7,12 @@ import HomeIcon from "@mui/icons-material/Home";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import InventoryIcon from "@mui/icons-material/Inventory";
 
-function Navbar() {
+function Navbar({ showNavbar }) {
     const [activeIndex, setActiveIndex] = useState(null);
+
+    if (!showNavbar) {
+        return null; // hide Navbar component
+    }
 
     const handleClick = (index) => {
         setActiveIndex(index);
