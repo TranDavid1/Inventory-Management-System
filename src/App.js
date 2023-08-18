@@ -11,16 +11,17 @@ import Item from "./components/Item";
 import Login from "./components/Login";
 
 function App() {
-    // Move the useState hook call to the top level
     const [inventory, setInventory] = useState([]);
+    const [showNavbar, setShowNavbar] = useState(true);
 
     // hide Navbar based on current route
-    const showNavbar = window.location.pathname !== "/login";
+    // const showNavbar = window.location.pathname !== "/login";
 
     return (
         <Router>
             <div className="App">
-                <Navbar showNavbar={showNavbar} />
+                {/* {showNavbar && <Navbar />} */}
+                {/* <Navbar showNavbar={showNavbar} /> */}
                 <Routes>
                     <Route
                         exact

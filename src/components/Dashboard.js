@@ -25,7 +25,7 @@ function Dashboard(props) {
                     <li>${totalValue.toFixed(2)} Total Value</li>
                 </ul>
             </div>
-            <div className="RecentActivity">
+            {/* <div className="RecentActivity">
                 <h2>Recent Activity</h2>
                 {recentActivity.length === 0 ? (
                     <p>No recent activity.</p>
@@ -36,7 +36,7 @@ function Dashboard(props) {
                         ))}
                     </ul>
                 )}
-            </div>
+            </div> */}
         </div>
     );
 }

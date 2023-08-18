@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "../css/Login.css";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const navigate = useNavigate();
+    // const [showNavbar, setShowNavbar] = useState(true);
 
     const handleLogin = () => {
         // TODO handle auth logic here
@@ -13,6 +16,11 @@ function Login() {
             // successful login
             setError("");
             // TODO handle redirect here
+
+            // setShowNavbar(true);
+            // navigate("/items", { state: { showNavbar } });
+
+            navigate("/items");
         } else {
             setError("Invalid username or password");
         }

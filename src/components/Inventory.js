@@ -4,6 +4,7 @@ import "../css/Inventory.css";
 import FolderGrid from "./FolderGrid";
 import ItemGrid from "./ItemGrid";
 import StickyHeader from "./StickyHeader";
+import Navbar from "./Navbar";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -23,6 +24,7 @@ function Inventory(props) {
     const [searchResultsTotal, setSearchResultsTotal] = useState(0);
     const [showFolderGrid, setShowFolderGrid] = useState(false);
     const [showSearchResults, setShowSearchResults] = useState(false);
+    const [showNavbar, setShowNavbar] = useState(true);
 
     useEffect(() => {
         setShowSearchResults(false);
@@ -178,6 +180,7 @@ function Inventory(props) {
 
     return (
         <div className="Inventory">
+            <Navbar />
             <StickyHeader />
             <div className="inventory-options">
                 <div className="searchBar">

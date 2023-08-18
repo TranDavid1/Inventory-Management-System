@@ -7,12 +7,14 @@ import HomeIcon from "@mui/icons-material/Home";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import InventoryIcon from "@mui/icons-material/Inventory";
 
-function Navbar({ showNavbar }) {
+// function Navbar({ showNavbar }) {
+function Navbar() {
     const [activeIndex, setActiveIndex] = useState(null);
+    const [recentActivity, setRecentActivity] = useState(null);
 
-    if (!showNavbar) {
-        return null; // hide Navbar component
-    }
+    // if (!showNavbar) {
+    //     return null; // hide Navbar component
+    // }
 
     const handleClick = (index) => {
         setActiveIndex(index);
@@ -44,6 +46,7 @@ function Navbar({ showNavbar }) {
                     <IconButton
                         component={Link}
                         to="/dashboard"
+                        recentActivity={recentActivity}
                         aria-label="Dashboard"
                         className="MuiIconButton-root"
                         title="Dashboard"
