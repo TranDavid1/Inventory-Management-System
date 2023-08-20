@@ -25,6 +25,13 @@ app.use(function (req, res, next) {
     );
     next();
 });
+app.use(
+    session({
+        secret: "a27aec21bcdb726ff276de8413230e1c90952509f12eb73f10818162d6efcdb7",
+        resave: false,
+        saveUninitialized: true,
+    })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
