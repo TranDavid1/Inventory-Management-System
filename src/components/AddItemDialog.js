@@ -5,6 +5,9 @@ import Dialog from "@mui/material/Dialog";
 import { InputLabel, MenuItem } from "@mui/material";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function AddItemDialog(props) {
     const { open, onClose } = props;
@@ -14,10 +17,19 @@ function AddItemDialog(props) {
     const [selectedFolderId, setSelectedFolderId] = useState("");
     const [items, setItems] = useState([]);
     const [folders, setFolders] = useState([]);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
 
     useEffect(() => {
         fetchItems();
         fetchFolders();
+        // Check if showToast query parameter is present
+        if (queryParams.get("showToast") === "true") {
+            toast.success("Item successfully added!", {
+                position: toast.POSITION.BOTTOM_LEFT,
+            });
+        }
     }, []);
 
     const fetchItems = () => {
@@ -80,6 +92,11 @@ function AddItemDialog(props) {
             })
             .then((data) => {
                 console.log("Item added successfully: ", data);
+                // navigate("/items");
+                // Add query parameter before reloading
+                const newUrl = new URL(window.location.href);
+                newUrl.searchParams.set("showToast", "true");
+                window.location.href = newUrl.toString();
                 window.location.reload();
                 // fetchItems();
                 // fetchFolders();
@@ -159,6 +176,7 @@ function AddItemDialog(props) {
                 <button className="add-item-button" type="submit">
                     Add
                 </button>
+                <ToastContainer />
             </form>
         </Dialog>
     );

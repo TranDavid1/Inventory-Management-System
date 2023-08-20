@@ -5,6 +5,7 @@ import FolderGrid from "./FolderGrid";
 import ItemGrid from "./ItemGrid";
 import StickyHeader from "./StickyHeader";
 import Navbar from "./Navbar";
+import { ToastContainer, toast } from "react-toastify";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -236,6 +237,7 @@ function Inventory(props) {
                 <FolderGrid folders={filteredFolders} />
                 <ItemGrid items={filteredItems} />
             </div>
+            <ToastContainer />
         </div>
     );
 }

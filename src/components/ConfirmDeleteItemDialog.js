@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 import Dialog from "@mui/material/Dialog";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -23,14 +24,22 @@ function ConfirmDeleteItemDialog(props) {
                 if (response.ok) {
                     onClose();
                     // window.location.reload();
+                    // alert("Item deleted successfully!");
+                    toast.success("Item deleted successfully!", {
+                        position: toast.POSITION.BOTTOM_LEFT,
+                    });
                     navigate("/items");
-                    alert("Item deleted successfully!");
                     console.log("Item deleted successfully");
                 } else {
-                    console.log("Error deleting item");
+                    toast.error("Error deleting item");
+                    // console.log("Error deleting item");
                 }
             })
-            .catch((error) => console.error("Error deleting item", error));
+            .catch((error) => {
+                console.error("Error deleting item", error);
+                // use toast.error to display error notification
+                toast.error("Error deleting item: ", error);
+            });
     };
 
     return (
