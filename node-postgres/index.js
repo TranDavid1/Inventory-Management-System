@@ -3,6 +3,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
 const cors = require("cors");
+require("dotenv").config();
 
 const item_model = require("./models/item_model");
 const folder_model = require("./models/folder_model");
@@ -27,7 +28,7 @@ app.use(function (req, res, next) {
 });
 app.use(
     session({
-        secret: "a27aec21bcdb726ff276de8413230e1c90952509f12eb73f10818162d6efcdb7",
+        secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
     })
