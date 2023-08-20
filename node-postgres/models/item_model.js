@@ -36,7 +36,7 @@ const item_model = {
             const item_id = newItem.id;
 
             let response = {
-                message: "A new item has been added.",
+                message: "A new item has been successfully added.",
                 item: {
                     id: item_id,
                     name: name,
@@ -70,7 +70,7 @@ const item_model = {
                 );
 
                 response = {
-                    message: "A new relationship has been added.",
+                    message: "A new relationship has been successfully added.",
                     entry: {
                         folder_id: folder_id,
                         item_id: newItem.id,
@@ -101,13 +101,18 @@ const item_model = {
 
     deleteItem: async (id) => {
         try {
+            console.log(`Starting deletion of item with ID: ${id}`);
+
             // delete item relationship
+            console.log(`Deleting item relationship for item ID: ${id}`);
             await pool.query("DELETE from folder_items WHERE item_id = $1", [
                 id,
             ]);
 
             // delete item row
+            console.log(`Deleting item row with ID: ${id}`);
             await pool.query("DELETE FROM items WHERE id = $1", [id]);
+            console.log(`Item with ID ${id} has been successfully deleted.`);
         } catch (error) {
             console.error("deleteItem error: ", error);
             throw error;
