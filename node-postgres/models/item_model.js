@@ -43,6 +43,7 @@ const item_model = {
                     quantity: quantity,
                 },
             };
+            console.log(response);
 
             // Insert row into folder_items for item-folder association
             if (folder_id) {
@@ -75,6 +76,8 @@ const item_model = {
                         item_id: newItem.id,
                     },
                 };
+
+                console.log(response);
             } else {
                 // Insert row into history table using eventLogger
                 const eventTimestamp = new Date();
