@@ -9,9 +9,13 @@ const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 require("dotenv").config();
 
+// models
 const item_model = require("./models/item_model");
 const folder_model = require("./models/folder_model");
 // const user_model = require("./user_model");
+
+// controllers
+const authController = require("./controllers/authController");
 
 const app = express();
 const port = 3001;
@@ -93,10 +97,7 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
-app.post("/login", passport.authenticate("local"), (req, res) => {
-    // Authentication successful
-    res.status(200).send({ message: "Login successful!" });
-});
+app.post("/login", authController.login);
 
 app.get("/items", (req, res) => {
     item_model
