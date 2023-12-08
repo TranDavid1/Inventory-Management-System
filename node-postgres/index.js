@@ -3,6 +3,11 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
 const cors = require("cors");
+const bcrypt = require("bcrypt");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const connectRedis = require("connect-redis");
 require("dotenv").config();
 
 const item_model = require("./models/item_model");
@@ -12,8 +17,12 @@ const folder_model = require("./models/folder_model");
 const app = express();
 const port = 3001;
 
-app.use(cors());
-app.use(express.json()); // parse requests of type - application/json
+app.use(cors(), helmet(), bodyParser.json(), cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// app.use(express.json()); // parse requests of type - application/json
+
+// CORS headers
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
     res.setHeader(
@@ -26,6 +35,7 @@ app.use(function (req, res, next) {
     );
     next();
 });
+
 app.use(
     session({
         secret: process.env.SESSION_SECRET,
@@ -49,7 +59,7 @@ passport.use(
 
                 if (!user) {
                     return done(null, false, {
-                        message: "Incorrect username.",
+                        message: "Incorrect username. Please try again!",
                     });
                 }
 
@@ -60,7 +70,7 @@ passport.use(
 
                 if (!isPasswordValid) {
                     return done(null, false, {
-                        message: "Incorrect password.",
+                        message: "Incorrect password. Please try again!",
                     });
                 }
                 return done(null, user);
