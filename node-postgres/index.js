@@ -7,7 +7,6 @@ const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
-const connectRedis = require("connect-redis");
 require("dotenv").config();
 
 const item_model = require("./models/item_model");
