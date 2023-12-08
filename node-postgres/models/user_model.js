@@ -22,7 +22,7 @@ const userModel = {
             return result.rows[0];
         } catch (error) {
             console.error("createUser error: ", error);
-            throw error;
+            res.status(500).json({ message: "Internal Server Error" });
         }
     },
 
@@ -33,7 +33,7 @@ const userModel = {
             return result.rows[0];
         } catch (error) {
             console.error("getUserByUsername error: ", error);
-            throw error;
+            res.status(500).json({ message: "Internal Server Error" });
         }
     },
 
@@ -49,7 +49,7 @@ const userModel = {
             return result.rows[0];
         } catch (error) {
             console.error("getUserByEmail error: ", error);
-            throw error;
+            res.status(500).json({ message: "Internal Server Error" });
         }
     },
 
@@ -58,7 +58,7 @@ const userModel = {
             return await bcrypt.compare(password, hashedPassword);
         } catch (error) {
             console.error("verifyPassword error: ", error);
-            throw error;
+            res.status(500).json({ message: "Internal Server Error" });
         }
     },
 
@@ -74,7 +74,44 @@ const userModel = {
             return result.rows[0];
         } catch (error) {
             console.error("getUserById error: ", error);
+            res.status(500).json({ message: "Internal Server Error" });
             throw error;
+        }
+    },
+
+    changePassword: async (userId, newPassword) => {
+        try {
+            const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+            const query =
+                "UPDATE users SET password = $1 WHERE id = $2 RETURNING *";
+            const values = [hashedPassword, userId];
+            const result = await pool.query(query, values);
+
+            if (result.rows.length === 0) {
+                throw new Error("User not found");
+            }
+
+            return { message: "Password changed successfully" };
+        } catch (error) {
+            console.error("Change password error:", error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    },
+
+    deleteUser: async (userId) => {
+        try {
+            const query = "DELETE FROM users WHERE id = $1 RETURNING *";
+            const values = [userId];
+            const result = await pool.query(query, values);
+
+            if (result.rows.length === 0) {
+                throw new Error("User not found");
+            }
+
+            return { message: "User account deleted successfully" };
+        } catch (error) {
+            console.error("Delete user error:", error);
+            res.status(500).json({ message: "Internal Server Error" });
         }
     },
 };
