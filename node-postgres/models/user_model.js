@@ -16,8 +16,8 @@ const userModel = {
             //
             const hashedPassword = await bcrypt.hash(password, saltRounds);
             const query =
-                "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *";
-            const values = [username, hashedPassword];
+                "INSERT INTO users (username, email, password_hash, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *";
+            const values = [username, email, hashedPassword];
             const result = await pool.query(query, values);
             return result.rows[0];
         } catch (error) {
