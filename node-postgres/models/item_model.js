@@ -13,10 +13,10 @@ const pool = new Pool({
 const item_model = {
     getItems: async () => {
         try {
-            const response = await pool.query(
+            const { rows } = await pool.query(
                 "SELECT * FROM items ORDER BY id ASC"
             );
-            return response.rows;
+            return rows;
         } catch (error) {
             console.error("getItems error: ", error);
             throw error;

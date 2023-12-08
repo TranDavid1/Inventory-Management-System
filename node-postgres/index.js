@@ -97,7 +97,9 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
+// auth routes
 app.post("/login", authController.login);
+app.post("/logout", authController.logout);
 
 app.get("/items", (req, res) => {
     item_model
