@@ -37,6 +37,22 @@ const userModel = {
         }
     },
 
+    getUserByEmail: async (email) => {
+        try {
+            const query = "SELECT * FROM users WHERE email = $1";
+            const result = await pool.query(query, [email]);
+
+            if (result.rows.length === 0) {
+                return null; // no user found from the given id
+            }
+
+            return result.rows[0];
+        } catch (error) {
+            console.error("getUserByEmail error: ", error);
+            throw error;
+        }
+    },
+
     verifyPassword: async (password, hashedPassword) => {
         try {
             return await bcrypt.compare(password, hashedPassword);
